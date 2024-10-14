@@ -18,7 +18,7 @@ export default function SignupComponent() {
   const { form, onSubmit, isPending } = useSignupComponent();
   return (
     <div className="w-1/2 h-screen rounded-3xl border p-32 space-y-5 relative bg-background flex flex-col items-center justify-center">
-      <h1 className="text-2xl font-bold text-center">Join CorrespondR</h1>
+      <h1 className="text-2xl font-bold text-center">Join EquiTotal</h1>
       <SSO />
       <div className="flex gap-4 items-center w-full">
         <Divider />
@@ -39,7 +39,7 @@ export default function SignupComponent() {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="E-mail" {...field} />
+                  <Input placeholder="Username" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

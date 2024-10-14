@@ -26,8 +26,9 @@ export default function SSO() {
   return (
     <>
       <Button
+        style={{ columnGap: "10px" }}
+        className="w-full"
         onClick={() => handleLoginWithOAuth("google")}
-        className=" w-full flex items-center gap-2"
         variant="outline"
       >
         <FaGoogle size={20} />
