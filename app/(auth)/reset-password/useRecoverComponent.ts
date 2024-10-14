@@ -1,0 +1,66 @@
+"use client";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  logoutUser,
+  recoverPassword,
+  signupUser,
+  updatePassword,
+} from "@/actions/clientActions/userActions";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter, useSearchParams } from "next/navigation";
+import { RouterKeys } from "@/constants/router";
+import { resetSchema, ResetType } from "./validation";
+
+export default function useAuthComponent() {
+  const { toast } = useToast();
+  const router = useRouter();
+  const params = useSearchParams();
+  const queryClient = useQueryClient();
+  const form = useForm<ResetType>({
+    resolver: zodResolver(resetSchema),
+    defaultValues: {
+      password: undefined,
+      confirmPassword: undefined,
+    },
+  });
+
+  const { mutate: logoutMutation } = useMutation({
+    mutationFn: logoutUser,
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Something went wrong",
+      });
+    },
+    onSuccess: () => {
+      router.push(RouterKeys.LOGIN);
+      queryClient.removeQueries({ queryKey: ["user"] });
+      queryClient.removeQueries({ queryKey: ["session"] });
+    },
+  });
+
+  const { mutate: updateMutation, isPending } = useMutation({
+    mutationFn: updatePassword,
+    onError: (data: string) => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: data,
+      });
+    },
+    onSuccess: (data: any) => {
+      logoutMutation();
+      form.reset();
+    },
+  });
+
+  function onSubmit(data: ResetType) {
+    updateMutation(data);
+  }
+
+  return { form, onSubmit, isPending };
+}
