@@ -11,7 +11,7 @@ type Props = {
 
 export default function useProfiles(props: Props) {
   return useQuery<Profile[]>({
-    queryKey: [QueryKeys.PROFILES, props.profilesId],
+    queryKey: [QueryKeys.PROFILE, props.profilesId],
     queryFn: () => getProfiles(props.profilesId),
   });
 }

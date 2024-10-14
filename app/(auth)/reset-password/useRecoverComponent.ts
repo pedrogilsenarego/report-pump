@@ -5,19 +5,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   logoutUser,
-  recoverPassword,
-  signupUser,
   updatePassword,
 } from "@/actions/clientActions/userActions";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { RouterKeys } from "@/constants/router";
 import { resetSchema, ResetType } from "./validation";
 
 export default function useAuthComponent() {
   const { toast } = useToast();
   const router = useRouter();
-  const params = useSearchParams();
+
   const queryClient = useQueryClient();
   const form = useForm<ResetType>({
     resolver: zodResolver(resetSchema),
@@ -52,7 +50,7 @@ export default function useAuthComponent() {
         description: data,
       });
     },
-    onSuccess: (data: any) => {
+    onSuccess: () => {
       logoutMutation();
       form.reset();
     },

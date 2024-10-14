@@ -1,1 +1,3 @@
-export enum QueryKeys {}
+export enum QueryKeys {
+  PROFILE = "profile",
+}

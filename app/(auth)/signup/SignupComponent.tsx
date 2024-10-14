@@ -1,8 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-
-import Link from "next/link";
 import { Divider } from "@/components/ui/divider";
 
 import {
@@ -10,7 +8,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
