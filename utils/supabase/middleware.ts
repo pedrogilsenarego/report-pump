@@ -3,7 +3,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Add any routes that should be protected
-export const protectedPaths = [];
+export const protectedPaths = [RouterKeys.MAIN];
 
 // Utility function to check if a path is protected
 const isProtectedPath = (pathname: string) => {
