@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 
 import Link from "next/link";
-import { Divider } from "@/components/ui/divider";
+//import { Divider } from "@/components/ui/divider";
 import useAuthComponent from "./useAuthComponent";
 import {
   Form,
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import SSO from "@/modules/Auth/SSO";
+//import SSO from "@/modules/Auth/SSO";
 
 export default function AuthComponent() {
   const { form, onSubmit, isPending } = useAuthComponent();
@@ -22,12 +22,12 @@ export default function AuthComponent() {
   return (
     <div className="w-1/2 h-screen rounded-3xl border p-32 space-y-5 relative bg-background flex flex-col items-center justify-center">
       <h1 className="text-2xl font-bold text-center">Welcome Back</h1>
-      <SSO />
+      {/* <SSO /> 
       <div className="flex gap-4 items-center w-full">
         <Divider />
         <p className="text-nowrap text-slate-200 text-xs">Or Log In With</p>
         <Divider />
-      </div>
+      </div>*/}
 
       <Form {...form}>
         <form

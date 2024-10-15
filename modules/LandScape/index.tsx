@@ -1,14 +1,26 @@
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import AuthButton from "./components/AuthButton";
 
 export default function Landscape() {
   return (
     <div className="w-screen h-screen flex justify-center items-center">
-      <main>
-        <div className="border px-3 w-full flex flex-col space-y-2 rounded-md">
-          <p>Equitotal</p>
+      <Card className="w-[350px]">
+        <CardHeader>
+          <CardTitle>Equitotal</CardTitle>
+          <CardDescription>Report you pump here</CardDescription>
+        </CardHeader>
+        <CardContent></CardContent>
+        <CardFooter className="flex justify-between">
           <AuthButton />
-        </div>
-      </main>
+        </CardFooter>
+      </Card>
     </div>
   );
 }

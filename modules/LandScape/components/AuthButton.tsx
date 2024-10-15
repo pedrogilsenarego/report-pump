@@ -11,8 +11,8 @@ export default function AuthButton() {
   };
 
   return (
-    <div>
-      <Button onClick={handleAuthClick}>Auth</Button>
-    </div>
+    <Button className="w-full" onClick={handleAuthClick}>
+      Auth
+    </Button>
   );
 }
