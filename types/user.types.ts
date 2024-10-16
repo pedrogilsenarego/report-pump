@@ -3,5 +3,6 @@ export type User = {
   email: string;
   display_name: string;
   image_url: string;
-  last_activity: Date;
+  active: boolean;
+  role: number;
 };

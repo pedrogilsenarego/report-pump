@@ -3,4 +3,5 @@ export enum RouterKeys {
   FORBIDDEN_ACCESS = "/403",
   LOGIN = "/auth",
   MAIN = "/main",
+  USER_REQUIRE_ACTIVATION = "/require-activation-user",
 }

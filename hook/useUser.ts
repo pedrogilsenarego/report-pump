@@ -1,20 +1,13 @@
 "use client";
 
+import { QueryKeys } from "@/constants/queryKeys";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { User } from "@/types/user.types";
 import { useQuery } from "@tanstack/react-query";
 
-const initUser = {
-  created_at: "",
-  display_name: "",
-  email: "",
-  id: "",
-  image_url: "",
-};
-
 export default function useUser() {
   return useQuery<User>({
-    queryKey: ["user"],
+    queryKey: [QueryKeys.USER],
     queryFn: async () => {
       const supabase = supabaseBrowser();
 
@@ -28,7 +21,6 @@ export default function useUser() {
           .single();
         return user;
       }
-      return initUser;
     },
   });
 }

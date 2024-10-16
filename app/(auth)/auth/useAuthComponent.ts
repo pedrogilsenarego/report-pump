@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -7,11 +5,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SignInSchema, SigninType } from "./validation";
 import { useMutation } from "@tanstack/react-query";
 import { signinUser } from "@/actions/clientActions/userActions";
-import { useToast } from "@/components/ui/use-toast";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { RouterKeys } from "@/constants/router";
 import useUser from "@/hook/useUser";
 import useSession from "@/hook/useSession";
+import { useToast } from "@/hooks/use-toast";
 
 export default function useAuthComponent() {
   const { toast } = useToast();
@@ -37,7 +36,7 @@ export default function useAuthComponent() {
         description: data,
       });
     },
-    onSuccess: (data: any) => {
+    onSuccess: () => {
       user.refetch();
       session.refetch();
       router.push(

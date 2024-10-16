@@ -234,6 +234,16 @@
   dependencies:
     "@radix-ui/react-primitive" "2.0.0"
 
+"@radix-ui/react-avatar@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-avatar/-/react-avatar-1.1.1.tgz#5848d2ed5f34d18b36fc7e2d227c41fca8600ea1"
+  integrity sha512-eoOtThOmxeoizxpX6RiEsQZ2wj5r4+zoeqAwO0cBaFQGjJwIH3dIX0OCxNrCyrrdxG+vBweMETh3VziQG7c1kw==
+  dependencies:
+    "@radix-ui/react-context" "1.1.1"
+    "@radix-ui/react-primitive" "2.0.0"
+    "@radix-ui/react-use-callback-ref" "1.1.0"
+    "@radix-ui/react-use-layout-effect" "1.1.0"
+
 "@radix-ui/react-collection@1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-collection/-/react-collection-1.1.0.tgz#f18af78e46454a2360d103c2251773028b7724ed"
@@ -2367,6 +2377,11 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
+
+next-themes@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/next-themes/-/next-themes-0.3.0.tgz#b4d2a866137a67d42564b07f3a3e720e2ff3871a"
+  integrity sha512-/QHIrsYpd6Kfk7xakK4svpDI5mmXP0gfvCoJdGpZQ2TOrQZmsW0QxjaiLn8wbIKjtm4BTSqLoix4lxYYOnLJ/w==
 
 next@14.2.15:
   version "14.2.15"

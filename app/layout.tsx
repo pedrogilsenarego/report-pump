@@ -4,6 +4,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import QueryProvider from "@/components/query-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,7 +34,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <QueryProvider>
-          <TooltipProvider>{children}</TooltipProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <TooltipProvider>{children}</TooltipProvider>
+            <Toaster />
+          </ThemeProvider>
         </QueryProvider>
       </body>
     </html>

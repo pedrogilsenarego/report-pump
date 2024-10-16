@@ -1,3 +1,3 @@
 export enum QueryKeys {
-  PROFILE = "profile",
+  USER = "user",
 }
