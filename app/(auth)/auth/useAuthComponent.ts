@@ -8,7 +8,7 @@ import { signinUser } from "@/actions/clientActions/userActions";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { RouterKeys } from "@/constants/router";
-import useUser from "@/hook/useUser";
+import { useUser } from "@/hook/useUser";
 import useSession from "@/hook/useSession";
 import { useToast } from "@/hooks/use-toast";
 

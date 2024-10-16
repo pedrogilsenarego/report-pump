@@ -5,4 +5,5 @@ export type User = {
   image_url: string;
   active: boolean;
   role: number;
+  created_at: string;
 };

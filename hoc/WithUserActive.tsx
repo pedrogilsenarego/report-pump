@@ -1,7 +1,7 @@
 "use client";
 
 import { RouterKeys } from "@/constants/router";
-import useUser from "@/hook/useUser";
+import { useUser } from "@/hook/useUser";
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
 

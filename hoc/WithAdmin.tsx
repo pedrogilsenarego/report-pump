@@ -1,6 +1,6 @@
 "use client";
 
-import useUser from "@/hook/useUser";
+import { useUser } from "@/hook/useUser";
 import { ReactNode } from "react";
 
 export default function WithAdmin({ children }: { children: ReactNode }) {
