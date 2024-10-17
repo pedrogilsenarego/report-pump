@@ -21,12 +21,14 @@ export default function useAuthComponent() {
       password: undefined,
       confirmPassword: undefined,
       username: undefined,
+      role: undefined,
     },
   });
 
   const { mutate: signupMutation, isPending } = useMutation({
     mutationFn: signupUser,
     onError: (data: string) => {
+      console.log(data);
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",

@@ -7,10 +7,12 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import useSignupComponent from "./useSignupComponent";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 //import SSO from "@/modules/Auth/SSO";
 
 export default function SignupComponent() {
@@ -32,6 +34,36 @@ export default function SignupComponent() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-5 w-full"
         >
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem className="space-y-3">
+                <FormLabel>Type of user</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex flex-col space-y-1"
+                  >
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="1" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Customer</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="2" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Supplyer</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="username"
@@ -56,6 +88,7 @@ export default function SignupComponent() {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="password"

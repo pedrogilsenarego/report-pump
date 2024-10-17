@@ -57,12 +57,15 @@ export const signupUser = async ({
   email,
   password,
   username,
+  role,
 }: {
   email: string;
   password: string;
   username: string;
+  role: string;
 }): Promise<string> => {
   console.log("creatingUser");
+
   return new Promise(async (resolve, reject) => {
     try {
       const { error } = await supabase.auth.signUp({
@@ -73,6 +76,7 @@ export const signupUser = async ({
           emailRedirectTo: `${origin}/auth/callback`,
           data: {
             displayName: username,
+            role: parseInt(role),
           },
         },
       });
@@ -81,7 +85,7 @@ export const signupUser = async ({
         reject(error.message);
       }
 
-      return resolve("Welcome to interseed enjoy");
+      return resolve("Welcome to Equitotal enjoy");
     } catch (error: any) {
       console.error("error", error);
       reject(error.message);

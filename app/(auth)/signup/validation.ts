@@ -5,6 +5,7 @@ import { z } from "zod";
 export const SignupSchema = z
   .object({
     username: z.string(),
+    role: z.string(),
     email: z
       .string()
       .email({
