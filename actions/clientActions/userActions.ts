@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { RouterKeys } from "@/constants/router";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 
 const supabase = supabaseBrowser();
@@ -58,11 +59,15 @@ export const signupUser = async ({
   password,
   username,
   role,
+  address,
+  nameCompany,
 }: {
   email: string;
   password: string;
   username: string;
   role: string;
+  address: string;
+  nameCompany: string;
 }): Promise<string> => {
   console.log("creatingUser");
 
@@ -73,10 +78,13 @@ export const signupUser = async ({
         password,
 
         options: {
-          emailRedirectTo: `${origin}/auth/callback`,
+          emailRedirectTo: `${origin}${RouterKeys.HOME}`,
+          //emailRedirectTo: `${origin}/auth/callback`,
           data: {
             displayName: username,
             role: parseInt(role),
+            address,
+            nameCompany,
           },
         },
       });

@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import useSignupComponent from "./useSignupComponent";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
 //import SSO from "@/modules/Auth/SSO";
 
 export default function SignupComponent() {
@@ -34,36 +35,6 @@ export default function SignupComponent() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-5 w-full"
         >
-          <FormField
-            control={form.control}
-            name="role"
-            render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel>Type of user</FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex flex-col space-y-1"
-                  >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="1" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Customer</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="2" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Supplyer</FormLabel>
-                    </FormItem>
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="username"
@@ -121,6 +92,62 @@ export default function SignupComponent() {
               </FormItem>
             )}
           />
+          <Separator />
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem className="space-y-3">
+                <FormLabel>Type of user</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex flex-col space-y-1"
+                  >
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="1" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Customer</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="2" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Supplyer</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nameCompany"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Name of the company" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Address" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Separator />
           <p className="text-xs mt-2">
             By signining up you agree to our{" "}
             <u className="cursor-pointer">Terms of Service</u> &{" "}

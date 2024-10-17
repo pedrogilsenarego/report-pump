@@ -5,6 +5,8 @@ import { z } from "zod";
 export const SignupSchema = z
   .object({
     username: z.string(),
+    address: z.string(),
+    nameCompany: z.string(),
     role: z.string(),
     email: z
       .string()

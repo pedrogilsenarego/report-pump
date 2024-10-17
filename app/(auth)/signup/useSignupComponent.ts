@@ -22,6 +22,8 @@ export default function useAuthComponent() {
       confirmPassword: undefined,
       username: undefined,
       role: undefined,
+      address: undefined,
+      nameCompany: undefined,
     },
   });
 
@@ -38,7 +40,8 @@ export default function useAuthComponent() {
     onSuccess: (data: string) => {
       toast({
         variant: "default",
-        title: "User created with success",
+        title:
+          "User created with success. Visit your email for confirmation, also you will have to wait for an admin to validate your registration",
         description: data,
       });
       router.push(
