@@ -6,6 +6,5 @@ import { ReactNode } from "react";
 export default function WithAdmin({ children }: { children: ReactNode }) {
   const user = useUser();
 
-  if (user?.data?.role !== 1) return;
-  return <>{children}</>;
+  return <>{user?.data?.role === 1 && children}</>;
 }

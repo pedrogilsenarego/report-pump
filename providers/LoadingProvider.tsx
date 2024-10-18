@@ -14,10 +14,10 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const user = useUser();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if ((user.isLoading || user.isFetching) && !isLoading) setIsLoading(true);
+    if (user.isLoading || user.isFetching) setIsLoading(true);
     else setIsLoading(false);
   }, [user.isLoading, user.isFetching]);
 
