@@ -11,6 +11,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { RouterKeys } from "@/constants/router";
 import { resetSchema, ResetType } from "./validation";
+import { QueryKeys } from "@/constants/queryKeys";
 
 export default function useAuthComponent() {
   const { toast } = useToast();
@@ -36,7 +37,8 @@ export default function useAuthComponent() {
     },
     onSuccess: () => {
       router.push(RouterKeys.LOGIN);
-      queryClient.removeQueries({ queryKey: ["user"] });
+      queryClient.removeQueries({ queryKey: [QueryKeys.USER] });
+      queryClient.removeQueries({ queryKey: [QueryKeys.USERS_PENDING] });
       queryClient.removeQueries({ queryKey: ["session"] });
     },
   });
