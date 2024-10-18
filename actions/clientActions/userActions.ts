@@ -146,3 +146,37 @@ export const logoutUser = async (): Promise<void> => {
     throw new Error(error.message);
   }
 };
+
+export const acceptUserPending = async ({
+  targetUserId,
+}: {
+  targetUserId: string;
+}): Promise<string> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return reject(new Error("User not authenticated"));
+      }
+
+      // Step 2: Update the invitation to mark it as accepted
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ active: true })
+        .eq("id", targetUserId);
+
+      if (updateError) {
+        console.error("Error updating invitation:", updateError);
+        return reject(updateError);
+      }
+
+      return resolve("User Accepted");
+    } catch (error: any) {
+      console.error("Unexpected error occurred:", error);
+      reject(error.message);
+    }
+  });
+};
