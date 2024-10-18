@@ -7,7 +7,22 @@ export const SignupSchema = z
     username: z.string(),
     address: z.string(),
     nameCompany: z.string(),
+    defaultLang: z.string(),
     role: z.string(),
+    phone: z
+      .string()
+      .optional()
+      .refine(
+        (val) =>
+          !val ||
+          /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
+            val
+          ),
+        {
+          message: "Invalid phone number format",
+        }
+      ),
+
     email: z
       .string()
       .email({

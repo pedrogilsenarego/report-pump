@@ -24,6 +24,8 @@ export default function useAuthComponent() {
       role: undefined,
       address: undefined,
       nameCompany: undefined,
+      phone: undefined,
+      defaultLang: undefined,
     },
   });
 

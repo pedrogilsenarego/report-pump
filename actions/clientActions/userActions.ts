@@ -61,6 +61,8 @@ export const signupUser = async ({
   role,
   address,
   nameCompany,
+  phone,
+  defaultLang,
 }: {
   email: string;
   password: string;
@@ -68,6 +70,8 @@ export const signupUser = async ({
   role: string;
   address: string;
   nameCompany: string;
+  phone?: string;
+  defaultLang: string;
 }): Promise<string> => {
   console.log("creatingUser");
 
@@ -85,6 +89,8 @@ export const signupUser = async ({
             role: parseInt(role),
             address,
             nameCompany,
+            phone,
+            defaultLang: parseInt(defaultLang),
           },
         },
       });

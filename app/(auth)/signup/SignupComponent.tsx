@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,6 +15,14 @@ import { Input } from "@/components/ui/input";
 import useSignupComponent from "./useSignupComponent";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
+import { langKeys } from "@/constants/lang";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 //import SSO from "@/modules/Auth/SSO";
 
 export default function SignupComponent() {
@@ -143,6 +152,50 @@ export default function SignupComponent() {
                 <FormControl>
                   <Input placeholder="Address" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Phone/Celular" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="defaultLang"
+            render={({ field }) => (
+              <FormItem>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Default language for reports" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {langKeys.map((lang) => {
+                      return (
+                        <SelectItem key={lang.id} value={lang.id}>
+                          {lang.value}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  This language will be used to create the reports, but can be
+                  changed later.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
