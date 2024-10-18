@@ -3,6 +3,7 @@
 import { getProfilesPending } from "@/actions/clientActions/profile.actions";
 import { QueryKeys } from "@/constants/queryKeys";
 import { supabaseBrowser } from "@/lib/supabase/browser";
+
 import { User } from "@/types/user.types";
 import { useQuery } from "@tanstack/react-query";
 
@@ -11,7 +12,6 @@ export function useUser() {
     queryKey: [QueryKeys.USER],
     queryFn: async () => {
       const supabase = supabaseBrowser();
-
       const { data } = await supabase.auth.getSession();
 
       if (data?.session?.user) {

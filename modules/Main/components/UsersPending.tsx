@@ -35,9 +35,12 @@ export default function UsersPending() {
       <CardContent className="grid gap-8" style={{ gap: "20px" }}>
         {usersPending.data?.map((user: User) => {
           return (
-            <div key={user.id} className="flex gap-2 items-center">
+            <div
+              key={user.id}
+              className="flex gap-2 items-center justify-between"
+            >
               <div
-                className="flex gap-4 border p-2 rounded-sm"
+                className="flex gap-4 border p-2 rounded-sm w-full"
                 style={{ gap: "20px" }}
               >
                 <div
