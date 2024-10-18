@@ -5,9 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SignupSchema, SignupType } from "./validation";
 import { useMutation } from "@tanstack/react-query";
 import { signupUser } from "@/actions/clientActions/userActions";
-import { useToast } from "@/components/ui/use-toast";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { RouterKeys } from "@/constants/router";
+import { useToast } from "@/hooks/use-toast";
 
 export default function useAuthComponent() {
   const { toast } = useToast();
