@@ -1,8 +1,8 @@
-import LogoutButton from "@/components/logout";
 import * as React from "react";
 import UsersPending from "./components/UsersPending";
 import { KeyRoles } from "@/constants/roles";
 import WithRole from "@/hoc/WithRole";
+import { ChartTest } from "./components/Chart";
 
 export default function Main() {
   return (
@@ -17,8 +17,8 @@ export default function Main() {
         <WithRole roleKey={[KeyRoles.ADMIN]}>
           <UsersPending />
         </WithRole>
+        <ChartTest />
       </div>
-      <LogoutButton />
     </div>
   );
 }

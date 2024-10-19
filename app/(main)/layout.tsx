@@ -15,7 +15,7 @@ export default function MainLayout({
           <div className="px-5">
             <Header />
           </div>
-          <div className="mx-5">{children}</div>
+          <div className="mt-2 mx-5">{children}</div>
         </div>
       </div>
     </WithUserActive>
