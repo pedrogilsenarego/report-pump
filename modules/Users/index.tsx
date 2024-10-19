@@ -1,7 +1,8 @@
 import * as React from "react";
-import WithAdmin from "@/hoc/WithAdmin";
 import UsersPending from "../Main/components/UsersPending";
 import { Button } from "@/components/ui/button";
+import { KeyRoles } from "@/constants/roles";
+import WithRole from "@/hoc/WithRole";
 
 export default function Users() {
   return (
@@ -10,7 +11,9 @@ export default function Users() {
         style={{ justifyContent: "end" }}
         className="w-full flex justify-end "
       >
-        <Button>New Technician</Button>
+        <WithRole roleKey={[KeyRoles.SUPPLYER, KeyRoles.CUSTOMER]}>
+          <Button>New Technician</Button>
+        </WithRole>
       </div>
       <div
         style={{
@@ -19,12 +22,9 @@ export default function Users() {
           gap: "1rem",
         }}
       >
-        <WithAdmin>
+        <WithRole roleKey={[KeyRoles.ADMIN]}>
           <UsersPending />
-        </WithAdmin>
-        <WithAdmin>
-          <UsersPending />
-        </WithAdmin>
+        </WithRole>
       </div>
     </div>
   );
