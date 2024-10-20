@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -27,6 +28,7 @@ export default function useAuthComponent() {
       nameCompany: undefined,
       phone: undefined,
       defaultLang: undefined,
+      country: undefined,
     },
   });
 

@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import CountrySelect from "@/components/ui/country-selector";
 //import SSO from "@/modules/Auth/SSO";
 
 export default function SignupComponent() {
@@ -116,13 +117,13 @@ export default function SignupComponent() {
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="1" />
+                        <RadioGroupItem value="2" />
                       </FormControl>
                       <FormLabel className="font-normal">Customer</FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="2" />
+                        <RadioGroupItem value="3" />
                       </FormControl>
                       <FormLabel className="font-normal">Supplyer</FormLabel>
                     </FormItem>
@@ -151,6 +152,18 @@ export default function SignupComponent() {
               <FormItem>
                 <FormControl>
                   <Input placeholder="Address" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="country"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl {...field}>
+                  <CountrySelect />
                 </FormControl>
                 <FormMessage />
               </FormItem>

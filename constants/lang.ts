@@ -1,10 +1,10 @@
 export const langKeys = [
   {
-    id: "1",
+    id: "PT",
     value: "pt",
   },
   {
-    id: "2",
+    id: "EN",
     value: "en",
   },
 ];

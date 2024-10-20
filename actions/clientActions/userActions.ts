@@ -63,11 +63,13 @@ export const signupUser = async ({
   nameCompany,
   phone,
   defaultLang,
+  country,
 }: {
   email: string;
   password: string;
   username: string;
   role: string;
+  country: string;
   address: string;
   nameCompany: string;
   phone?: string;
@@ -90,7 +92,8 @@ export const signupUser = async ({
             address,
             nameCompany,
             phone,
-            defaultLang: parseInt(defaultLang),
+            country,
+            defaultLang,
           },
         },
       });

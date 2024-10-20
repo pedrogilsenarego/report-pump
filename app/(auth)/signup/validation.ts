@@ -8,6 +8,7 @@ export const SignupSchema = z
     address: z.string(),
     nameCompany: z.string(),
     defaultLang: z.string(),
+    country: z.string(),
     role: z.string(),
     phone: z
       .string()
