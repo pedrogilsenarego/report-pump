@@ -7,4 +7,5 @@ export enum RouterKeys {
   USER_REQUIRE_ACTIVATION = "/require-activation-user",
   ANALYTICS = "/analytics",
   SETTINGS = "/settings",
+  INSTALLATIONS = "/installations",
 }

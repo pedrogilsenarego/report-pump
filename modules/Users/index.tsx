@@ -18,7 +18,7 @@ export default function Users() {
           <UsersPending />
         </WithRole>
       </div>
-      <WithRole roleKey={[KeyRoles.CUSTOMER]}>
+      <WithRole roleKey={[KeyRoles.CUSTOMER, KeyRoles.SUPPLYER]}>
         <TechnicianList />
       </WithRole>
     </div>

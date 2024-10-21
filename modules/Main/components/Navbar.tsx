@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Home, LineChart, Settings, Users2 } from "lucide-react";
+import { Factory, Home, LineChart, Settings, Users2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import {
@@ -9,6 +9,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { RouterKeys } from "@/constants/router";
+import WithRole from "@/hoc/WithRole";
+import { KeyRoles } from "@/constants/roles";
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -53,6 +55,29 @@ export default function NavBar() {
           </TooltipTrigger>
           <TooltipContent side="right">Users</TooltipContent>
         </Tooltip>
+        <WithRole roleKey={[KeyRoles.CUSTOMER]}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                href={RouterKeys.INSTALLATIONS}
+                style={{
+                  color: isActive(RouterKeys.INSTALLATIONS)
+                    ? "white"
+                    : undefined,
+                }}
+                className={`flex h-9 w-9 items-center justify-center transition-all md:h-8 md:w-8 ${
+                  isActive(RouterKeys.INSTALLATIONS)
+                    ? "text-background bg-primary rounded-full"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Factory className="h-5 w-5" />
+                <span className="sr-only">Installations</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right">Installations</TooltipContent>
+          </Tooltip>
+        </WithRole>
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
