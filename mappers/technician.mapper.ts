@@ -29,3 +29,6 @@ export const mapTechnicianToRaw = (
     certification: profile.certification,
   };
 };
+
+export const mapTechnicians = (profiles: TechnicianRaw[]): Technician[] =>
+  profiles.map((profile) => mapTechnician(profile));

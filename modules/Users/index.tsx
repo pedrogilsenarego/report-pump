@@ -3,6 +3,7 @@ import UsersPending from "../Main/components/UsersPending";
 import { KeyRoles } from "@/constants/roles";
 import WithRole from "@/hoc/WithRole";
 import NewTecnician from "./components/NewTechnician";
+import TechnicianList from "./components/TechnicianList";
 
 export default function Users() {
   return (
@@ -24,6 +25,9 @@ export default function Users() {
       >
         <WithRole roleKey={[KeyRoles.ADMIN]}>
           <UsersPending />
+        </WithRole>
+        <WithRole roleKey={[KeyRoles.CUSTOMER]}>
+          <TechnicianList />
         </WithRole>
       </div>
     </div>

@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseBrowser } from "@/lib/supabase/browser";
-import { mapTechnicianToRaw } from "@/mappers/technician.mapper";
-
+import {
+  mapTechnicians,
+  mapTechnicianToRaw,
+} from "@/mappers/technician.mapper";
 import { NewTechnicianType } from "@/modules/Users/components/NewTechnician.validation";
-import { Profile } from "@/types/profile.types";
+import { Technician } from "@/types/technician.types";
 
 const supabase = supabaseBrowser();
 
@@ -13,7 +15,7 @@ type GetTechnicianProps = {
 
 export const getTechnician = async ({
   profileId,
-}: GetTechnicianProps): Promise<Profile[]> => {
+}: GetTechnicianProps): Promise<Technician[]> => {
   return new Promise(async (resolve, reject) => {
     try {
       const {
@@ -34,7 +36,9 @@ export const getTechnician = async ({
         return reject(error.message);
       }
 
-      return resolve(data);
+      const mappedData = mapTechnicians(data);
+
+      return resolve(mappedData);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Error in getProfiles:", error);
