@@ -13,11 +13,12 @@ import {
 import { addTechnician } from "@/actions/clientActions/technician.actions";
 import { useUser } from "@/hook/useUser";
 import { useState } from "react";
+import { useTechnicians } from "@/hook/useTechnician";
 
 export default function useNewTechnician() {
   const { toast } = useToast();
   const [openModal, setOpenModal] = useState(false);
-  const params = useSearchParams();
+  const { refetch } = useTechnicians();
   const user = useUser();
   const form = useForm<NewTechnicianType>({
     resolver: zodResolver(NewTechnicianSchema),
@@ -47,6 +48,7 @@ export default function useNewTechnician() {
         description: data,
       });
       setOpenModal(false);
+      refetch();
       form.reset();
     },
   });
