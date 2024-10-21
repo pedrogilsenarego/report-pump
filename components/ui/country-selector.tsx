@@ -45,6 +45,7 @@ function CountrySelect({
     setCountries(
       filterCountries(countryRegionData, priorityOptions, whitelist, blacklist)
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
