@@ -1,8 +1,8 @@
 import * as React from "react";
 import UsersPending from "../Main/components/UsersPending";
-import { Button } from "@/components/ui/button";
 import { KeyRoles } from "@/constants/roles";
 import WithRole from "@/hoc/WithRole";
+import NewTecnician from "./components/NewTechnician";
 
 export default function Users() {
   return (
@@ -11,8 +11,8 @@ export default function Users() {
         style={{ justifyContent: "end" }}
         className="w-full flex justify-end "
       >
-        <WithRole roleKey={[KeyRoles.SUPPLYER, KeyRoles.CUSTOMER]}>
-          <Button>New Technician</Button>
+        <WithRole roleKey={[KeyRoles.CUSTOMER]}>
+          <NewTecnician />
         </WithRole>
       </div>
       <div
