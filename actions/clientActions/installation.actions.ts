@@ -62,9 +62,10 @@ export const addInstallation = async (
         return reject(new Error("User not authenticated"));
       }
       const rawData = mapInstallationToRaw(props);
+      console.log(rawData);
 
       const { data, error } = await supabase
-        .from("installation")
+        .from("installations")
         .insert([
           {
             ...rawData,

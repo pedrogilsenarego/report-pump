@@ -41,24 +41,26 @@ export const columns: ColumnDef<Installation>[] = [
     cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "email",
+    accessorKey: "area",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Area
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("area")}</div>,
   },
   {
-    accessorKey: "phone",
-    header: () => <div className="text-right">Phone</div>,
-    cell: ({ row }) => <div className="lowercase">{row.getValue("phone")}</div>,
+    accessorKey: "address",
+    header: () => <div className="text-right">Address</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("address")}</div>
+    ),
   },
   {
     accessorKey: "condition",
@@ -82,7 +84,7 @@ export const columns: ColumnDef<Installation>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Delete Technician</DropdownMenuItem>
+            <DropdownMenuItem>Delete Installation</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

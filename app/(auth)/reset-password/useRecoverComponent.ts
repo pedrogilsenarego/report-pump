@@ -39,6 +39,8 @@ export default function useAuthComponent() {
       router.push(RouterKeys.LOGIN);
       queryClient.removeQueries({ queryKey: [QueryKeys.USER] });
       queryClient.removeQueries({ queryKey: [QueryKeys.USERS_PENDING] });
+      queryClient.removeQueries({ queryKey: [QueryKeys.INSTALLATIONS] });
+      queryClient.removeQueries({ queryKey: [QueryKeys.TECHNICIANS] });
       queryClient.removeQueries({ queryKey: ["session"] });
     },
   });
