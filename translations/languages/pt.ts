@@ -1,8 +1,9 @@
 export const content = {
   pt: {
     translations: {
-      teste: "Teste",
-      true: "Verdade",
+      dashboard: {
+        usersPendingApproval: "Existem utilizadores em aprovação",
+      },
     },
   },
 };

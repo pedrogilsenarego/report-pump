@@ -32,7 +32,7 @@ export default function UsersPending() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{i18n.t("True")}</CardTitle>
+        <CardTitle>{i18n.t("dashboard.usersPendingApproval")}</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-8" style={{ gap: "20px" }}>
         {usersPending.data?.map((user: User) => {

@@ -10,18 +10,25 @@ export default function Header() {
   return (
     <div
       style={{
-        justifyContent: "end",
+        justifyContent: "space-between",
         alignItems: "center",
         borderBottom: "solid 1px lightgray",
       }}
       className="w-full  flex gap-2 p-2"
     >
       <ChangeLanguage type="dropdown" />
-      <p style={{ textTransform: "capitalize" }} className="font-medium">
-        {keyRolesComplete.find((role) => role.id === user.data?.role)?.value}
-      </p>
-      <p>{user.data?.email}</p>
-      <LogoutButton />
+      <div
+        style={{
+          alignItems: "center",
+        }}
+        className="flex gap-2 p-2"
+      >
+        <p style={{ textTransform: "capitalize" }} className="font-medium">
+          {keyRolesComplete.find((role) => role.id === user.data?.role)?.value}
+        </p>
+        <p>{user.data?.email}</p>
+        <LogoutButton />
+      </div>
     </div>
   );
 }

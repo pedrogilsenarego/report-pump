@@ -25,6 +25,8 @@ type Props = {
 
 export default function ChangeLanguage(props: Props) {
   const { changeLanguage } = useChangeLang();
+  const getLanguage = () => i18n.language;
+
   return (
     <>
       {props.type === "dropdown" ? (
@@ -33,17 +35,21 @@ export default function ChangeLanguage(props: Props) {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="flex items-center gap-2">
                 <GlobeIcon className="h-5 w-5" />
-                <span>EN</span>
+                <span>{getLanguage().toUpperCase()}</span>
                 <ChevronDownIcon className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem className="flex items-center justify-between">
+              <DropdownMenuItem
+                onClick={() => changeLanguage(LANG.en)}
+                className="flex items-center justify-between"
+              >
                 <span>English</span>
-                <CheckIcon className="h-5 w-5" />
+                {getLanguage() === LANG.en && <CheckIcon className="h-5 w-5" />}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => changeLanguage(LANG.pt)}>
-                Português
+                <span>Português</span>
+                {getLanguage() === LANG.pt && <CheckIcon className="h-5 w-5" />}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
