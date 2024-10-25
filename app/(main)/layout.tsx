@@ -11,6 +11,7 @@ export default function MainLayout({
     <WithUserActive>
       <div className="w-full min-h-screen mx-auto flex h-full bg-muted/40">
         <NavBar />
+
         <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14 w-full">
           <div className="px-5">
             <Header />

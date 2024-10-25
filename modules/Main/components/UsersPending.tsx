@@ -6,12 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { keyRoles } from "@/constants/roles";
 import { useUsersPending } from "@/hook/useUser";
 import { useToast } from "@/hooks/use-toast";
+import { i18n } from "@/translations/i18n";
 import { User } from "@/types/user.types";
 import { useMutation } from "@tanstack/react-query";
 import { CheckIcon } from "lucide-react";
 
 export default function UsersPending() {
   const usersPending = useUsersPending();
+
   const { toast } = useToast();
   const { mutate: acceptNewUserMutation, isPending } = useMutation({
     mutationFn: acceptUserPending,
@@ -30,7 +32,7 @@ export default function UsersPending() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Users Awaiting Accept</CardTitle>
+        <CardTitle>{i18n.t("True")}</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-8" style={{ gap: "20px" }}>
         {usersPending.data?.map((user: User) => {

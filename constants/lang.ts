@@ -8,3 +8,8 @@ export const langKeys = [
     value: "en",
   },
 ];
+
+export const LANG = {
+  pt: "pt",
+  en: "en",
+};
