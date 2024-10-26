@@ -25,17 +25,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import CountrySelect from "@/components/ui/country-selector";
-import { useState } from "react";
+
+import StepperCounter from "@/components/stepper";
 
 export default function SignupComponent() {
-  const { form, onSubmit, isPending } = useSignupComponent();
-  const [step, setStep] = useState(1);
+  const { form, onSubmit, isPending, step, setStep, disableNext } =
+    useSignupComponent();
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="w-full h-screen bg-primary p-10">
           <div className="rounded-3xl border p-10 space-y-5 relative bg-background  flex flex-col h-full  min-h-full">
-            <h1 className="text-4xl font-bold text-center">Join Equitotal</h1>
+            <h1 className="text-4xl font-bold text-center">
+              Join Equitotal - {step === 1 && "Type of user"}
+              {step === 2 && "Company General"}
+              {step === 3 && "Company Details"}
+              {step === 4 && "Login Details"}
+            </h1>
             <div className="min-h-fit flex-1">
               <div className="flex flex-col h-full justify-between">
                 <div className="p-32 flex flex-col justify-center items-center h-full">
@@ -84,20 +91,129 @@ export default function SignupComponent() {
                     <div className="flex flex-col align-top space-y-8 ">
                       <FormField
                         control={form.control}
+                        name="nameCompany"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-2xl">
+                              What is name of your company?
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Name of the company*"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="country"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-2xl">
+                              Where is your company?
+                            </FormLabel>
+                            <FormControl {...field}>
+                              <CountrySelect />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
                         name="username"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-2xl">
-                              What is your username?
+                              Who is the responsible?
                             </FormLabel>
                             <FormControl>
-                              <Input placeholder="Username" {...field} />
+                              <Input
+                                placeholder="Responsible name*"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                  {step === 3 && (
+                    <div className="flex flex-col align-top space-y-8 ">
+                      <FormField
+                        control={form.control}
+                        name="address"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="font-bold text-4xl cursor-pointer">
+                              Where can we find you?
+                            </FormLabel>
+                            <FormControl>
+                              <Input placeholder="Address*" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
 
+                      <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="font-bold text-4xl cursor-pointer">
+                              How can we contact you?
+                            </FormLabel>
+                            <FormControl>
+                              <Input placeholder="Phone/Celular" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="defaultLang"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="font-bold text-4xl cursor-pointer">
+                              Reports language?
+                            </FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Default language for reports*" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {langKeys.map((lang) => {
+                                  return (
+                                    <SelectItem key={lang.id} value={lang.id}>
+                                      {lang.value}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectContent>
+                            </Select>
+                            <FormDescription>
+                              This language will be used to create the reports,
+                              but can be changed later.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                  {step === 4 && (
+                    <div className="flex flex-col align-top space-y-8">
                       <FormField
                         control={form.control}
                         name="email"
@@ -113,10 +229,6 @@ export default function SignupComponent() {
                           </FormItem>
                         )}
                       />
-                    </div>
-                  )}
-                  {step === 3 && (
-                    <div className="flex flex-col align-top space-y-8">
                       <FormField
                         control={form.control}
                         name="password"
@@ -160,130 +272,49 @@ export default function SignupComponent() {
                           </FormItem>
                         )}
                       />
-                    </div>
-                  )}
-                  {step === 4 && (
-                    <>
-                      <FormField
-                        control={form.control}
-                        name="nameCompany"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                placeholder="Name of the company"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="address"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input placeholder="Address" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="country"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl {...field}>
-                              <CountrySelect />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="phone"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input placeholder="Phone/Celular" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="defaultLang"
-                        render={({ field }) => (
-                          <FormItem>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Default language for reports" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {langKeys.map((lang) => {
-                                  return (
-                                    <SelectItem key={lang.id} value={lang.id}>
-                                      {lang.value}
-                                    </SelectItem>
-                                  );
-                                })}
-                              </SelectContent>
-                            </Select>
-                            <FormDescription>
-                              This language will be used to create the reports,
-                              but can be changed later.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <Separator />
                       <p className="text-xs mt-2">
                         By signining up you agree to our{" "}
                         <u className="cursor-pointer">Terms of Service</u> &{" "}
                         <u className="cursor-pointer">Privacy Policy</u>
                       </p>
-                    </>
+                    </div>
                   )}
                 </div>
-                <div className="w-full flex justify-end space-x-2">
-                  {step > 1 && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setStep((prev) => prev - 1)}
-                    >
-                      Previous
-                    </Button>
-                  )}
-                  {step !== 4 && (
-                    <Button
-                      type="button"
-                      onClick={() => setStep((prev) => prev + 1)}
-                      disabled={step === 1 && form.watch("role") === undefined}
-                    >
-                      Next
-                    </Button>
-                  )}
-                  {step === 4 && (
-                    <Button
-                      isLoading={isPending}
-                      variant="default"
-                      type="submit"
-                    >
-                      Agreed and Signup
-                    </Button>
-                  )}
+                <div className="w-full flex justify-between items-center">
+                  <div style={{ width: "20%" }}></div>
+                  <StepperCounter currentStep={step} totalSteps={4} />
+                  <div
+                    style={{ width: "20%" }}
+                    className="flex justify-end space-x-2"
+                  >
+                    {step > 1 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setStep((prev) => prev - 1)}
+                      >
+                        Previous
+                      </Button>
+                    )}
+                    {step !== 4 && (
+                      <Button
+                        type="button"
+                        onClick={() => setStep((prev) => prev + 1)}
+                        disabled={disableNext}
+                      >
+                        Next
+                      </Button>
+                    )}
+                    {step === 4 && (
+                      <Button
+                        isLoading={isPending}
+                        variant="default"
+                        type="submit"
+                      >
+                        Agreed and Signup
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

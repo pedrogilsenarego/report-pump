@@ -10,9 +10,11 @@ import { signupUser } from "@/actions/clientActions/userActions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { RouterKeys } from "@/constants/router";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 export default function useAuthComponent() {
   const { toast } = useToast();
+  const [step, setStep] = useState(1);
   const router = useRouter();
   const params = useSearchParams();
   const next = params.get("next");
@@ -31,6 +33,16 @@ export default function useAuthComponent() {
       country: undefined,
     },
   });
+
+  const disableNext =
+    (step === 1 && form.watch("role") === undefined) ||
+    (step === 2 &&
+      (form.watch("nameCompany") === undefined ||
+        form.watch("country") === undefined ||
+        form.watch("username") === undefined)) ||
+    (step === 3 &&
+      (form.watch("address") === undefined ||
+        form.watch("defaultLang") === undefined));
 
   const { mutate: signupMutation, isPending } = useMutation({
     mutationFn: signupUser,
@@ -63,5 +75,5 @@ export default function useAuthComponent() {
     signupMutation(data);
   }
 
-  return { form, onSubmit, isPending };
+  return { form, onSubmit, isPending, step, setStep, disableNext };
 }
