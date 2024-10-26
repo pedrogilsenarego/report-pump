@@ -39,9 +39,11 @@ export default function SignupComponent() {
           <div className="rounded-3xl border p-10 space-y-5 relative bg-background  flex flex-col h-full  min-h-full">
             <h1 className="text-4xl font-bold text-center">
               Join Equitotal - {step === 1 && "Type of user"}
-              {step === 2 && "Company General"}
-              {step === 3 && "Company Details"}
-              {step === 4 && "Login Details"}
+              <span className="text-foreground/45">
+                {step === 2 && "Company General"}
+                {step === 3 && "Company Details"}
+                {step === 4 && "Login Details"}
+              </span>
             </h1>
             <div className="min-h-fit flex-1">
               <div className="flex flex-col h-full justify-between">
@@ -149,7 +151,7 @@ export default function SignupComponent() {
                         name="address"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="font-bold text-4xl cursor-pointer">
+                            <FormLabel className="text-2xl">
                               Where can we find you?
                             </FormLabel>
                             <FormControl>
@@ -165,7 +167,7 @@ export default function SignupComponent() {
                         name="phone"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="font-bold text-4xl cursor-pointer">
+                            <FormLabel className="text-2xl">
                               How can we contact you?
                             </FormLabel>
                             <FormControl>
@@ -180,7 +182,7 @@ export default function SignupComponent() {
                         name="defaultLang"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="font-bold text-4xl cursor-pointer">
+                            <FormLabel className="text-2xl">
                               Reports language?
                             </FormLabel>
                             <Select
