@@ -4,6 +4,9 @@ export const content = {
       dashboard: {
         usersPendingApproval: "Existem utilizadores em aprovação",
       },
+      landingPage: {
+        manageFirePumps: "Gestão de relatórios de bombas de incêndio",
+      },
     },
   },
 };

@@ -12,7 +12,7 @@ export default function AuthButton() {
 
   return (
     <Button className="w-full" onClick={handleAuthClick}>
-      Auth
+      Enter Here
     </Button>
   );
 }

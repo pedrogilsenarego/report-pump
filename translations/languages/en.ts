@@ -4,6 +4,9 @@ export const content = {
       dashboard: {
         usersPendingApproval: "There are users pending approval",
       },
+      landingPage: {
+        manageFirePumps: "Manage your firepump reports",
+      },
     },
   },
 };
