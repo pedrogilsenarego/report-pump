@@ -39,7 +39,7 @@ export default function SignupComponent() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="w-full h-screen bg-primary p-10">
+        <div className="w-full h-screen bg-primary p-8">
           <div className="rounded-3xl border p-10 space-y-5 relative bg-background  flex flex-col h-full  min-h-full">
             <CircleX
               onClick={() => router.push(RouterKeys.LOGIN)}
@@ -47,8 +47,9 @@ export default function SignupComponent() {
               className="absolute text-primary cursor-pointer right-10"
             />
             <h1 className="text-4xl font-bold text-center">
-              Join Equitotal - {step === 1 && "Type of user"}
+              Join Equitotal -
               <span className="text-foreground/45">
+                {step === 1 && "Type of user"}
                 {step === 2 && "Company General"}
                 {step === 3 && "Company Details"}
                 {step === 4 && "Login Details"}
