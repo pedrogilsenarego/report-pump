@@ -27,8 +27,12 @@ import {
 import CountrySelect from "@/components/ui/country-selector";
 
 import StepperCounter from "@/components/stepper";
+import { CircleX } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { RouterKeys } from "@/constants/router";
 
 export default function SignupComponent() {
+  const router = useRouter();
   const { form, onSubmit, isPending, step, setStep, disableNext } =
     useSignupComponent();
 
@@ -37,6 +41,11 @@ export default function SignupComponent() {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="w-full h-screen bg-primary p-10">
           <div className="rounded-3xl border p-10 space-y-5 relative bg-background  flex flex-col h-full  min-h-full">
+            <CircleX
+              onClick={() => router.push(RouterKeys.LOGIN)}
+              style={{ width: "40px", height: "40px" }}
+              className="absolute text-primary cursor-pointer right-10"
+            />
             <h1 className="text-4xl font-bold text-center">
               Join Equitotal - {step === 1 && "Type of user"}
               <span className="text-foreground/45">
