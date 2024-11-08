@@ -43,6 +43,8 @@ export default function SignupComponent() {
     setStep,
     disableNext,
     terms,
+    termsAccepted,
+    setTermsAccepted,
     setOpenTerms,
   } = useSignupComponent();
 
@@ -296,41 +298,30 @@ export default function SignupComponent() {
                           )}
                         />
                         <div
-                          className="cursor-pointer"
+                          className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow cursor-pointer"
                           onClick={() => setOpenTerms(true)}
                         >
-                          <FormField
-                            control={form.control}
-                            name="terms"
-                            render={({ field }) => (
-                              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    //onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                                <div className="space-y-1 leading-none">
-                                  <FormLabel className="cursor-pointer">
-                                    By signining up you agree to our{" "}
-                                    <u className="cursor-pointer">
-                                      Terms of Service
-                                    </u>{" "}
-                                    &{" "}
-                                    <u className="cursor-pointer">
-                                      Privacy Policy
-                                    </u>
-                                  </FormLabel>
-                                  <FormDescription>
-                                    Some helper text
-                                  </FormDescription>
-                                </div>
-                              </FormItem>
-                            )}
+                          <Checkbox
+                            checked={termsAccepted}
+                            //onCheckedChange={field.onChange}
                           />
+
+                          <div className="space-y-1 leading-none">
+                            <FormLabel className="cursor-pointer">
+                              By signining up you agree to our{" "}
+                              <u className="cursor-pointer">Terms of Service</u>{" "}
+                              & <u className="cursor-pointer">Privacy Policy</u>
+                            </FormLabel>
+                            <FormDescription>Some helper text</FormDescription>
+                          </div>
                         </div>
                       </div>
-                      <Terms open={terms} onOpenChange={setOpenTerms} />
+                      <Terms
+                        onRead={() => setTermsAccepted(true)}
+                        open={terms}
+                        onOpenChange={setOpenTerms}
+                        read={termsAccepted}
+                      />
                     </>
                   )}
                 </div>
@@ -364,8 +355,9 @@ export default function SignupComponent() {
                         isLoading={isPending}
                         variant="default"
                         type="submit"
+                        disabled={!termsAccepted}
                       >
-                        Agreed and Signup
+                        Signup
                       </Button>
                     )}
                   </div>

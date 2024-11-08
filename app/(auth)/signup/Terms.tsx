@@ -11,6 +11,8 @@ import { useEffect } from "react";
 type Props = {
   open: boolean;
   onOpenChange: (signal: boolean) => void;
+  onRead: () => void;
+  read: boolean;
 };
 
 export default function Terms(props: Props) {
@@ -22,7 +24,7 @@ export default function Terms(props: Props) {
       const { scrollTop, scrollHeight, clientHeight } = target;
 
       if (scrollTop + clientHeight >= scrollHeight) {
-        console.log("finished");
+        props.onRead();
       }
     };
 
@@ -43,11 +45,16 @@ export default function Terms(props: Props) {
       }
     };
   }, [props.open]);
+
   return (
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Read our terms and conditions</DialogTitle>
+          <DialogTitle
+            className={props.read ? "text-green-700" : "text-foreground/60"}
+          >
+            Read our terms and conditions
+          </DialogTitle>
           <DialogDescription>
             <div className=" terms-description max-h-[550px] overflow-y-auto ">
               <p>
