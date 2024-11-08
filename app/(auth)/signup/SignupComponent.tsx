@@ -30,11 +30,21 @@ import StepperCounter from "@/components/stepper";
 import { CircleX } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { RouterKeys } from "@/constants/router";
+import { Checkbox } from "@/components/ui/checkbox";
+import Terms from "./Terms";
 
 export default function SignupComponent() {
   const router = useRouter();
-  const { form, onSubmit, isPending, step, setStep, disableNext } =
-    useSignupComponent();
+  const {
+    form,
+    onSubmit,
+    isPending,
+    step,
+    setStep,
+    disableNext,
+    terms,
+    setOpenTerms,
+  } = useSignupComponent();
 
   return (
     <Form {...form}>
@@ -107,11 +117,11 @@ export default function SignupComponent() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-2xl">
-                              What is name of your company?
+                              What is name of your company?*
                             </FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Name of the company*"
+                                placeholder="Name of the company"
                                 {...field}
                               />
                             </FormControl>
@@ -125,7 +135,7 @@ export default function SignupComponent() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-2xl">
-                              Where is your company?
+                              Where is your company?*
                             </FormLabel>
                             <FormControl {...field}>
                               <CountrySelect />
@@ -140,11 +150,11 @@ export default function SignupComponent() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-2xl">
-                              Who is the responsible?
+                              Who is the responsible?*
                             </FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Responsible name*"
+                                placeholder="Responsible name"
                                 {...field}
                               />
                             </FormControl>
@@ -162,10 +172,10 @@ export default function SignupComponent() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-2xl">
-                              Where can we find you?
+                              Where can we find you?*
                             </FormLabel>
                             <FormControl>
-                              <Input placeholder="Address*" {...field} />
+                              <Input placeholder="Address" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -193,7 +203,7 @@ export default function SignupComponent() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-2xl">
-                              Reports language?
+                              Reports language?*
                             </FormLabel>
                             <Select
                               onValueChange={field.onChange}
@@ -201,7 +211,7 @@ export default function SignupComponent() {
                             >
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Default language for reports*" />
+                                  <SelectValue placeholder="Default language for reports" />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
@@ -225,71 +235,103 @@ export default function SignupComponent() {
                     </div>
                   )}
                   {step === 4 && (
-                    <div className="flex flex-col align-top space-y-8">
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-2xl">
-                              And your email?
-                            </FormLabel>
-                            <FormControl>
-                              <Input placeholder="E-mail" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-2xl">
-                              Choose a password
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Password"
-                                {...field}
-                                type="password"
-                              />
-                            </FormControl>
-                            <p className="text-xs mt-2">
-                              Your password must be at least 8 characters long
-                            </p>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                    <>
+                      <div className="flex flex-col align-top space-y-8">
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-2xl">
+                                And your email?*
+                              </FormLabel>
+                              <FormControl>
+                                <Input placeholder="E-mail" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-2xl">
+                                Choose a password*
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Password"
+                                  {...field}
+                                  type="password"
+                                />
+                              </FormControl>
+                              <p className="text-xs mt-2">
+                                Your password must be at least 8 characters long
+                              </p>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
 
-                      <FormField
-                        control={form.control}
-                        name="confirmPassword"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-2xl">
-                              Confirm the password
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Confirm Password"
-                                {...field}
-                                type="password"
-                              />
-                            </FormControl>
+                        <FormField
+                          control={form.control}
+                          name="confirmPassword"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-2xl">
+                                Confirm the password*
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Confirm Password"
+                                  {...field}
+                                  type="password"
+                                />
+                              </FormControl>
 
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <p className="text-xs mt-2">
-                        By signining up you agree to our{" "}
-                        <u className="cursor-pointer">Terms of Service</u> &{" "}
-                        <u className="cursor-pointer">Privacy Policy</u>
-                      </p>
-                    </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => setOpenTerms(true)}
+                        >
+                          <FormField
+                            control={form.control}
+                            name="terms"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value}
+                                    //onCheckedChange={field.onChange}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel className="cursor-pointer">
+                                    By signining up you agree to our{" "}
+                                    <u className="cursor-pointer">
+                                      Terms of Service
+                                    </u>{" "}
+                                    &{" "}
+                                    <u className="cursor-pointer">
+                                      Privacy Policy
+                                    </u>
+                                  </FormLabel>
+                                  <FormDescription>
+                                    Some helper text
+                                  </FormDescription>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                      <Terms open={terms} onOpenChange={setOpenTerms} />
+                    </>
                   )}
                 </div>
                 <div className="w-full flex justify-between items-center">

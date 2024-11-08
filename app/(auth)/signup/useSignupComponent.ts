@@ -15,6 +15,7 @@ import { useState } from "react";
 export default function useAuthComponent() {
   const { toast } = useToast();
   const [step, setStep] = useState(1);
+  const [terms, setOpenTerms] = useState(false);
   const router = useRouter();
   const params = useSearchParams();
   const next = params.get("next");
@@ -31,6 +32,7 @@ export default function useAuthComponent() {
       phone: undefined,
       defaultLang: undefined,
       country: undefined,
+      terms: false,
     },
   });
 
@@ -75,5 +77,14 @@ export default function useAuthComponent() {
     signupMutation(data);
   }
 
-  return { form, onSubmit, isPending, step, setStep, disableNext };
+  return {
+    form,
+    onSubmit,
+    isPending,
+    step,
+    setStep,
+    disableNext,
+    terms,
+    setOpenTerms,
+  };
 }

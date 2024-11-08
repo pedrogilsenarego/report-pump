@@ -37,7 +37,7 @@ function CountrySelect({
   blacklist = [],
   onChange = () => {},
   className,
-  placeholder = "Country*",
+  placeholder = "Country",
 }: CountrySelectProps) {
   const [countries, setCountries] = useState<CountryRegion[]>([]);
 

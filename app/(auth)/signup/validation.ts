@@ -10,6 +10,7 @@ export const SignupSchema = z
     defaultLang: z.string(),
     country: z.string(),
     role: z.string(),
+    terms: z.boolean(),
     phone: z
       .string()
       .optional()
