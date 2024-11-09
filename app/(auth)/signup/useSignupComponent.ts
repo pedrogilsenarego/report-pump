@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
@@ -11,6 +12,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { RouterKeys } from "@/constants/router";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import {
+  addCompany,
+  deleteCompany,
+} from "@/actions/clientActions/companies.actions";
 
 export default function useAuthComponent() {
   const { toast } = useToast();
@@ -46,15 +51,16 @@ export default function useAuthComponent() {
       (form.watch("address") === undefined ||
         form.watch("defaultLang") === undefined));
 
-  const { mutate: signupMutation, isPending } = useMutation({
+  const { mutate: signupMutation, isPending: isCreatingUser } = useMutation({
     mutationFn: signupUser,
-    onError: (data: string) => {
+    onError: (data: any) => {
       console.log(data);
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: data,
+        description: "",
       });
+      deleteCompany(data.companyId);
     },
     onSuccess: (data: string) => {
       toast({
@@ -73,9 +79,31 @@ export default function useAuthComponent() {
     },
   });
 
+  const { mutate: createCompanyMutation, isPending: isCreatingCompany } =
+    useMutation({
+      mutationFn: addCompany,
+      onError: (data: string) => {
+        console.log(data);
+        // toast({
+        //   variant: "destructive",
+        //   title: "Uh oh! Something went wrong.",
+        //   description: data,
+        // });
+      },
+      onSuccess: (data: any) => {
+        const password = form.watch("password");
+        console.log(data);
+        signupMutation({ ...data, password });
+      },
+    });
+
   function onSubmit(data: SignupType) {
-    signupMutation(data);
+    console.log(data);
+    createCompanyMutation(data);
+    //signupMutation(data);
   }
+
+  const isPending = isCreatingCompany || isCreatingUser;
 
   return {
     form,

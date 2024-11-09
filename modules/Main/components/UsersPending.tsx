@@ -73,6 +73,7 @@ export default function UsersPending() {
                 onClick={() =>
                   acceptNewUserMutation({
                     targetUserId: user.id,
+                    companyId: user.company_id,
                   })
                 }
                 isLoading={isPending}

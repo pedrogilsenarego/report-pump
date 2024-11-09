@@ -63,6 +63,7 @@ export const signupUser = async ({
   nameCompany,
   phone,
   defaultLang,
+  companyId,
   country,
 }: {
   email: string;
@@ -71,6 +72,7 @@ export const signupUser = async ({
   role: string;
   country: string;
   address: string;
+  companyId: string;
   nameCompany: string;
   phone?: string;
   defaultLang: string;
@@ -94,18 +96,19 @@ export const signupUser = async ({
             phone,
             country,
             defaultLang,
+            companyId,
           },
         },
       });
 
       if (error) {
-        reject(error.message);
+        reject({ error: error.message, companyId });
       }
 
       return resolve("Welcome to Equitotal enjoy");
     } catch (error: any) {
-      console.error("error", error);
-      reject(error.message);
+      console.error("error", { error: error.message, companyId });
+      reject({ error: error.message, companyId });
     }
   });
 };
@@ -158,8 +161,10 @@ export const logoutUser = async (): Promise<void> => {
 
 export const acceptUserPending = async ({
   targetUserId,
+  companyId,
 }: {
   targetUserId: string;
+  companyId: string;
 }): Promise<string> => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -178,6 +183,16 @@ export const acceptUserPending = async ({
         .eq("id", targetUserId);
 
       if (updateError) {
+        console.error("Error updating invitation:", updateError);
+        return reject(updateError);
+      }
+
+      const { error: updateErrorCompany } = await supabase
+        .from("companies")
+        .update({ active: true })
+        .eq("id", companyId);
+
+      if (updateErrorCompany) {
         console.error("Error updating invitation:", updateError);
         return reject(updateError);
       }

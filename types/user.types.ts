@@ -6,4 +6,5 @@ export type User = {
   active: boolean;
   role: number;
   created_at: string;
+  company_id: string;
 };
