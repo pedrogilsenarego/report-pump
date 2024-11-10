@@ -60,7 +60,7 @@ export const signupUser = async ({
   username,
   role,
   address,
-  nameCompany,
+
   phone,
   defaultLang,
   companyId,
@@ -73,7 +73,6 @@ export const signupUser = async ({
   country: string;
   address: string;
   companyId: string;
-  nameCompany: string;
   phone?: string;
   defaultLang: string;
 }): Promise<string> => {
@@ -92,7 +91,6 @@ export const signupUser = async ({
             displayName: username,
             role: parseInt(role),
             address,
-            nameCompany,
             phone,
             country,
             defaultLang,

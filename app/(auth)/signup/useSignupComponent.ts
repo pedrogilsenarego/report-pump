@@ -93,7 +93,7 @@ export default function useAuthComponent() {
       onSuccess: (data: any) => {
         const password = form.watch("password");
         console.log(data);
-        signupMutation({ ...data, password });
+        signupMutation({ ...data, password, username: data.nameCompany });
       },
     });
 
