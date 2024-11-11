@@ -4,13 +4,12 @@ export const mapTechnician = (profile: TechnicianRaw): Technician => {
   return {
     id: profile.id,
     createdAt: profile.created_at,
-    function: profile.function,
-    condition: profile.condition,
+    function: profile?.technician?.[0].function,
+    condition: profile?.technician?.[0].condition,
     email: profile.email,
     phone: profile.phone,
-    technicianProfile: profile.technician_profile,
-    name: profile.name,
-    certification: profile.certification,
+    name: profile.display_name,
+    certification: profile?.technician?.[0].certification,
   };
 };
 
@@ -25,7 +24,7 @@ export const mapTechnicianToRaw = (
     condition: profile.condition,
     phone: profile.phone,
     email: profile.email,
-    name: profile.name,
+    display_name: profile.name,
     certification: profile.certification,
   };
 };

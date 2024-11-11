@@ -8,11 +8,11 @@ import { Technician } from "@/types/technician.types";
 
 export function useTechnicians() {
   const user = useUser();
-  const profileId = user?.data?.id || "";
+  const companyId = user?.data?.company_id || "";
 
   return useQuery<Technician[]>({
     queryKey: [QueryKeys.TECHNICIANS],
-    queryFn: () => getTechnician({ profileId: profileId }),
-    enabled: !!profileId,
+    queryFn: () => getTechnician({ companyId: companyId }),
+    enabled: !!companyId,
   });
 }

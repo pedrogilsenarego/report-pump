@@ -7,17 +7,16 @@ export type Technician = {
   condition?: string;
   certification?: string;
   phone?: string;
-  technicianProfile: string;
 };
 
 export type TechnicianRaw = {
   id: string;
   created_at: string;
   email?: string;
-  name: string;
+  display_name: string;
   function?: string;
   condition?: string;
   certification?: string;
   phone?: string;
-  technician_profile: string;
+  technician?: { certification: string; condition: string; function: string }[];
 };

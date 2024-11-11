@@ -1,20 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseBrowser } from "@/lib/supabase/browser";
-import {
-  mapTechnicians,
-  mapTechnicianToRaw,
-} from "@/mappers/technician.mapper";
+import { mapTechnicians } from "@/mappers/technician.mapper";
 import { NewTechnicianType } from "@/modules/Users/components/NewTechnician.validation";
 import { Technician } from "@/types/technician.types";
 
 const supabase = supabaseBrowser();
 
 type GetTechnicianProps = {
-  profileId: string;
+  companyId: string;
 };
 
 export const getTechnician = async ({
-  profileId,
+  companyId,
 }: GetTechnicianProps): Promise<Technician[]> => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -27,9 +24,23 @@ export const getTechnician = async ({
       }
 
       const { data, error } = await supabase
-        .from("technician")
-        .select(`*`)
-        .eq("technician_profile", profileId);
+        .from("profiles")
+        .select(
+          `
+          *,
+          technician (
+            profile_id,
+            function,
+            certification,
+            condition
+          )
+        `
+        )
+        .eq("company_id", companyId)
+        .neq("role", 2)
+        .neq("role", 3);
+
+      console.log(data);
 
       if (error) {
         console.error("Error fetching user data:", error);
@@ -48,7 +59,7 @@ export const getTechnician = async ({
 };
 
 export const addTechnician = async (
-  props: NewTechnicianType & { technicianProfile: string }
+  props: NewTechnicianType & { companyId: string }
 ): Promise<any> => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -59,23 +70,47 @@ export const addTechnician = async (
       if (!user) {
         return reject(new Error("User not authenticated"));
       }
-      const rawData = mapTechnicianToRaw(props);
 
-      const { data, error } = await supabase
-        .from("technician")
-        .insert([
-          {
-            ...rawData,
+      // Step 1: Create the new user
+      const { data: signUpData, error: errorCreatingUser } =
+        await supabase.auth.signUp({
+          email: props.email,
+          password: props.password,
+          options: {
+            data: {
+              displayName: props.name,
+              role: parseInt(props.role),
+              phone: props.phone,
+              companyId: props.companyId,
+            },
           },
-        ])
-        .single();
+        });
 
-      if (error) {
-        console.error("Error adding technician:", error);
-        return reject(error.message);
+      if (errorCreatingUser) {
+        return reject(errorCreatingUser.message);
       }
 
-      return resolve(data);
+      // Step 2: Retrieve the new user's ID from the sign-up response
+      const newUserId = signUpData.user?.id;
+      if (!newUserId) {
+        return reject(new Error("Failed to retrieve new user ID"));
+      }
+
+      // Step 3: Insert technician-specific data into the technicians table
+      const { error: errorInsertingTechnician } = await supabase
+        .from("technician")
+        .insert({
+          profile_id: newUserId,
+          function: props.function,
+          certification: props.certification,
+          condition: props.condition,
+        });
+
+      if (errorInsertingTechnician) {
+        return reject(errorInsertingTechnician.message);
+      }
+
+      return resolve("Added Technician");
     } catch (error: any) {
       console.error("Error in addTechnician:", error);
       reject(error.message);

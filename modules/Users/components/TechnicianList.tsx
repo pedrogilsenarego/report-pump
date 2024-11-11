@@ -41,7 +41,7 @@ export default function TechnicianList() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
-
+  console.log(data);
   const table = useReactTable({
     data: data || [],
     columns,

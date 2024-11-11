@@ -123,9 +123,42 @@ export default function NewTechnician() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Password" {...field} type="password" />
+                  </FormControl>
+                  <p className="text-xs mt-2">
+                    Your password must be at least 8 characters long
+                  </p>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder="Confirm Password"
+                      {...field}
+                      type="password"
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <DialogFooter>
               <Button isLoading={isPending} type="submit">
-                Save changes
+                Create Technician
               </Button>
             </DialogFooter>
           </form>

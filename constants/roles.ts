@@ -28,4 +28,6 @@ export enum KeyRoles {
   ADMIN = 1,
   CUSTOMER = 2,
   SUPPLYER = 3,
+  CUSTOMER_TECHNICIAN = 4,
+  SUPPLYER_TECHNICIAN = 5,
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
@@ -12,7 +13,7 @@ import {
 } from "./NewTechnician.validation";
 import { addTechnician } from "@/actions/clientActions/technician.actions";
 import { useUser } from "@/hook/useUser";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTechnicians } from "@/hook/useTechnician";
 
 export default function useNewTechnician() {
@@ -23,22 +24,31 @@ export default function useNewTechnician() {
   const form = useForm<NewTechnicianType>({
     resolver: zodResolver(NewTechnicianSchema),
     defaultValues: {
+      name: undefined,
       email: undefined,
       phone: undefined,
       certification: undefined,
       condition: undefined,
       function: undefined,
+      password: undefined,
+      confirmPassword: undefined,
+      role: undefined,
     },
   });
 
+  useEffect(() => {
+    form.setValue("role", user.data?.role === 2 ? "4" : "5");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.data]);
+
   const { mutate: createNewTechnician, isPending } = useMutation({
     mutationFn: addTechnician,
-    onError: (data: string) => {
+    onError: (data: any) => {
       console.log(data);
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: data,
+        description: data?.error,
       });
     },
     onSuccess: (data: string) => {
@@ -54,11 +64,9 @@ export default function useNewTechnician() {
   });
 
   function onSubmit(data: NewTechnicianType) {
-    const newData: NewTechnicianType & { technicianProfile?: string } = data;
-    newData.technicianProfile = user.data?.id;
-    createNewTechnician(
-      newData as NewTechnicianType & { technicianProfile: string }
-    );
+    const newData: NewTechnicianType & { companyId?: string } = data;
+    newData.companyId = user.data?.company_id;
+    createNewTechnician(newData as NewTechnicianType & { companyId: string });
   }
 
   return { form, onSubmit, isPending, openModal, setOpenModal };
