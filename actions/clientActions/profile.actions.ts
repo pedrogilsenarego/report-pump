@@ -17,7 +17,9 @@ export const getProfilesPending = async (): Promise<User[]> => {
       const { data, error } = await supabase
         .from("profiles")
         .select(`*`)
-        .eq("active", false);
+        .eq("active", false)
+        .eq("role", 2)
+        .eq("role", 3);
 
       if (error) {
         console.error("Error fetching user data:", error);
