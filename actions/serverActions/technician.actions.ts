@@ -1,63 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { supabaseBrowser } from "@/lib/supabase/browser";
-
-import { mapTechnicians } from "@/mappers/technician.mapper";
+"use server";
+import { supabaseAdminServer } from "@/lib/supabase/server";
 import { NewTechnicianType } from "@/modules/Users/components/NewTechnician.validation";
-import { Technician } from "@/types/technician.types";
 
-const supabase = supabaseBrowser();
-
-type GetTechnicianProps = {
-  companyId: string;
-};
-
-export const getTechnician = async ({
-  companyId,
-}: GetTechnicianProps): Promise<Technician[]> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        return reject(new Error("User not authenticated"));
-      }
-
-      const { data, error } = await supabase
-        .from("profiles")
-        .select(
-          `
-          *,
-          technician (
-            profile_id,
-            function,
-            certification,
-            condition
-          )
-        `
-        )
-        .eq("company_id", companyId)
-        .neq("role", 2)
-        .neq("role", 3);
-
-      console.log(data);
-
-      if (error) {
-        console.error("Error fetching user data:", error);
-        return reject(error.message);
-      }
-
-      const mappedData = mapTechnicians(data);
-
-      return resolve(mappedData);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      console.error("Error in getProfiles:", error);
-      reject(error.message);
-    }
-  });
-};
+const supabaseAdmin = supabaseAdminServer();
 
 export const addTechnician = async (
   props: NewTechnicianType & { companyId: string }
@@ -66,7 +12,7 @@ export const addTechnician = async (
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await supabaseAdmin.auth.getUser();
 
       if (!user) {
         return reject(new Error("User not authenticated"));
@@ -74,7 +20,7 @@ export const addTechnician = async (
 
       // Step 1: Create the new user
       const { data: signUpData, error: errorCreatingUser } =
-        await supabase.auth.admin.createUser({
+        await supabaseAdmin.auth.admin.createUser({
           email: props.email,
           password: props.password,
           user_metadata: {
@@ -96,7 +42,7 @@ export const addTechnician = async (
       }
 
       // Step 3: Insert technician-specific data into the technicians table
-      const { error: errorInsertingTechnician } = await supabase
+      const { error: errorInsertingTechnician } = await supabaseAdmin
         .from("technician")
         .insert({
           profile_id: newUserId,

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 import { redirect } from "next/navigation";
 import { supabaseServer } from "../../lib/supabase/server";
