@@ -7,12 +7,14 @@ export type Technician = {
   condition?: string;
   certification?: string;
   phone?: string;
+  active: boolean;
 };
 
 export type TechnicianRaw = {
   id: string;
   created_at: string;
   email?: string;
+  active: boolean;
   display_name: string;
   function?: string;
   condition?: string;

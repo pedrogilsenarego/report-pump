@@ -61,6 +61,15 @@ export const columns: ColumnDef<Technician>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("phone")}</div>,
   },
   {
+    accessorKey: "active",
+    header: () => <div className="text-right">Active</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">
+        {row.getValue("active") ? "true" : "false"}
+      </div>
+    ),
+  },
+  {
     accessorKey: "condition",
     header: () => <div className="text-right">Condition</div>,
     cell: ({ row }) => (

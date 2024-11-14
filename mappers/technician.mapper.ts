@@ -10,12 +10,15 @@ export const mapTechnician = (profile: TechnicianRaw): Technician => {
     phone: profile.phone,
     name: profile.display_name,
     certification: profile?.technician?.[0].certification,
+    active: profile.active,
   };
 };
 
 export const mapTechnicianToRaw = (
-  profile: Omit<Technician, "createdAt" | "id"> & { technicianProfile: string }
-): Omit<TechnicianRaw, "created_at" | "id"> & {
+  profile: Omit<Technician, "createdAt" | "id" | "active"> & {
+    technicianProfile: string;
+  }
+): Omit<TechnicianRaw, "created_at" | "id" | "active"> & {
   technician_profile: string;
 } => {
   return {

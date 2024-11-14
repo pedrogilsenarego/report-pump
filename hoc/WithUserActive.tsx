@@ -11,9 +11,13 @@ export default function WithUserActive({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!user.isLoading && user?.data?.active === false) {
-      router.push(RouterKeys.USER_REQUIRE_ACTIVATION);
+      if (user.data.role === 2 || user.data.role === 3) {
+        router.push(RouterKeys.USER_REQUIRE_ACTIVATION);
+      } else {
+        router.push(RouterKeys.UPDATE_PASSWORD);
+      }
     }
-  }, [user]);
+  }, [router, user]);
 
   return <>{user.data?.active === true && children}</>;
 }

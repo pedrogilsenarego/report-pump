@@ -23,6 +23,7 @@ export const addTechnician = async (
         await supabaseAdmin.auth.admin.createUser({
           email: props.email,
           password: props.password,
+          email_confirm: true,
           user_metadata: {
             displayName: props.name,
             role: parseInt(props.role),

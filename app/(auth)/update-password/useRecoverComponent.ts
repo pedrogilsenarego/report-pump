@@ -6,16 +6,19 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   logoutUser,
   updatePassword,
+  validateUser,
 } from "@/actions/clientActions/userActions";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { RouterKeys } from "@/constants/router";
 import { resetSchema, ResetType } from "./validation";
 import { QueryKeys } from "@/constants/queryKeys";
+import { useUser } from "@/hook/useUser";
 
 export default function useAuthComponent() {
   const { toast } = useToast();
   const router = useRouter();
+  const user = useUser();
 
   const queryClient = useQueryClient();
   const form = useForm<ResetType>({
@@ -45,6 +48,21 @@ export default function useAuthComponent() {
     },
   });
 
+  const { mutate: validateUserMutation } = useMutation({
+    mutationFn: validateUser,
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Something went wrong",
+      });
+    },
+    onSuccess: () => {
+      logoutMutation();
+      form.reset();
+    },
+  });
+
   const { mutate: updateMutation, isPending } = useMutation({
     mutationFn: updatePassword,
     onError: (data: string) => {
@@ -55,8 +73,12 @@ export default function useAuthComponent() {
       });
     },
     onSuccess: () => {
-      logoutMutation();
-      form.reset();
+      if (user.data?.active) {
+        logoutMutation();
+        form.reset();
+      } else {
+        validateUserMutation();
+      }
     },
   });
 

@@ -202,3 +202,35 @@ export const acceptUserPending = async ({
     }
   });
 };
+
+export const validateUser = async (): Promise<string> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return reject(new Error("User not authenticated"));
+      }
+
+      console.log(user);
+
+      // Step 2: Update the invitation to mark it as accepted
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ active: true })
+        .eq("id", user.id);
+
+      if (updateError) {
+        console.error("Error updating invitation:", updateError);
+        return reject(updateError);
+      }
+
+      return resolve("User Validated");
+    } catch (error: any) {
+      console.error("Unexpected error occurred:", error);
+      reject(error.message);
+    }
+  });
+};

@@ -22,6 +22,14 @@ export const keyRolesComplete = [
     id: 3,
     value: "supplyer",
   },
+  {
+    id: 4,
+    value: "Technician",
+  },
+  {
+    id: 5,
+    value: "Technician",
+  },
 ];
 
 export enum KeyRoles {

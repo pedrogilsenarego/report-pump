@@ -37,6 +37,7 @@ import NewTechnician from "./NewTechnician";
 
 export default function TechnicianList() {
   const { data } = useTechnicians();
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
