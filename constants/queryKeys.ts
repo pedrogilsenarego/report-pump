@@ -3,4 +3,5 @@ export enum QueryKeys {
   USERS_PENDING = "users-pending",
   TECHNICIANS = "technicians",
   INSTALLATIONS = "installations",
+  RESPONSIBLES = "responsibles",
 }

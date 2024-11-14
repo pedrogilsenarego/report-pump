@@ -12,10 +12,15 @@ import { Input } from "@/components/ui/input";
 import useSignupComponent from "./useRecoverComponent";
 
 export default function ResetComponent() {
-  const { form, onSubmit, isPending } = useSignupComponent();
+  const { form, onSubmit, isPending, user } = useSignupComponent();
   return (
     <div className="w-full h-full flex justify-center">
       <div className="w-1/2 h-screen p-32 space-y-5 relative bg-background flex flex-col items-center justify-center">
+        {!user.data?.active && (
+          <h1 className="text-2xl font-bold text-center">
+            This is your first login please reset your password
+          </h1>
+        )}
         <h1 className="text-2xl font-bold text-center">Update password</h1>
         <Form {...form}>
           <form

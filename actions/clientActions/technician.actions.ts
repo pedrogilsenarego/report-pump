@@ -2,7 +2,7 @@
 import { supabaseBrowser } from "@/lib/supabase/browser";
 
 import { mapTechnicians } from "@/mappers/technician.mapper";
-import { NewTechnicianType } from "@/modules/Users/components/NewTechnician.validation";
+import { NewTechnicianType } from "@/modules/Users/components/Techncian/NewTechnician.validation";
 import { Technician } from "@/types/technician.types";
 
 const supabase = supabaseBrowser();
@@ -38,8 +38,7 @@ export const getTechnician = async ({
         `
         )
         .eq("company_id", companyId)
-        .neq("role", 2)
-        .neq("role", 3);
+        .in("role", [4, 5]);
 
       console.log(data);
 

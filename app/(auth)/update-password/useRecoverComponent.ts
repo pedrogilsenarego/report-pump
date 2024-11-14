@@ -86,5 +86,5 @@ export default function useAuthComponent() {
     updateMutation(data);
   }
 
-  return { form, onSubmit, isPending };
+  return { form, onSubmit, isPending, user };
 }

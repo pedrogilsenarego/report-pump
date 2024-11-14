@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 import { supabaseAdminServer } from "@/lib/supabase/server";
-import { NewTechnicianType } from "@/modules/Users/components/Techncian/NewTechnician.validation";
+import { NewResponsibleType } from "@/modules/Users/components/Responsible/NewResponsible.validation";
 
 const supabaseAdmin = supabaseAdminServer();
 
-export const addTechnician = async (
-  props: NewTechnicianType & { companyId: string }
+export const addResponsible = async (
+  props: NewResponsibleType & { companyId: string }
 ): Promise<any> => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -44,11 +44,11 @@ export const addTechnician = async (
 
       // Step 3: Insert technician-specific data into the technicians table
       const { error: errorInsertingTechnician } = await supabaseAdmin
-        .from("technician")
+        .from("responsables")
         .insert({
           profile_id: newUserId,
-          function: props.function,
-          certification: props.certification,
+          date_in: props.dateIn,
+          date_out: props.dateOut,
           condition: props.condition,
         });
 
@@ -56,7 +56,7 @@ export const addTechnician = async (
         return reject(errorInsertingTechnician.message);
       }
 
-      return resolve("Added Technician");
+      return resolve("Added Responsable");
     } catch (error: any) {
       console.error("Error in addTechnician:", error);
       reject(error.message);
