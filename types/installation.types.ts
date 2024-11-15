@@ -5,7 +5,9 @@ export type Installation = {
   area?: string;
   address?: string;
   condition?: string;
-  profileId?: string;
+  companyId?: string;
+  responsibleId?: string;
+  responsibleName?: string;
 };
 
 export type InstallationRaw = {
@@ -15,5 +17,7 @@ export type InstallationRaw = {
   area?: string;
   address?: string;
   condition?: string;
-  profile_id?: string;
+  company_id?: string;
+  responsible_id?: string;
+  profiles?: { display_name: string };
 };

@@ -43,6 +43,8 @@ export default function useNewTechnician() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.data]);
 
+  console.log(form.watch("dateIn"));
+
   const { mutate: createNewResponsible, isPending } = useMutation({
     mutationFn: addResponsible,
     onError: (data: any) => {

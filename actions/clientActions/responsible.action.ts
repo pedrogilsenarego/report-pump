@@ -39,8 +39,6 @@ export const getReponsible = async ({
         .eq("company_id", companyId)
         .in("role", [6, 7]);
 
-      console.log(data);
-
       if (error) {
         console.error("Error fetching user data:", error);
         return reject(error.message);

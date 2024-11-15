@@ -28,6 +28,7 @@ export default function useNewInstallation() {
       condition: undefined,
       area: undefined,
       address: undefined,
+      responsibleId: undefined,
     },
   });
 
@@ -55,10 +56,10 @@ export default function useNewInstallation() {
 
   function onSubmit(data: NewInstallationType) {
     console.log(data);
-    const newData: NewInstallationType & { profileId?: string } = data;
-    newData.profileId = user.data?.id;
+    const newData: NewInstallationType & { companyId?: string } = data;
+    newData.companyId = user.data?.company_id;
     createNewInstallation(
-      newData as NewInstallationType & { profileId: string }
+      newData as NewInstallationType & { companyId: string }
     );
   }
 

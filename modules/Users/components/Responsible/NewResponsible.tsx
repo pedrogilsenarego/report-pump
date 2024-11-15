@@ -133,9 +133,7 @@ export default function NewTechnician() {
                       />
                     </PopoverContent>
                   </Popover>
-                  {/* <FormDescription>
-                    Your date of birth is used to calculate your age.
-                  </FormDescription> */}
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -174,9 +172,7 @@ export default function NewTechnician() {
                       />
                     </PopoverContent>
                   </Popover>
-                  {/* <FormDescription>
-                    Your date of birth is used to calculate your age.
-                  </FormDescription> */}
+
                   <FormMessage />
                 </FormItem>
               )}

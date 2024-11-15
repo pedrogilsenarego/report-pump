@@ -7,7 +7,7 @@ export const NewInstallationSchema = z.object({
 
   address: z.string().optional(),
   area: z.string().optional(),
-
+  responsibleId: z.string(),
   condition: z.string().optional(),
 });
 

@@ -12,11 +12,11 @@ import { Installation } from "@/types/installation.types";
 const supabase = supabaseBrowser();
 
 type GetInstallationsProps = {
-  profileId: string;
+  companyId: string;
 };
 
 export const getInstallations = async ({
-  profileId,
+  companyId,
 }: GetInstallationsProps): Promise<Installation[]> => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -30,8 +30,13 @@ export const getInstallations = async ({
 
       const { data, error } = await supabase
         .from("installations")
-        .select(`*`)
-        .eq("profile_id", profileId);
+        .select(
+          `*,
+          profiles (
+            display_name
+          )`
+        )
+        .eq("company_id", companyId);
 
       if (error) {
         console.error("Error fetching user data:", error);
@@ -50,7 +55,7 @@ export const getInstallations = async ({
 };
 
 export const addInstallation = async (
-  props: NewInstallationType & { profileId: string }
+  props: NewInstallationType & { companyId: string }
 ): Promise<any> => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -62,7 +67,6 @@ export const addInstallation = async (
         return reject(new Error("User not authenticated"));
       }
       const rawData = mapInstallationToRaw(props);
-      console.log(rawData);
 
       const { data, error } = await supabase
         .from("installations")

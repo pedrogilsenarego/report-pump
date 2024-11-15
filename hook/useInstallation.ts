@@ -8,11 +8,11 @@ import { getInstallations } from "@/actions/clientActions/installation.actions";
 
 export function useInstallations() {
   const user = useUser();
-  const profileId = user?.data?.id || "";
+  const companyId = user?.data?.company_id || "";
 
   return useQuery<Installation[]>({
     queryKey: [QueryKeys.INSTALLATIONS],
-    queryFn: () => getInstallations({ profileId: profileId }),
-    enabled: !!profileId,
+    queryFn: () => getInstallations({ companyId: companyId }),
+    enabled: !!companyId,
   });
 }

@@ -8,7 +8,9 @@ export const mapInstallation = (profile: InstallationRaw): Installation => {
     condition: profile.condition,
     area: profile.area,
     address: profile.address,
-    profileId: profile.profile_id,
+    companyId: profile.company_id,
+    responsibleId: profile.responsible_id,
+    responsibleName: profile.profiles?.display_name,
   };
 };
 
@@ -20,7 +22,8 @@ export const mapInstallationToRaw = (
     condition: profile.condition,
     area: profile.area,
     address: profile.address,
-    profile_id: profile.profileId,
+    company_id: profile.companyId,
+    responsible_id: profile.responsibleId,
   };
 };
 

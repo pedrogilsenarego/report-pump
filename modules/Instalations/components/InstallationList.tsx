@@ -37,6 +37,7 @@ import NewInstallation from "./NewInstallation";
 
 export default function InstallationList() {
   const { data } = useInstallations();
+  console.log(data);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});

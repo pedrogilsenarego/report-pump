@@ -41,6 +41,13 @@ export const columns: ColumnDef<Installation>[] = [
     cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
+    accessorKey: "responsibleName",
+    header: "Responsible",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("responsibleName")}</div>
+    ),
+  },
+  {
     accessorKey: "area",
     header: ({ column }) => {
       return (

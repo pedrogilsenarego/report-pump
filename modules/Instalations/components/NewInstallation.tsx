@@ -13,18 +13,31 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
 import { Textarea } from "@/components/ui/textarea";
 import useNewInstallation from "./useNewInstallation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useResponsibles } from "@/hook/useResponsibles";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 export default function NewInstallation() {
   const { form, onSubmit, isPending, openModal, setOpenModal } =
     useNewInstallation();
+  const { data: responsibles, isLoading: isLoadingResponsibles } =
+    useResponsibles();
   return (
     <Dialog open={openModal} onOpenChange={(value) => setOpenModal(value)}>
       <DialogTrigger asChild>
@@ -51,6 +64,48 @@ export default function NewInstallation() {
                   <FormControl>
                     <Input placeholder="Name" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="responsibleId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Responsible</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      {isLoadingResponsibles ? (
+                        <div className="flex items-center justify-center">
+                          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                        </div>
+                      ) : (
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a responsible" />
+                        </SelectTrigger>
+                      )}
+                    </FormControl>
+                    <SelectContent>
+                      {responsibles?.map((responsible) => {
+                        return (
+                          <SelectItem
+                            key={responsible.id}
+                            value={responsible.id}
+                          >
+                            {responsible.name}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Choose a responsible for the insatallation if there is none,
+                    go to users and create one
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
