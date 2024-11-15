@@ -44,6 +44,7 @@ export default function Terms(props: Props) {
         descriptionEl.removeEventListener("scroll", handleScroll);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.open]);
 
   return (
