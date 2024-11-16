@@ -214,8 +214,6 @@ export const validateUser = async (): Promise<string> => {
         return reject(new Error("User not authenticated"));
       }
 
-      console.log(user);
-
       // Step 2: Update the invitation to mark it as accepted
       const { error: updateError } = await supabase
         .from("profiles")

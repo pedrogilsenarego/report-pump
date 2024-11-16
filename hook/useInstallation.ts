@@ -11,7 +11,7 @@ export function useInstallations() {
   const companyId = user?.data?.company_id || "";
 
   return useQuery<Installation[]>({
-    queryKey: [QueryKeys.INSTALLATIONS],
+    queryKey: [QueryKeys.INSTALLATIONS, user],
     queryFn: () => getInstallations({ companyId: companyId }),
     enabled: !!companyId,
   });

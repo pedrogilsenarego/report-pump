@@ -18,8 +18,7 @@ export const getProfilesPending = async (): Promise<User[]> => {
         .from("profiles")
         .select(`*`)
         .eq("active", false)
-        .eq("role", 2)
-        .eq("role", 3);
+        .in("role", [2, 3]);
 
       if (error) {
         console.error("Error fetching user data:", error);

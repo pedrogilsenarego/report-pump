@@ -7,4 +7,5 @@ export type User = {
   role: number;
   created_at: string;
   company_id: string;
+  phone: string;
 };
