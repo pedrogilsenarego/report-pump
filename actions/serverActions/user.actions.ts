@@ -3,8 +3,8 @@
 import { redirect } from "next/navigation";
 import { supabaseServer } from "../../lib/supabase/server";
 
+const supabase = supabaseServer();
 export const getSession = async (): Promise<any> => {
-  const supabase = supabaseServer();
   return new Promise(async (resolve, reject) => {
     try {
       const { data: sessionData, error: sessionError } =
