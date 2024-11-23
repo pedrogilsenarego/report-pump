@@ -1,6 +1,13 @@
 "use client";
 import Link from "next/link";
-import { Factory, Home, LineChart, Settings, Users2 } from "lucide-react";
+import {
+  CircleGauge,
+  Factory,
+  Home,
+  LineChart,
+  Settings,
+  Users2,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import {
@@ -79,6 +86,27 @@ export default function NavBar() {
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="right">Installations</TooltipContent>
+            </Tooltip>
+          </WithRole>
+          <WithRole roleKey={[KeyRoles.CUSTOMER]}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href={RouterKeys.PUMPS}
+                  style={{
+                    color: isActive(RouterKeys.PUMPS) ? "white" : undefined,
+                  }}
+                  className={`flex h-9 w-9 items-center justify-center transition-all md:h-8 md:w-8 ${
+                    isActive(RouterKeys.PUMPS)
+                      ? "text-background bg-primary rounded-full"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <CircleGauge className="h-5 w-5" />
+                  <span className="sr-only">Pumps</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">Pumps</TooltipContent>
             </Tooltip>
           </WithRole>
           <Tooltip>
