@@ -6,13 +6,13 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import { Installation } from "@/types/installation.types";
+import { Pump } from "@/types/pump.types";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 import { ColumnDef } from "@tanstack/react-table";
 
-export const columns: ColumnDef<Installation>[] = [
+export const columns: ColumnDef<Pump>[] = [
   //   {
   //     id: "select",
   //     header: ({ table }) => (
@@ -36,39 +36,15 @@ export const columns: ColumnDef<Installation>[] = [
   //     enableHiding: false,
   //   },
   {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
-  },
-  {
-    accessorKey: "responsibleName",
-    header: "Responsible",
+    accessorKey: "installationName",
+    header: "Installation Name",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("responsibleName")}</div>
+      <div className="capitalize">
+        {row.original.installations?.name || "N/A"}
+      </div>
     ),
   },
-  {
-    accessorKey: "area",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Area
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("area")}</div>,
-  },
-  {
-    accessorKey: "address",
-    header: () => <div className="text-right">Address</div>,
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("address")}</div>
-    ),
-  },
+
   {
     accessorKey: "condition",
     header: () => <div className="text-right">Condition</div>,

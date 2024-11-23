@@ -4,6 +4,9 @@ export type Pump = {
   installationId?: string;
   type?: string;
   condition?: string;
+  installations?: {
+    name?: string;
+  };
 };
 
 export type PumpRaw = {

@@ -31,12 +31,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { useInstallations } from "@/hook/useInstallation";
-import { columns } from "./InstallationList.columns";
+import { columns } from "./PumpList.columns";
 import NewPump from "./NewPump";
+import { usePumps } from "@/hook/usePumps";
 
 export default function PumpList() {
-  const { data } = useInstallations();
+  const { data } = usePumps();
   console.log(data);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

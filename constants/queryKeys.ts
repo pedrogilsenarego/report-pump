@@ -4,4 +4,5 @@ export enum QueryKeys {
   TECHNICIANS = "technicians",
   INSTALLATIONS = "installations",
   RESPONSIBLES = "responsibles",
+  PUMPS = "pumps",
 }
