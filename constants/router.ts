@@ -10,4 +10,5 @@ export enum RouterKeys {
   SETTINGS = "/settings",
   INSTALLATIONS = "/installations",
   PUMPS = "/pumps",
+  INTERVENTIONS = "/interventions",
 }
