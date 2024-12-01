@@ -6,5 +6,6 @@ export enum QueryKeys {
   RESPONSIBLES = "responsibles",
   PUMPS = "pumps",
   CHECKLISTS = "checklists",
+  CHECKLIST = "checklist",
   INTERVENTIONS = "interventions",
 }

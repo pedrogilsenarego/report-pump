@@ -8,8 +8,11 @@ import {
   NewInterventionSchema,
   NewInterventionType,
 } from "./NewIntervention.validation";
+import { useRouter } from "next/navigation";
+import { RouterKeys } from "@/constants/router";
 
 export default function useNewIntervention() {
+  const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
   const form = useForm<NewInterventionType>({
     resolver: zodResolver(NewInterventionSchema),
@@ -19,7 +22,7 @@ export default function useNewIntervention() {
   });
 
   function onSubmit(data: NewInterventionType) {
-    console.log(data);
+    router.push(RouterKeys.NEW_INTERVENTION.replace(":id", data.checklistId));
   }
 
   return { form, onSubmit, openModal, setOpenModal };

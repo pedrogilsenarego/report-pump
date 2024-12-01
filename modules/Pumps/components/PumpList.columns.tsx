@@ -37,7 +37,7 @@ export const columns: ColumnDef<Pump>[] = [
   //   },
   {
     accessorKey: "installationName",
-    header: "Installation Name",
+    header: "Installation",
     cell: ({ row }) => (
       <div className="capitalize">
         {row.original.installations?.name || "N/A"}

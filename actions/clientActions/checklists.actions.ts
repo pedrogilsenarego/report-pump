@@ -31,3 +31,42 @@ export const getCheckLists = async (): Promise<Checklist[]> => {
     }
   });
 };
+
+export const getCheckList = async (): Promise<Checklist> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return reject(new Error("User not authenticated"));
+      }
+
+      const { data, error } = await supabase.from("checklists").select(
+        `
+        *,
+        checklistactions (
+          code,
+          code_group,
+          code_subgroup,
+          actions ( * )
+        )
+      `
+      );
+
+      if (error) {
+        console.error("Error fetching user data:", error);
+        return reject(error.message);
+      }
+      console.log(data);
+      //const mappedData = mapChecklists(data);
+
+      return resolve(data as unknown as Checklist);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Error in getProfiles:", error);
+      reject(error.message);
+    }
+  });
+};
