@@ -16,9 +16,9 @@ export function useChecklists() {
 }
 
 export function useChecklist(checklistId: number | undefined) {
-  return useQuery<Checklist>({
+  return useQuery<Checklist[]>({
     queryKey: [QueryKeys.CHECKLIST, checklistId],
-    queryFn: getCheckList,
+    queryFn: () => getCheckList(checklistId),
     enabled: !!checklistId,
   });
 }
