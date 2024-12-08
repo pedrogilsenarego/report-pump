@@ -16,12 +16,14 @@ export type Action = {
   codeSubGroup: number;
   period: string;
   pumpType: string;
+  description: string;
 };
 
 export type ChecklistActionRaw = {
   actions: {
     period: string;
     pump_type: string;
+    description: string;
   };
   code: number;
   code_group: number;

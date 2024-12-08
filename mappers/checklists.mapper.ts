@@ -11,8 +11,9 @@ const mapAction = (action: ChecklistActionRaw): Action => {
     code: action.code,
     codeGroup: action.code_group,
     codeSubGroup: action.code_subgroup,
-    period: action.actions?.period || "", // Default to empty string if period is undefined
-    pumpType: action.actions?.pump_type || "", // Default to empty string if pump_type is undefined
+    period: action.actions?.period || "",
+    pumpType: action.actions?.pump_type || "",
+    description: action.actions?.description || "",
   };
 };
 
