@@ -29,10 +29,13 @@ import {
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useChecklists } from "@/hook/useChecklist";
 import useNewIntervention from "./useNewIntervention";
+import { useInstallations } from "@/hook/useInstallation";
 
 export default function NewIntervention() {
   const { form, onSubmit, openModal, setOpenModal } = useNewIntervention();
   const { data: checklists, isLoading: isLoadingChecklists } = useChecklists();
+  const { data: installations, isLoading: isLoadingInstallations } =
+    useInstallations();
   return (
     <Dialog open={openModal} onOpenChange={(value) => setOpenModal(value)}>
       <DialogTrigger asChild>
@@ -67,7 +70,7 @@ export default function NewIntervention() {
                         </div>
                       ) : (
                         <SelectTrigger>
-                          <SelectValue placeholder="Select an installation" />
+                          <SelectValue placeholder="Select a checklist" />
                         </SelectTrigger>
                       )}
                     </FormControl>
@@ -83,6 +86,48 @@ export default function NewIntervention() {
                   </Select>
                   <FormDescription>
                     Choose a checklist for the intervention if there is none.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="installationId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Installation</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      {isLoadingInstallations ? (
+                        <div className="flex items-center justify-center">
+                          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                        </div>
+                      ) : (
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select an installation" />
+                        </SelectTrigger>
+                      )}
+                    </FormControl>
+                    <SelectContent>
+                      {installations?.map((installation) => {
+                        return (
+                          <SelectItem
+                            key={installation.id}
+                            value={installation.id}
+                          >
+                            {installation.name}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Choose a Installation for the intervention if there is none.
+                    Create one.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

@@ -3,16 +3,11 @@
 
 import { useNewIntervention } from "./useNewIntervention";
 import { ExclusiveMultiToggleForm } from "@/components/ui/multi-exclusive-toggle";
-import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 
 export default function NewIntervention() {
-  const { checklistData } = useNewIntervention();
-  const { control, handleSubmit } = useForm();
-
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
+  const { checklistData, control, handleSubmit, onSubmit, isSubmitting } =
+    useNewIntervention();
 
   const options = [
     { value: "error", label: "Falha" },
@@ -47,7 +42,7 @@ export default function NewIntervention() {
               </div>
             );
           })}
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" isLoading={isSubmitting}>
             Save Intervention
           </Button>
         </div>

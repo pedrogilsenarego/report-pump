@@ -18,11 +18,17 @@ export default function useNewIntervention() {
     resolver: zodResolver(NewInterventionSchema),
     defaultValues: {
       checklistId: undefined,
+      installationId: undefined,
     },
   });
 
   function onSubmit(data: NewInterventionType) {
-    router.push(RouterKeys.NEW_INTERVENTION.replace(":id", data.checklistId));
+    router.push(
+      RouterKeys.NEW_INTERVENTION.replace(":id", data.checklistId).replace(
+        ":installation",
+        data.installationId
+      )
+    );
   }
 
   return { form, onSubmit, openModal, setOpenModal };

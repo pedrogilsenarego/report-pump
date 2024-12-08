@@ -11,5 +11,5 @@ export enum RouterKeys {
   INSTALLATIONS = "/installations",
   PUMPS = "/pumps",
   INTERVENTIONS = "/interventions",
-  NEW_INTERVENTION = "/new-intervention/:id",
+  NEW_INTERVENTION = "/new-intervention/:id/:installation",
 }
