@@ -6,14 +6,15 @@ import {
 } from "@/types/checklist.types";
 
 // Map a single ChecklistActionRaw to an Action
-const mapAction = (action: ChecklistActionRaw): Action => {
+const mapAction = (checklistaction: ChecklistActionRaw): Action => {
   return {
-    code: action.code,
-    codeGroup: action.code_group,
-    codeSubGroup: action.code_subgroup,
-    period: action.actions?.period || "",
-    pumpType: action.actions?.pump_type || "",
-    description: action.actions?.description || "",
+    code: checklistaction.code,
+    codeGroup: checklistaction.code_group,
+    codeSubGroup: checklistaction.code_subgroup,
+    period: checklistaction.actions?.period || "",
+    pumpType: checklistaction.actions?.pump_type || "",
+    description: checklistaction.actions?.description || "",
+    checklistactionId: checklistaction.id,
   };
 };
 

@@ -21,6 +21,7 @@ export default function NewIntervention() {
         <h2>New Intervention</h2>
         <div style={{ rowGap: "10px" }} className="flex flex-col gap-y-2 mt-2">
           {checklistData?.[0].actions?.map((action, index) => {
+            console.log(action);
             return (
               <div
                 key={index}

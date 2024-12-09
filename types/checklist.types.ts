@@ -11,6 +11,7 @@ export type ChecklistRaw = {
 };
 
 export type Action = {
+  checklistactionId: number;
   code: number;
   codeGroup: number;
   codeSubGroup: number;
@@ -25,6 +26,7 @@ export type ChecklistActionRaw = {
     pump_type: string;
     description: string;
   };
+  id: number;
   code: number;
   code_group: number;
   code_subgroup: number;

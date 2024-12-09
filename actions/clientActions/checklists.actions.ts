@@ -52,6 +52,7 @@ export const getCheckList = async (
           `
         *,
         checklistactions (
+          id,
           code,
           code_group,
           code_subgroup,

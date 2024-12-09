@@ -37,12 +37,25 @@ export const useNewIntervention = () => {
       },
     });
 
-  const onSubmit = (data: any) => {
-    newInterventionMutation({ installationId, checklistId });
-  };
-
   const { data: checklistData, isLoading: isLoadingChecklist } =
     useChecklist(checklistId);
+
+  const onSubmit = (formValues: any) => {
+    console.log(formValues);
+    const actionsWithValues = checklistData?.[0].actions?.map(
+      (action, index) => {
+        return {
+          checklistactionId: action.checklistactionId,
+          value: formValues[`action_${index}`] || "",
+        };
+      }
+    );
+    newInterventionMutation({
+      installationId,
+      checklistId,
+      data: actionsWithValues,
+    });
+  };
 
   return {
     checklistData,

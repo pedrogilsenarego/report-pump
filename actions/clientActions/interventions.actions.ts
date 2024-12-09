@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import {
@@ -39,7 +40,9 @@ export const getInterventions = async (): Promise<Intervention[]> => {
   });
 };
 
-type NewIntervantionType = {} & Intervention;
+type NewIntervantionType = {
+  data?: any[];
+} & Intervention;
 
 export const addIntervention = async (
   props: NewIntervantionType
@@ -53,29 +56,59 @@ export const addIntervention = async (
       if (!user) {
         return reject(new Error("User not authenticated"));
       }
+
       const rawDataIntervention = mapInterventionToRaw({
         userId: user.id,
         installationId: props.installationId,
         checklistId: props.checklistId,
       });
 
-      const { data, error } = await supabase
-        .from("interventions")
-        .insert([
-          {
-            ...rawDataIntervention,
-          },
-        ])
-        .single();
+      const { data: interventionData, error: interventionError } =
+        await supabase
+          .from("interventions")
+          .insert([rawDataIntervention])
+          .select("id")
+          .single();
 
-      if (error) {
-        console.error("Error adding technician:", error);
-        return reject(error.message);
+      if (interventionError) {
+        console.error("Error adding intervention:", interventionError);
+        return reject(interventionError.message);
       }
 
-      return resolve(data);
+      const interventionId = interventionData.id;
+
+      if (!interventionId) {
+        return reject(new Error("Failed to retrieve intervention ID"));
+      }
+
+      const interventionChecklistActions = props.data?.map((action) => ({
+        intervention_id: interventionId,
+        checklistaction_id: action.checklistactionId,
+        value: action.value,
+      }));
+
+      console.log(interventionChecklistActions);
+
+      const { data: checklistActionData, error: checklistActionError } =
+        await supabase
+          .from("interventionchecklistactions")
+          .insert(interventionChecklistActions);
+
+      if (checklistActionError) {
+        console.error(
+          "Error adding intervention checklist actions:",
+          checklistActionError
+        );
+        return reject(checklistActionError.message);
+      }
+
+      // Resolve with the intervention and checklist action data
+      return resolve({
+        intervention: interventionData,
+        checklistActions: checklistActionData,
+      });
     } catch (error: any) {
-      console.error("Error in addTechnician:", error);
+      console.error("Error in addIntervention:", error);
       reject(error.message);
     }
   });
