@@ -32,7 +32,6 @@ export const addCompany = async ({
         defaultLang,
         country,
       });
-      console.log(rawData);
 
       const { data, error } = await supabase
         .from("companies")

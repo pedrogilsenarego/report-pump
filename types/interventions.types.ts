@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type Intervention = {
   id?: string;
   createdAt?: string;
@@ -13,3 +14,6 @@ export type InterventionRaw = {
   checklist_id?: number;
   installation_id?: string;
 };
+
+export type InterventionResultRaw = any;
+export type InterventionResult = any;

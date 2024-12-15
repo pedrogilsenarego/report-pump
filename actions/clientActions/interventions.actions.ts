@@ -5,7 +5,7 @@ import {
   mapInterventions,
   mapInterventionToRaw,
 } from "@/mappers/interventions.mapper";
-import { Intervention } from "@/types/interventions.types";
+import { Intervention, InterventionResult } from "@/types/interventions.types";
 const supabase = supabaseBrowser();
 
 export const getInterventions = async (): Promise<Intervention[]> => {
@@ -109,6 +109,45 @@ export const addIntervention = async (
       });
     } catch (error: any) {
       console.error("Error in addIntervention:", error);
+      reject(error.message);
+    }
+  });
+};
+
+export const getIntervention = async ({
+  interventionId,
+}: {
+  interventionId: number | undefined;
+}): Promise<InterventionResult[]> => {
+  return new Promise(async (resolve, reject) => {
+    if (!interventionId) return;
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return reject(new Error("User not authenticated"));
+      }
+
+      const { data, error } = await supabase
+        .from("interventions")
+        .select(
+          `*, interventionchecklistactions (*, checklistactions (*, actions(*))) `
+        )
+        .eq("id", interventionId);
+
+      if (error) {
+        console.error("Error fetching user data:", error);
+        return reject(error.message);
+      }
+
+      //const mappedData = mapInterventions(data);
+
+      return resolve(data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Error in getProfiles:", error);
       reject(error.message);
     }
   });
