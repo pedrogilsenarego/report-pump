@@ -1,4 +1,9 @@
-import { Intervention, InterventionRaw } from "@/types/interventions.types";
+import {
+  Intervention,
+  InterventionRaw,
+  InterventionResult,
+  InterventionResultRaw,
+} from "@/types/interventions.types";
 
 export const mapIntervention = (profile: InterventionRaw): Intervention => {
   return {
@@ -18,4 +23,19 @@ export const mapInterventionToRaw = (
     installation_id: profile.installationId,
     checklist_id: profile.checklistId,
   };
+};
+
+export const mapInterventionResults = (
+  interventions: InterventionResultRaw
+): InterventionResult[] => {
+  return interventions.interventionchecklistactions.map((intervention) => {
+    console.log(intervention);
+    return {
+      value: intervention.value,
+      description: intervention.checklistactions.actions.description,
+      code: intervention.checklistactions.code,
+      codeGroup: intervention.checklistactions.code_group,
+      codeSubgroup: intervention.checklistactions.code_subgroup,
+    };
+  });
 };

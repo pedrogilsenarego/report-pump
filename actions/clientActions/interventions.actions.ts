@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import {
+  mapInterventionResults,
   mapInterventions,
   mapInterventionToRaw,
 } from "@/mappers/interventions.mapper";
@@ -142,9 +143,9 @@ export const getIntervention = async ({
         return reject(error.message);
       }
 
-      //const mappedData = mapInterventions(data);
+      const mappedData = mapInterventionResults(data[0]);
 
-      return resolve(data);
+      return resolve(mappedData);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Error in getProfiles:", error);

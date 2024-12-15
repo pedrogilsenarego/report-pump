@@ -15,5 +15,26 @@ export type InterventionRaw = {
   installation_id?: string;
 };
 
-export type InterventionResultRaw = any;
-export type InterventionResult = any;
+export type InterventionResultRaw = {
+  interventionchecklistactions: {
+    checklistaction_id: number;
+    value: string;
+    checklistactions: {
+      id: number;
+      action_id: number;
+      code: number;
+      code_group: number;
+      code_subgroup: number;
+      actions: {
+        description: string;
+      };
+    };
+  }[];
+};
+export type InterventionResult = {
+  code: number;
+  codeGroup: number;
+  codeSubgroup: number;
+  description: string;
+  value: string;
+};
