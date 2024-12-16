@@ -29,13 +29,13 @@ export const mapInterventionResults = (
   interventions: InterventionResultRaw
 ): InterventionResult[] => {
   return interventions.interventionchecklistactions.map((intervention) => {
-    console.log(intervention);
     return {
       value: intervention.value,
       description: intervention.checklistactions.actions.description,
       code: intervention.checklistactions.code,
       codeGroup: intervention.checklistactions.code_group,
       codeSubgroup: intervention.checklistactions.code_subgroup,
+      period: intervention.checklistactions.actions.period,
     };
   });
 };

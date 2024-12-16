@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useIntervention } from "./useIntervention";
 import { useReactToPrint } from "react-to-print";
 import { Button } from "@/components/ui/button";
+import { periodValues } from "@/constants/actions";
 
 export default function Intervention() {
   const { intervention } = useIntervention();
@@ -23,17 +24,20 @@ export default function Intervention() {
           return (
             <div
               key={index}
-              className="border flex p-2 rounded-sm justify-between"
+              className="border flex p-2 rounded-sm justify-between space-x-3 items-center"
             >
-              <div className="flex gap-2">
+              <div className="flex gap-4 w-full items-center">
                 <p>
                   {intervention.codeGroup}
                   {intervention.codeSubgroup}
                   {intervention.code}
                 </p>
+                <div className="border p-2">
+                  <p>{periodValues[intervention.period]}</p>
+                </div>
                 <p>{intervention.description}</p>
               </div>
-              <div>
+              <div className="border p-2">
                 <p>{intervention.value}</p>
               </div>
             </div>

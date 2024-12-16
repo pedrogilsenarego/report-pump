@@ -27,6 +27,7 @@ export type InterventionResultRaw = {
       code_subgroup: number;
       actions: {
         description: string;
+        period: number;
       };
     };
   }[];
@@ -37,4 +38,5 @@ export type InterventionResult = {
   codeSubgroup: number;
   description: string;
   value: string;
+  period: number;
 };
