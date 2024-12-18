@@ -7,6 +7,7 @@ import {
   Home,
   LineChart,
   Settings,
+  Table,
   Users2,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -68,7 +69,29 @@ export default function NavBar() {
             </TooltipTrigger>
             <TooltipContent side="right">Interventions</TooltipContent>
           </Tooltip>
-
+          <WithRole roleKey={[KeyRoles.ADMIN]}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href={RouterKeys.CHECKLISTS}
+                  style={{
+                    color: isActive(RouterKeys.CHECKLISTS)
+                      ? "white"
+                      : undefined,
+                  }}
+                  className={`flex h-9 w-9 items-center justify-center transition-all md:h-8 md:w-8 ${
+                    isActive(RouterKeys.CHECKLISTS)
+                      ? "text-background bg-primary rounded-full"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Table className="h-5 w-5" />
+                  <span className="sr-only">Checklists</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">Checklists</TooltipContent>
+            </Tooltip>
+          </WithRole>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link

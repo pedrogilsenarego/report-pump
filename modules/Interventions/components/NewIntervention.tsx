@@ -61,7 +61,7 @@ export default function NewIntervention() {
                   <FormLabel>Checklist</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    defaultValue={checklists?.[0].id}
                   >
                     <FormControl>
                       {isLoadingChecklists ? (

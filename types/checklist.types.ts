@@ -1,7 +1,7 @@
 export type Checklist = {
   id: string;
   nfpaEd: string;
-  actions?: Action[];
+  actions?: ChecklistAction[];
 };
 
 export type ChecklistRaw = {
@@ -10,7 +10,7 @@ export type ChecklistRaw = {
   checklistactions?: ChecklistActionRaw[];
 };
 
-export type Action = {
+export type ChecklistAction = {
   checklistactionId: number;
   code: number;
   codeGroup: number;

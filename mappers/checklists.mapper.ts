@@ -1,12 +1,12 @@
 import {
-  Action,
+  ChecklistAction,
   Checklist,
   ChecklistActionRaw,
   ChecklistRaw,
 } from "@/types/checklist.types";
 
 // Map a single ChecklistActionRaw to an Action
-const mapAction = (checklistaction: ChecklistActionRaw): Action => {
+const mapAction = (checklistaction: ChecklistActionRaw): ChecklistAction => {
   return {
     code: checklistaction.code,
     codeGroup: checklistaction.code_group,
@@ -19,7 +19,7 @@ const mapAction = (checklistaction: ChecklistActionRaw): Action => {
 };
 
 // Map an array of ChecklistActionRaw to an array of Action
-const mapActions = (actions: ChecklistActionRaw[]): Action[] => {
+const mapActions = (actions: ChecklistActionRaw[]): ChecklistAction[] => {
   return actions.map((action) => mapAction(action));
 };
 
