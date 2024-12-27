@@ -24,7 +24,7 @@ export type ChecklistAction = {
 
 export type ChecklistActionRaw = {
   actions: {
-    period: string;
+    period: number;
     pump_type: string;
     description: string;
   };

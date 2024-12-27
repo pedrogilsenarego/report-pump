@@ -11,8 +11,8 @@ const mapAction = (checklistaction: ChecklistActionRaw): ChecklistAction => {
   return {
     code: checklistaction.code,
     codeGroup: checklistaction.code_group,
-    codeSubGroup: checklistaction.code_subgroup,
-    period: checklistaction.actions?.period || "",
+    codeSubgroup: checklistaction.code_subgroup,
+    period: checklistaction.actions?.period || 0,
     pumpType: checklistaction.actions?.pump_type || "",
     description: checklistaction.actions?.description || "",
     checklistactionId: checklistaction.id,
