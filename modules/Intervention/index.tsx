@@ -6,10 +6,14 @@ import { useRef } from "react";
 import { useIntervention } from "./useIntervention";
 import { useReactToPrint } from "react-to-print";
 import { Button } from "@/components/ui/button";
-import { periodValues } from "@/constants/actions";
 import { groupByCodeGroup } from "@/utils/checklist";
 import { i18n } from "@/translations/i18n";
-import { InterventionGroup } from "@/components/atoms/InterventionGroup";
+import {
+  InterventionDescription,
+  InterventionDetailsBox,
+  InterventionGroup,
+  InterventionPeriod,
+} from "@/components/atoms/InterventionComponents";
 
 export default function Intervention() {
   const { intervention } = useIntervention();
@@ -36,16 +40,16 @@ export default function Intervention() {
                 key={index}
                 className="border flex p-2 rounded-sm justify-between space-x-3 items-center"
               >
-                <div className="flex gap-4 w-full items-center">
+                <InterventionDetailsBox>
                   <InterventionGroup
                     codeGroup={intervention.codeGroup}
                     code={intervention.code}
                   />
-                  <div className="border p-2">
-                    <p>{periodValues[intervention.period]}</p>
-                  </div>
-                  <p>{intervention.description}</p>
-                </div>
+                  <InterventionPeriod period={intervention.period} />
+                  <InterventionDescription
+                    description={intervention.description}
+                  />
+                </InterventionDetailsBox>
                 <div className="border p-2">
                   <p>{intervention.value}</p>
                 </div>

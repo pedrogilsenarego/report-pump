@@ -4,7 +4,12 @@
 import { useNewIntervention } from "./useNewIntervention";
 import { ExclusiveMultiToggleForm } from "@/components/ui/multi-exclusive-toggle";
 import { Button } from "@/components/ui/button";
-import { InterventionGroup } from "@/components/atoms/InterventionGroup";
+import {
+  InterventionDescription,
+  InterventionDetailsBox,
+  InterventionGroup,
+  InterventionPeriod,
+} from "@/components/atoms/InterventionComponents";
 
 export default function NewIntervention() {
   const { checklistData, control, handleSubmit, onSubmit, isSubmitting } =
@@ -27,13 +32,14 @@ export default function NewIntervention() {
                 key={index}
                 className="border flex p-2 rounded-sm justify-between"
               >
-                <div className="flex gap-2">
+                <InterventionDetailsBox>
                   <InterventionGroup
                     codeGroup={action.codeGroup}
                     code={action.codeSubGroup}
                   />
-                  <p>{action.description}</p>
-                </div>
+                  <InterventionPeriod period={action.period} />
+                  <InterventionDescription description={action.description} />
+                </InterventionDetailsBox>
                 <ExclusiveMultiToggleForm
                   name={`action_${index}`}
                   control={control}

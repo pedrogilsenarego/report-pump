@@ -17,7 +17,7 @@ export type ChecklistAction = {
   code: number;
   codeGroup: number;
   codeSubGroup: number;
-  period: string;
+  period: number;
   pumpType: string;
   description: string;
 };
