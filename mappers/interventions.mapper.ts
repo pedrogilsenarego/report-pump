@@ -30,12 +30,14 @@ export const mapInterventionResults = (
 ): InterventionResult[] => {
   return interventions.interventionchecklistactions.map((intervention) => {
     return {
+      checklistactionId: intervention.checklistactions.action_id,
       value: intervention.value,
       description: intervention.checklistactions.actions.description,
       code: intervention.checklistactions.code,
       codeGroup: intervention.checklistactions.code_group,
       codeSubgroup: intervention.checklistactions.code_subgroup,
       period: intervention.checklistactions.actions.period,
+      pumpType: intervention.checklistactions.actions.pump_type,
     };
   });
 };

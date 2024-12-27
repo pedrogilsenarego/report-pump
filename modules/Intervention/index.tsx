@@ -7,11 +7,12 @@ import { useIntervention } from "./useIntervention";
 import { useReactToPrint } from "react-to-print";
 import { Button } from "@/components/ui/button";
 import { groupByCodeGroup } from "@/utils/checklist";
-import { i18n } from "@/translations/i18n";
 import {
+  InterventionBox,
   InterventionDescription,
   InterventionDetailsBox,
   InterventionGroup,
+  InterventionGroupTitle,
   InterventionPeriod,
 } from "@/components/atoms/InterventionComponents";
 
@@ -32,14 +33,9 @@ export default function Intervention() {
       >
         {Object.entries(groupedInterventions).map(([group, interventions]) => (
           <div key={group} className="mb-6">
-            <h2 className="text-lg font-semibold mb-2">
-              {group} - {i18n.t(`checklists.groupTitle.${group}`)}
-            </h2>
+            <InterventionGroupTitle group={group} />
             {interventions.map((intervention: any, index: number) => (
-              <div
-                key={index}
-                className="border flex p-2 rounded-sm justify-between space-x-3 items-center"
-              >
+              <InterventionBox key={index}>
                 <InterventionDetailsBox>
                   <InterventionGroup
                     codeGroup={intervention.codeGroup}
@@ -53,7 +49,7 @@ export default function Intervention() {
                 <div className="border p-2">
                   <p>{intervention.value}</p>
                 </div>
-              </div>
+              </InterventionBox>
             ))}{" "}
           </div>
         ))}

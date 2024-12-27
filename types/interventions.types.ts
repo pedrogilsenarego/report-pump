@@ -1,3 +1,5 @@
+import { ChecklistAction } from "./checklist.types";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type Intervention = {
   id?: string;
@@ -28,15 +30,11 @@ export type InterventionResultRaw = {
       actions: {
         description: string;
         period: number;
+        pump_type: string;
       };
     };
   }[];
 };
-export type InterventionResult = {
-  code: number;
-  codeGroup: number;
-  codeSubgroup: number;
-  description: string;
+export type InterventionResult = ChecklistAction & {
   value: string;
-  period: number;
 };

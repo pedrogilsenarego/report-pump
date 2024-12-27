@@ -1,8 +1,8 @@
-import { InterventionResult } from "@/types/interventions.types";
+import { ChecklistAction } from "@/types/checklist.types";
 
-export const groupByCodeGroup = (data: InterventionResult[]) => {
+export const groupByCodeGroup = (data: ChecklistAction[]) => {
   return data.reduce(
-    (acc: Record<string, InterventionResult[]>, item: InterventionResult) => {
+    (acc: Record<string, ChecklistAction[]>, item: ChecklistAction) => {
       const groupKey = item.codeGroup || "Ungrouped";
       if (!acc[groupKey]) acc[groupKey] = [];
       acc[groupKey].push(item);
