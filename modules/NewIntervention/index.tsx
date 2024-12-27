@@ -4,6 +4,7 @@
 import { useNewIntervention } from "./useNewIntervention";
 import { ExclusiveMultiToggleForm } from "@/components/ui/multi-exclusive-toggle";
 import { Button } from "@/components/ui/button";
+import { InterventionGroup } from "@/components/atoms/InterventionGroup";
 
 export default function NewIntervention() {
   const { checklistData, control, handleSubmit, onSubmit, isSubmitting } =
@@ -21,18 +22,16 @@ export default function NewIntervention() {
         <h2>New Intervention</h2>
         <div style={{ rowGap: "10px" }} className="flex flex-col gap-y-2 mt-2">
           {checklistData?.[0].actions?.map((action, index) => {
-            console.log(action);
             return (
               <div
                 key={index}
                 className="border flex p-2 rounded-sm justify-between"
               >
                 <div className="flex gap-2">
-                  <p>
-                    {action.codeGroup}
-                    {action.codeSubGroup}
-                    {action.code}
-                  </p>
+                  <InterventionGroup
+                    codeGroup={action.codeGroup}
+                    code={action.codeSubGroup}
+                  />
                   <p>{action.description}</p>
                 </div>
                 <ExclusiveMultiToggleForm

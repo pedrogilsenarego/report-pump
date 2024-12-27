@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { periodValues } from "@/constants/actions";
 import { groupByCodeGroup } from "@/utils/checklist";
 import { i18n } from "@/translations/i18n";
+import { InterventionGroup } from "@/components/atoms/InterventionGroup";
 
 export default function Intervention() {
   const { intervention } = useIntervention();
@@ -36,9 +37,10 @@ export default function Intervention() {
                 className="border flex p-2 rounded-sm justify-between space-x-3 items-center"
               >
                 <div className="flex gap-4 w-full items-center">
-                  <p>
-                    {intervention.codeGroup}.{intervention.code}
-                  </p>
+                  <InterventionGroup
+                    codeGroup={intervention.codeGroup}
+                    code={intervention.code}
+                  />
                   <div className="border p-2">
                     <p>{periodValues[intervention.period]}</p>
                   </div>
