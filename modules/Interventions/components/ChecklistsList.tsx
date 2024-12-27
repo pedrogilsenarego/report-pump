@@ -31,25 +31,26 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { columns } from "./InterventionList.columns";
-import NewPump from "./NewIntervention";
-import { useInterventions } from "@/hook/useInterventions";
-import { useRouter } from "next/navigation";
-import { RouterKeys } from "@/constants/router";
+// import { useInterventions } from "@/hook/useInterventions";
+// import { useRouter } from "next/navigation";
+// import { RouterKeys } from "@/constants/router";
+import { useChecklists } from "@/hook/useChecklist";
+import { columns } from "./ChecklistsList.columns";
+import NewChecklist from "./NewChecklist";
 
-export default function InterventionsList() {
-  const { data } = useInterventions();
+export default function ChecklistsList() {
+  const { data } = useChecklists();
 
-  const router = useRouter();
+  // const router = useRouter();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const handleClickRow = (interventionId?: string) => {
-    if (!interventionId) return;
-    router.push(RouterKeys.INTERVENTION.replace(":id", interventionId));
-  };
+  // const handleClickRow = (interventionId?: string) => {
+  //   if (!interventionId) return;
+  //   router.push(RouterKeys.INTERVENTION.replace(":id", interventionId));
+  // };
 
   const table = useReactTable({
     data: data || [],
@@ -79,7 +80,7 @@ export default function InterventionsList() {
           display: "flex",
         }}
       >
-        <NewPump />
+        <NewChecklist />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -132,7 +133,7 @@ export default function InterventionsList() {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   className="cursor-pointer"
-                  onClick={() => handleClickRow(row.original.id)}
+                  //onClick={() => handleClickRow(row.original.id)}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >

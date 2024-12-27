@@ -1,11 +1,13 @@
 export type Checklist = {
   id: string;
+  createdAt: string;
   nfpaEd: string;
   actions?: ChecklistAction[];
 };
 
 export type ChecklistRaw = {
   id: string;
+  created_at: string;
   nfpa_ed: string;
   checklistactions?: ChecklistActionRaw[];
 };
