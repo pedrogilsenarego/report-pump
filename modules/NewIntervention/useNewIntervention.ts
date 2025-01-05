@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 export const useNewIntervention = () => {
   const params = useParams();
   const { checklist, installation, period } = params;
+
   const { control, handleSubmit } = useForm();
   const checklists = useChecklists();
   const router = useRouter();
@@ -67,5 +68,6 @@ export const useNewIntervention = () => {
     onSubmit,
     isSubmitting,
     periodName,
+    period,
   };
 };

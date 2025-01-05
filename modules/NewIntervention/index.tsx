@@ -22,6 +22,7 @@ export default function NewIntervention() {
     onSubmit,
     isSubmitting,
     periodName,
+    period,
   } = useNewIntervention();
 
   const options = [
@@ -31,7 +32,9 @@ export default function NewIntervention() {
   ];
 
   const groupedInterventions = groupByCodeGroup(
-    checklistData?.[0].actions || []
+    checklistData?.[0].actions?.filter(
+      (action) => action.period >= parseInt(period as string)
+    ) || []
   );
 
   return (
