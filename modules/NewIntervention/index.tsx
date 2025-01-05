@@ -15,8 +15,14 @@ import {
 import { groupByCodeGroup } from "@/utils/checklist";
 
 export default function NewIntervention() {
-  const { checklistData, control, handleSubmit, onSubmit, isSubmitting } =
-    useNewIntervention();
+  const {
+    checklistData,
+    control,
+    handleSubmit,
+    onSubmit,
+    isSubmitting,
+    periodName,
+  } = useNewIntervention();
 
   const options = [
     { value: "error", label: "Falha" },
@@ -31,7 +37,7 @@ export default function NewIntervention() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="p-6">
-        <h2>New Intervention</h2>
+        <h2>New Intervention - {periodName}</h2>
         <div style={{ rowGap: "10px" }} className="flex flex-col gap-y-2 mt-2">
           {Object.entries(groupedInterventions).map(
             ([group, interventions]) => (

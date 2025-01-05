@@ -27,13 +27,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useChecklists } from "@/hook/useChecklist";
 import useNewIntervention from "./useNewIntervention";
 import { useInstallations } from "@/hook/useInstallation";
+import { periodValues } from "@/constants/actions";
 
 export default function NewIntervention() {
-  const { form, onSubmit, openModal, setOpenModal } = useNewIntervention();
-  const { data: checklists, isLoading: isLoadingChecklists } = useChecklists();
+  const {
+    form,
+    onSubmit,
+    openModal,
+    setOpenModal,
+    checklists,
+    isLoadingChecklists,
+  } = useNewIntervention();
+
   const { data: installations, isLoading: isLoadingInstallations } =
     useInstallations();
   return (
@@ -60,6 +67,7 @@ export default function NewIntervention() {
                 <FormItem>
                   <FormLabel>Checklist</FormLabel>
                   <Select
+                    value={field.value}
                     onValueChange={field.onChange}
                     defaultValue={checklists?.[0].id}
                   >
@@ -79,6 +87,39 @@ export default function NewIntervention() {
                         return (
                           <SelectItem key={checklist.id} value={checklist.id}>
                             {checklist.nfpaEd}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Choose a checklist for the intervention if there is none.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="period"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Period</FormLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    defaultValue={periodValues?.[0]}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a period" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {periodValues?.map((checklist, index) => {
+                        return (
+                          <SelectItem key={index} value={index.toFixed()}>
+                            {checklist}
                           </SelectItem>
                         );
                       })}

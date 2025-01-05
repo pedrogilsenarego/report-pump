@@ -3,6 +3,7 @@
 "use client";
 
 import { addIntervention } from "@/actions/clientActions/interventions.actions";
+import { periodValues } from "@/constants/actions";
 import { RouterKeys } from "@/constants/router";
 import { useChecklist, useChecklists } from "@/hook/useChecklist";
 import { useToast } from "@/hooks/use-toast";
@@ -12,13 +13,14 @@ import { useForm } from "react-hook-form";
 
 export const useNewIntervention = () => {
   const params = useParams();
-  const { checklist, installation } = params;
+  const { checklist, installation, period } = params;
   const { control, handleSubmit } = useForm();
   const checklists = useChecklists();
   const router = useRouter();
   const { toast } = useToast();
   const checklistId = checklist ? parseInt(checklist as string) : undefined;
   const installationId = installation as string;
+  const periodName = periodValues[parseInt(period as string)];
 
   const { mutate: newInterventionMutation, isPending: isSubmitting } =
     useMutation({
@@ -64,5 +66,6 @@ export const useNewIntervention = () => {
     handleSubmit,
     onSubmit,
     isSubmitting,
+    periodName,
   };
 };
