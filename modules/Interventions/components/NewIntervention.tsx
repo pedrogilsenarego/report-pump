@@ -67,9 +67,8 @@ export default function NewIntervention() {
                 <FormItem>
                   <FormLabel>Checklist</FormLabel>
                   <Select
-                    value={field.value}
                     onValueChange={field.onChange}
-                    defaultValue={checklists?.[0].id}
+                    defaultValue={field.value}
                   >
                     <FormControl>
                       {isLoadingChecklists ? (
@@ -106,9 +105,8 @@ export default function NewIntervention() {
                 <FormItem>
                   <FormLabel>Period</FormLabel>
                   <Select
-                    value={field.value}
                     onValueChange={field.onChange}
-                    defaultValue={periodValues?.[0]}
+                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
