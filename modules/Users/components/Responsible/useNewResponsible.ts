@@ -43,18 +43,22 @@ export default function useNewTechnician() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.data]);
 
-  console.log(form.watch("dateIn"));
-
   const { mutate: createNewResponsible, isPending } = useMutation({
     mutationFn: addResponsible,
-    onError: (data: any) => {
-      console.log(data);
+    onError: (error: any) => {
+      console.error("Mutation error:", error);
+
+      const errorMessage =
+        error?.message ||
+        (typeof error === "string" ? error : "An unexpected error occurred");
+
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: data?.error,
+        description: errorMessage,
       });
     },
+
     onSuccess: (data: string) => {
       toast({
         variant: "default",
