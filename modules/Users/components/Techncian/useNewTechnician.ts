@@ -38,6 +38,7 @@ export default function useNewTechnician() {
 
   useEffect(() => {
     form.setValue("role", user.data?.role === 2 ? "4" : "5");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.data]);
 
   const { mutate: createNewTechnician, isPending } = useMutation({
