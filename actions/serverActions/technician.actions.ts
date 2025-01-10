@@ -33,7 +33,10 @@ export const addTechnician = async (
 
     if (errorCreatingUser) {
       console.error("Error creating user:", errorCreatingUser);
-      throw new Error(errorCreatingUser.message || "Failed to create user");
+
+      throw new Error(
+        "Failed to create user. Please try again. Check if the email is not being used"
+      ); // Pass this to the client
     }
 
     // Step 2: Retrieve the new user's ID from the sign-up response
