@@ -42,7 +42,15 @@ export default function useNewTechnician() {
   }, [user.data]);
 
   const { mutate: createNewTechnician, isPending } = useMutation({
-    mutationFn: addTechnician,
+    mutationFn: async (data: NewTechnicianType & { companyId: string }) => {
+      const response = await addTechnician(data);
+
+      if (!response.success) {
+        throw new Error(response.message);
+      }
+
+      return response.message;
+    },
     onError: (error: any) => {
       console.error("Mutation error:", error);
 
