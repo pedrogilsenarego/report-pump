@@ -7,64 +7,60 @@ const supabaseAdmin = supabaseAdminServer();
 
 export const addTechnician = async (
   props: NewTechnicianType & { companyId: string }
-): Promise<string> => {
-  try {
-    const {
-      data: { user },
-    } = await supabaseAdmin.auth.getUser();
+): Promise<{ success: boolean; message: string }> => {
+  const {
+    data: { user },
+  } = await supabaseAdmin.auth.getUser();
 
-    if (!user) {
-      throw new Error("User not authenticated");
-    }
-
-    // Step 1: Create the new user
-    const { data: signUpData, error: errorCreatingUser } =
-      await supabaseAdmin.auth.admin.createUser({
-        email: props.email,
-        password: props.password,
-        email_confirm: true,
-        user_metadata: {
-          displayName: props.name,
-          role: parseInt(props.role),
-          phone: props.phone,
-          companyId: props.companyId,
-        },
-      });
-
-    if (errorCreatingUser) {
-      console.error("Error creating user:", errorCreatingUser);
-
-      throw new Error(
-        "Failed to create user. Please try again. Check if the email is not being used"
-      ); // Pass this to the client
-    }
-
-    // Step 2: Retrieve the new user's ID from the sign-up response
-    const newUserId = signUpData?.user?.id;
-    if (!newUserId) {
-      throw new Error("Failed to retrieve new user ID");
-    }
-
-    // Step 3: Insert technician-specific data into the technicians table
-    const { error: errorInsertingTechnician } = await supabaseAdmin
-      .from("technician")
-      .insert({
-        profile_id: newUserId,
-        function: props.function,
-        certification: props.certification,
-        condition: props.condition,
-      });
-
-    if (errorInsertingTechnician) {
-      console.error("Error inserting technician:", errorInsertingTechnician);
-      throw new Error(
-        errorInsertingTechnician.message || "Failed to insert technician data"
-      );
-    }
-
-    return "Added Technician";
-  } catch (error: any) {
-    console.error("Error in addTechnician:", error);
-    throw new Error(error.message || "An unexpected error occurred");
+  if (!user) {
+    return { success: false, message: "User not authenticated" };
   }
+
+  // Step 1: Attempt to create the user
+  const { data: signUpData, error: errorCreatingUser } =
+    await supabaseAdmin.auth.admin.createUser({
+      email: props.email,
+      password: props.password,
+      email_confirm: true,
+      user_metadata: {
+        displayName: props.name,
+        role: parseInt(props.role),
+        phone: props.phone,
+        companyId: props.companyId,
+      },
+    });
+
+  if (errorCreatingUser) {
+    console.error("Error creating user:", errorCreatingUser);
+    return {
+      success: false,
+      message: errorCreatingUser.message || "Failed to create user",
+    };
+  }
+
+  const newUserId = signUpData?.user?.id;
+  if (!newUserId) {
+    return { success: false, message: "Failed to retrieve new user ID" };
+  }
+
+  // Step 2: Insert data into the "technicians" table
+  const { error: errorInsertingTechnician } = await supabaseAdmin
+    .from("technician")
+    .insert({
+      profile_id: newUserId,
+      function: props.function,
+      certification: props.certification,
+      condition: props.condition,
+    });
+
+  if (errorInsertingTechnician) {
+    console.error("Error inserting technician:", errorInsertingTechnician);
+    return {
+      success: false,
+      message:
+        errorInsertingTechnician.message || "Failed to insert technician data",
+    };
+  }
+
+  return { success: true, message: "Added Technician" };
 };
