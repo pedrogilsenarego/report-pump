@@ -212,7 +212,7 @@ export default function NewTechnician() {
             />
             <DialogFooter>
               <Button isLoading={isPending} type="submit">
-                Create Technician
+                Create Responsable
               </Button>
             </DialogFooter>
           </form>

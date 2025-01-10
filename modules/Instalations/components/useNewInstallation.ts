@@ -55,7 +55,6 @@ export default function useNewInstallation() {
   });
 
   function onSubmit(data: NewInstallationType) {
-    console.log(data);
     const newData: NewInstallationType & { companyId?: string } = data;
     newData.companyId = user.data?.company_id;
     createNewInstallation(
