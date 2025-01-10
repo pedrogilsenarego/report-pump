@@ -33,7 +33,11 @@ export const addResponsible = async (
 
     if (errorCreatingUser) {
       console.error("Error creating user:", errorCreatingUser);
-      throw new Error(errorCreatingUser.message || "Failed to create user");
+
+      const safeMessage =
+        errorCreatingUser.message || "Failed to create user. Please try again.";
+
+      throw new Error(safeMessage); // Pass this to the client
     }
 
     // Step 2: Retrieve the new user's ID from the sign-up response
