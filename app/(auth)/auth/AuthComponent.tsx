@@ -13,11 +13,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import SignupModal from "@/app/(auth)/signup/SignupModal";
 
 //import SSO from "@/modules/Auth/SSO";
 
 export default function AuthComponent() {
   const { form, onSubmit, isPending } = useAuthComponent();
+  const [openSignup, setOpenSignup] = useState(false);
 
   return (
     <div className="w-full h-full flex justify-center">
@@ -76,11 +79,12 @@ export default function AuthComponent() {
           </form>
         </Form>
 
-        <Link href={"/signup"}>
+        <button type="button" onClick={() => setOpenSignup(true)}>
           <p className="text-sm text-gray-300">
             New here? <span className="text-blue-300">Create an Account</span>
           </p>{" "}
-        </Link>
+        </button>
+        <SignupModal open={openSignup} onOpenChange={setOpenSignup} />
         <div className="glowbox -z-10"></div>
       </div>
     </div>
