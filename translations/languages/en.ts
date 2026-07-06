@@ -6,6 +6,18 @@ export const content = {
       },
       landingPage: {
         manageFirePumps: "Manage your firepump reports",
+        subtitle: "Fire Pump Maintenance Program",
+        emailPlaceholder: "E-mail",
+        passwordPlaceholder: "Password",
+        forgotPassword: "Forgot Password?",
+        access: "Access",
+        newUser: "New User",
+      },
+      checklists: {
+        groupTitle: {
+          "1": "Pre-Test Inspections",
+          "2": "Checks and Tests (VE)",
+        },
       },
       common: {
         previous: "Previous",

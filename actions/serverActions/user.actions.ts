@@ -11,7 +11,7 @@ export const getSession = async (): Promise<any> => {
         await supabase.auth.getUser();
 
       if (sessionError || !sessionData?.user) {
-        redirect("/auth");
+        redirect("/");
       }
 
       return resolve(sessionData);

@@ -1,7 +1,7 @@
 export enum RouterKeys {
   HOME = "/",
   FORBIDDEN_ACCESS = "/403",
-  LOGIN = "/auth",
+  LOGIN = "/",
   MAIN = "/main",
   USERS = "/users",
   UPDATE_PASSWORD = "/update-password",

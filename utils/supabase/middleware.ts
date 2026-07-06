@@ -51,18 +51,14 @@ export async function updateSession(request: NextRequest) {
   const url = new URL(request.url);
 
   if (data.session) {
-    if (
-      url.pathname === "/auth" ||
-      url.pathname === "/signup" ||
-      url.pathname === "/"
-    ) {
+    if (url.pathname === "/signup" || url.pathname === "/") {
       return NextResponse.redirect(new URL(RouterKeys.MAIN, request.url));
     }
     return supabaseResponse;
   } else {
     if (isProtectedPath(url.pathname)) {
       return NextResponse.redirect(
-        new URL(`/auth?next=${url.pathname}`, request.url)
+        new URL(`/?next=${url.pathname}`, request.url)
       );
     }
     return supabaseResponse;

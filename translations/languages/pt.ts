@@ -6,6 +6,12 @@ export const content = {
       },
       landingPage: {
         manageFirePumps: "Gestão de relatórios de bombas de incêndio",
+        subtitle: "Programa de Manutenção de Bombas de Incêndio",
+        emailPlaceholder: "E-mail",
+        passwordPlaceholder: "Palavra-passe",
+        forgotPassword: "Esqueceu-se da palavra-passe?",
+        access: "Aceder",
+        newUser: "Novo Utilizador",
       },
       checklists: {
         groupTitle: {

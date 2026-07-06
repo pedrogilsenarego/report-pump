@@ -12,7 +12,7 @@ import { useUser } from "@/hook/useUser";
 import useSession from "@/hook/useSession";
 import { useToast } from "@/hooks/use-toast";
 
-export default function useAuthComponent() {
+export default function useLogin() {
   const { toast } = useToast();
   const user = useUser();
   const session = useSession();
@@ -39,11 +39,7 @@ export default function useAuthComponent() {
     onSuccess: () => {
       user.refetch();
       session.refetch();
-      router.push(
-        `${process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL}${
-          next ? next : RouterKeys.MAIN
-        }`
-      );
+      router.push(next ? next : RouterKeys.MAIN);
 
       form.reset();
     },
