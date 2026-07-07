@@ -98,7 +98,15 @@ export default function SignupModal({ open, onOpenChange }: Props) {
       id: 2,
       title: i18n.t("signup.steps.companyTitle"),
       description: i18n.t("signup.steps.companyDescription"),
-      fields: ["nameCompany", "country", "username"],
+      fields: [
+        "nameCompany",
+        "address",
+        "country",
+        "defaultLang",
+        "username",
+        "phone",
+        "email",
+      ],
       content: (
         <>
           <FormField
@@ -119,45 +127,6 @@ export default function SignupModal({ open, onOpenChange }: Props) {
           />
           <FormField
             control={form.control}
-            name="country"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{i18n.t("signup.countryLabel")}</FormLabel>
-                <FormControl {...field}>
-                  <CountrySelect />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{i18n.t("signup.responsibleLabel")}</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder={i18n.t("signup.responsiblePlaceholder")}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </>
-      ),
-    },
-    {
-      id: 3,
-      title: i18n.t("signup.steps.detailsTitle"),
-      description: i18n.t("signup.steps.detailsDescription"),
-      fields: ["address", "phone", "defaultLang"],
-      content: (
-        <>
-          <FormField
-            control={form.control}
             name="address"
             render={({ field }) => (
               <FormItem>
@@ -174,15 +143,12 @@ export default function SignupModal({ open, onOpenChange }: Props) {
           />
           <FormField
             control={form.control}
-            name="phone"
+            name="country"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{i18n.t("signup.phoneLabel")}</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder={i18n.t("signup.phonePlaceholder")}
-                    {...field}
-                  />
+                <FormLabel>{i18n.t("signup.countryLabel")}</FormLabel>
+                <FormControl {...field}>
+                  <CountrySelect />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -220,16 +186,38 @@ export default function SignupModal({ open, onOpenChange }: Props) {
               </FormItem>
             )}
           />
-        </>
-      ),
-    },
-    {
-      id: 4,
-      title: i18n.t("signup.steps.loginTitle"),
-      description: i18n.t("signup.steps.loginDescription"),
-      fields: ["email", "password", "confirmPassword"],
-      content: (
-        <>
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{i18n.t("signup.responsibleLabel")}</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder={i18n.t("signup.responsiblePlaceholder")}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{i18n.t("signup.phoneLabel")}</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder={i18n.t("signup.phonePlaceholder")}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"
@@ -246,6 +234,16 @@ export default function SignupModal({ open, onOpenChange }: Props) {
               </FormItem>
             )}
           />
+        </>
+      ),
+    },
+    {
+      id: 3,
+      title: i18n.t("signup.steps.loginTitle"),
+      description: i18n.t("signup.steps.loginDescription"),
+      fields: ["password", "confirmPassword"],
+      content: (
+        <>
           <FormField
             control={form.control}
             name="password"
