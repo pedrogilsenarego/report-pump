@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   FormControl,
   FormDescription,
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import CountrySelect from "@/components/ui/country-selector";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import { langKeys } from "@/constants/lang";
 import {
   StepperFormModal,
@@ -28,7 +30,7 @@ import { i18n } from "@/translations/i18n";
 
 import useSignupComponent from "./useSignupComponent";
 import type { SignupType } from "./validation";
-import Terms from "./Terms";
+import AccessConditions from "./AccessConditions";
 
 type Props = {
   open: boolean;
@@ -36,21 +38,12 @@ type Props = {
 };
 
 export default function SignupModal({ open, onOpenChange }: Props) {
-  const {
-    form,
-    onSubmit,
-    isPending,
-    terms,
-    termsAccepted,
-    setTermsAccepted,
-    setOpenTerms,
-  } = useSignupComponent();
+  const { form, onSubmit, isPending } = useSignupComponent();
 
-  // Enter on the last step can bypass the disabled button, so guard the submit.
-  const handleSubmit = (data: SignupType) => {
-    if (!termsAccepted) return;
-    onSubmit(data);
-  };
+  const [openAccessConditions, setOpenAccessConditions] = useState(false);
+
+  // The access conditions apply only to customer registrations (role "2").
+  const isCustomer = form.watch("role") === "2";
 
   const steps: StepperFormStep<SignupType>[] = [
     {
@@ -107,6 +100,20 @@ export default function SignupModal({ open, onOpenChange }: Props) {
         "phone",
         "email",
       ],
+      // Customers must accept the access conditions before continuing. This is
+      // handled here (not in `fields`) because a cross-field zod refine only
+      // runs once the whole object parses, so it wouldn't surface while other
+      // required fields are still empty.
+      validate: () => {
+        if (isCustomer && !form.getValues("accessConditions")) {
+          form.setError("accessConditions", {
+            message: i18n.t("signup.accessConditionsRequired"),
+          });
+          return false;
+        }
+        form.clearErrors("accessConditions");
+        return true;
+      },
       content: (
         <>
           <FormField
@@ -234,6 +241,49 @@ export default function SignupModal({ open, onOpenChange }: Props) {
               </FormItem>
             )}
           />
+          {isCustomer && (
+            <FormField
+              control={form.control}
+              name="accessConditions"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex flex-row items-center gap-3 rounded-md border p-4 shadow">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                          if (checked) form.clearErrors("accessConditions");
+                        }}
+                      />
+                    </FormControl>
+                    <FormLabel className="cursor-pointer font-normal">
+                      {i18n.t("signup.acceptAccessConditions")}
+                    </FormLabel>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="ml-auto"
+                      onClick={() => setOpenAccessConditions(true)}
+                    >
+                      {i18n.t("signup.readAccessConditions")}
+                    </Button>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+          <AccessConditions
+            open={openAccessConditions}
+            onOpenChange={setOpenAccessConditions}
+            onAccept={() =>
+              form.setValue("accessConditions", true, {
+                shouldValidate: true,
+              })
+            }
+          />
         </>
       ),
     },
@@ -279,31 +329,6 @@ export default function SignupModal({ open, onOpenChange }: Props) {
               </FormItem>
             )}
           />
-          <div
-            className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow cursor-pointer"
-            onClick={() => setOpenTerms(true)}
-          >
-            <Checkbox checked={termsAccepted} />
-            <div className="space-y-1 leading-none">
-              <FormLabel className="cursor-pointer">
-                {i18n.t("signup.termsAgree")}{" "}
-                <u className="cursor-pointer">
-                  {i18n.t("signup.termsService")}
-                </u>{" "}
-                {i18n.t("signup.termsAnd")}{" "}
-                <u className="cursor-pointer">
-                  {i18n.t("signup.termsPrivacy")}
-                </u>
-              </FormLabel>
-              <FormDescription>{i18n.t("signup.termsHelper")}</FormDescription>
-            </div>
-          </div>
-          <Terms
-            onRead={() => setTermsAccepted(true)}
-            open={terms}
-            onOpenChange={setOpenTerms}
-            read={termsAccepted}
-          />
         </>
       ),
     },
@@ -316,10 +341,9 @@ export default function SignupModal({ open, onOpenChange }: Props) {
       title={i18n.t("signup.title")}
       steps={steps}
       form={form}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
       submitButtonText={i18n.t("signup.submit")}
       isSubmitting={isPending}
-      submitDisabled={!termsAccepted}
     />
   );
 }

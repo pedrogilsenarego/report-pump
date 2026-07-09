@@ -38,6 +38,7 @@ export default function useAuthComponent() {
       phone: undefined,
       defaultLang: undefined,
       country: undefined,
+      accessConditions: false,
     },
   });
 

@@ -10,6 +10,7 @@ export const SignupSchema = z
     defaultLang: z.string(),
     country: z.string(),
     role: z.string(),
+    accessConditions: z.boolean().optional(),
 
     phone: z
       .string()
@@ -50,6 +51,11 @@ export const SignupSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
+  })
+  // Customers (role "2") must accept the access conditions before continuing.
+  .refine((data) => data.role !== "2" || data.accessConditions === true, {
+    message: "You must accept the access conditions",
+    path: ["accessConditions"],
   });
 
 export type SignupType = z.infer<typeof SignupSchema>;

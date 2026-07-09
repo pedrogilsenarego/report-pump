@@ -22,6 +22,8 @@ export const content = {
       common: {
         previous: "Previous",
         next: "Next",
+        cancel: "Cancel",
+        ok: "OK",
       },
       signup: {
         title: "Join Equitotal",
@@ -61,6 +63,12 @@ export const content = {
         termsAnd: "&",
         termsPrivacy: "Privacy Policy",
         termsHelper: "Some helper text",
+        readAccessConditions: "Read Access Conditions",
+        acceptAccessConditions: "Accept Access Conditions",
+        accessConditionsTitle: "General Conditions",
+        accessConditionsRequired: "You must accept the access conditions",
+        accessConditionsBody:
+          "[Display text from GENERAL CONDITIONS FILE]",
       },
     },
   },

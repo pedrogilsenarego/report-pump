@@ -25,6 +25,12 @@ export type StepperFormStep<T extends FieldValues> = Step & {
   content: ReactNode;
   /** Fields validated before advancing past this step. */
   fields?: Path<T>[];
+  /**
+   * Extra validation run before advancing, alongside `fields`. Should return
+   * false (and surface its own errors, e.g. via form.setError) to block the
+   * step. Runs even when field validation fails, so all errors show at once.
+   */
+  validate?: () => boolean | Promise<boolean>;
 };
 
 type Props<T extends FieldValues> = {
@@ -71,11 +77,18 @@ export function StepperFormModal<T extends FieldValues>({
   const isLastStep = currentStep === steps.length - 1;
 
   const handleNext = async () => {
-    const fields = steps[currentStep].fields ?? [];
-    if (fields.length > 0) {
-      const valid = await form.trigger(fields);
-      if (!valid) return;
+    const step = steps[currentStep];
+    const fields = step.fields ?? [];
+
+    // Run field validation and the step's custom validation together so every
+    // error (including the custom ones) is surfaced in a single pass.
+    let valid = fields.length > 0 ? await form.trigger(fields) : true;
+    if (step.validate) {
+      const extraValid = await step.validate();
+      valid = valid && extraValid;
     }
+
+    if (!valid) return;
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
   };
 

@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import SignupModal from "@/app/(auth)/signup/SignupModal";
+import SignupModal from "@/modules/Auth/SignupModal";
 import { i18n } from "@/translations/i18n";
 
 import useLogin from "./useLogin";

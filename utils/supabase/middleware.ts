@@ -51,7 +51,7 @@ export async function updateSession(request: NextRequest) {
   const url = new URL(request.url);
 
   if (data.session) {
-    if (url.pathname === "/signup" || url.pathname === "/") {
+    if (url.pathname === "/") {
       return NextResponse.redirect(new URL(RouterKeys.MAIN, request.url));
     }
     return supabaseResponse;
