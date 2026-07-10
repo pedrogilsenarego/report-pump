@@ -68,7 +68,7 @@ export const content = {
         accessConditionsTitle: "General Conditions",
         accessConditionsRequired: "You must accept the access conditions",
         accessConditionsBody:
-          "[Display text from GENERAL CONDITIONS FILE]",
+          "Access is limited to conditions to be defined.",
       },
     },
   },
