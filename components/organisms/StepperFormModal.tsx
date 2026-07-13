@@ -73,6 +73,14 @@ export function StepperFormModal<T extends FieldValues>({
     if (!open) setCurrentStep(0);
   }, [open]);
 
+  // Don't carry validation errors across steps: a step should only surface
+  // errors once the user tries to advance/submit from it, not on entry because
+  // an earlier submit left stale errors in form state.
+  useEffect(() => {
+    form.clearErrors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep]);
+
   const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === steps.length - 1;
 
@@ -96,15 +104,14 @@ export function StepperFormModal<T extends FieldValues>({
     setCurrentStep((prev) => Math.max(prev - 1, 0));
   };
 
-  // Only submit on the last step; on earlier steps (e.g. an Enter keypress)
-  // advance instead of validating/submitting the whole form prematurely.
+  // Never submit implicitly. An Enter keypress (or the Next button morphing
+  // into the submit button as the step advances) would otherwise fire the
+  // form's submit on the last step and validate the whole form before the user
+  // intended to — surfacing errors on entry. Enter only advances; submission
+  // happens exclusively via an explicit click on the submit button below.
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    if (!isLastStep) {
-      event.preventDefault();
-      void handleNext();
-      return;
-    }
-    void form.handleSubmit(onSubmit)(event);
+    event.preventDefault();
+    if (!isLastStep) void handleNext();
   };
 
   return (
@@ -131,8 +138,22 @@ export function StepperFormModal<T extends FieldValues>({
 
         <Form {...form}>
           <form onSubmit={handleFormSubmit} className="space-y-6">
-            <div className="max-h-[55vh] space-y-5 overflow-y-auto px-1">
-              {steps[currentStep].content}
+            {/* Render every step once and toggle visibility rather than
+                swapping content in and out. Swapping would let React reuse the
+                same input instances across steps (values bleeding between
+                fields) and remount fields, which — with an async resolver and
+                a prior submit — re-runs validation on entry and re-surfaces
+                errors right after we clear them. Keeping every field mounted
+                avoids both. */}
+            <div className="max-h-[55vh] overflow-y-auto p-1">
+              {steps.map((step, index) => (
+                <div
+                  key={step.id}
+                  className={index === currentStep ? "space-y-5" : "hidden"}
+                >
+                  {step.content}
+                </div>
+              ))}
             </div>
 
             <div className="flex justify-between gap-4 pt-2">
@@ -151,7 +172,8 @@ export function StepperFormModal<T extends FieldValues>({
 
               {isLastStep ? (
                 <Button
-                  type="submit"
+                  type="button"
+                  onClick={() => void form.handleSubmit(onSubmit)()}
                   isLoading={isSubmitting}
                   disabled={submitDisabled}
                 >

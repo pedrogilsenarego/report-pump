@@ -27,7 +27,7 @@ export const content = {
       },
       signup: {
         title: "Aderir à Equitotal",
-        submit: "Registar",
+        submit: "Enviar Pedido de Registo",
         steps: {
           userTypeTitle: "Tipo de utilizador",
           userTypeDescription: "Quem é",

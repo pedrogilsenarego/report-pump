@@ -65,17 +65,17 @@ export default function SignupModal({ open, onOpenChange }: Props) {
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem className="h-6 w-6" value="2" />
+                      <RadioGroupItem value="2" />
                     </FormControl>
-                    <FormLabel className="font-semibold text-xl cursor-pointer">
+                    <FormLabel className="cursor-pointer">
                       {i18n.t("signup.customer")}
                     </FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem className="h-6 w-6" value="3" />
+                      <RadioGroupItem value="3" />
                     </FormControl>
-                    <FormLabel className="font-semibold text-xl cursor-pointer">
+                    <FormLabel className="cursor-pointer">
                       {i18n.t("signup.supplier")}
                     </FormLabel>
                   </FormItem>
