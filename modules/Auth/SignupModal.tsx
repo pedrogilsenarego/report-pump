@@ -38,7 +38,9 @@ type Props = {
 };
 
 export default function SignupModal({ open, onOpenChange }: Props) {
-  const { form, onSubmit, isPending } = useSignupComponent();
+  const { form, onSubmit, isPending } = useSignupComponent(() =>
+    onOpenChange(false)
+  );
 
   const [openAccessConditions, setOpenAccessConditions] = useState(false);
 
@@ -330,6 +332,76 @@ export default function SignupModal({ open, onOpenChange }: Props) {
             )}
           />
         </>
+      ),
+    },
+    {
+      id: 4,
+      title: i18n.t("signup.steps.reviewTitle"),
+      description: i18n.t("signup.steps.reviewDescription"),
+      content: (
+        <div className="space-y-5">
+          <dl className="divide-y rounded-md border">
+            {[
+              {
+                label: i18n.t("signup.review.userType"),
+                value:
+                  form.watch("role") === "2"
+                    ? i18n.t("signup.review.customerValue")
+                    : form.watch("role") === "3"
+                    ? i18n.t("signup.review.supplierValue")
+                    : "",
+              },
+              {
+                label: i18n.t("signup.review.company"),
+                value: form.watch("nameCompany"),
+              },
+              {
+                label: i18n.t("signup.review.responsible"),
+                value: form.watch("username"),
+              },
+              {
+                label: i18n.t("signup.review.country"),
+                value: form.watch("country"),
+              },
+              {
+                label: i18n.t("signup.review.language"),
+                value:
+                  langKeys.find((lang) => lang.id === form.watch("defaultLang"))
+                    ?.value ?? form.watch("defaultLang"),
+              },
+              {
+                label: i18n.t("signup.review.address"),
+                value: form.watch("address"),
+              },
+              {
+                label: i18n.t("signup.review.phone"),
+                value: form.watch("phone"),
+              },
+              {
+                label: i18n.t("signup.review.email"),
+                value: form.watch("email"),
+              },
+            ].map((row) => (
+              <div
+                key={row.label}
+                className="flex justify-between gap-4 px-4 py-2 text-sm"
+              >
+                <dt className="text-muted-foreground">{row.label}</dt>
+                <dd className="text-right font-medium">
+                  {row.value || i18n.t("signup.review.notProvided")}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <div className="rounded-md border border-amber-300 bg-amber-50 p-4 text-sm dark:border-amber-800 dark:bg-amber-950/40">
+            <p className="font-semibold">
+              {i18n.t("signup.review.pendingTitle")}
+            </p>
+            <p className="mt-1 text-muted-foreground">
+              {i18n.t("signup.review.pendingBody")}
+            </p>
+          </div>
+        </div>
       ),
     },
   ];
