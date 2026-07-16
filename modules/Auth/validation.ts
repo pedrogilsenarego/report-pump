@@ -52,10 +52,14 @@ export const SignupSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   })
-  // Customers (role "2") must accept the access conditions before continuing.
-  .refine((data) => data.role !== "2" || data.accessConditions === true, {
-    message: "You must accept the access conditions",
-    path: ["accessConditions"],
-  });
+  // Customers (role "2") and suppliers (role "3") must accept the access
+  // conditions before continuing.
+  .refine(
+    (data) => !["2", "3"].includes(data.role) || data.accessConditions === true,
+    {
+      message: "You must accept the access conditions",
+      path: ["accessConditions"],
+    }
+  );
 
 export type SignupType = z.infer<typeof SignupSchema>;

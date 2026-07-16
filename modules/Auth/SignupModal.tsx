@@ -44,8 +44,11 @@ export default function SignupModal({ open, onOpenChange }: Props) {
 
   const [openAccessConditions, setOpenAccessConditions] = useState(false);
 
-  // The access conditions apply only to customer registrations (role "2").
-  const isCustomer = form.watch("role") === "2";
+  // The access conditions apply to both customer (role "2") and supplier
+  // (role "3") registrations.
+  const requiresAccessConditions = ["2", "3"].includes(
+    form.watch("role") ?? ""
+  );
 
   const steps: StepperFormStep<SignupType>[] = [
     {
@@ -102,12 +105,12 @@ export default function SignupModal({ open, onOpenChange }: Props) {
         "phone",
         "email",
       ],
-      // Customers must accept the access conditions before continuing. This is
-      // handled here (not in `fields`) because a cross-field zod refine only
-      // runs once the whole object parses, so it wouldn't surface while other
-      // required fields are still empty.
+      // Customers and suppliers must accept the access conditions before
+      // continuing. This is handled here (not in `fields`) because a cross-field
+      // zod refine only runs once the whole object parses, so it wouldn't
+      // surface while other required fields are still empty.
       validate: () => {
-        if (isCustomer && !form.getValues("accessConditions")) {
+        if (requiresAccessConditions && !form.getValues("accessConditions")) {
           form.setError("accessConditions", {
             message: i18n.t("signup.accessConditionsRequired"),
           });
@@ -243,7 +246,7 @@ export default function SignupModal({ open, onOpenChange }: Props) {
               </FormItem>
             )}
           />
-          {isCustomer && (
+          {requiresAccessConditions && (
             <FormField
               control={form.control}
               name="accessConditions"
