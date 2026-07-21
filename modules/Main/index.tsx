@@ -3,10 +3,14 @@ import UsersPending from "./components/UsersPending";
 import { KeyRoles } from "@/constants/roles";
 import WithRole from "@/hoc/WithRole";
 import { ChartTest } from "./components/Chart";
+import SendMessage from "./components/SendMessage";
 
 export default function Main() {
   return (
     <div className="w-full flex flex-col gap-2">
+      <div className="flex justify-end">
+        <SendMessage />
+      </div>
       <div
         style={{
           display: "grid",

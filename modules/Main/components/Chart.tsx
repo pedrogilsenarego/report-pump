@@ -17,10 +17,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Button } from "@/components/ui/button";
-import { sendContactForm } from "@/lib/api";
-import { useToast } from "@/hooks/use-toast";
-
 export const description = "An area chart with gradient fill";
 
 const chartData = [
@@ -44,26 +40,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function ChartTest() {
-  const { toast } = useToast();
-  const onSubmit = async () => {
-    try {
-      await sendContactForm({
-        name: "ee",
-        email: "pedrogilsenarego@gmail.com",
-        subject: "ee",
-        message: "ee",
-      });
-
-      toast({
-        title: "Message sent.",
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <>
-      <Button onClick={onSubmit}>Teste</Button>
       <Card>
         <CardHeader>
           <CardTitle>Area Chart - Gradient</CardTitle>

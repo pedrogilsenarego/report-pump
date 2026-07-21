@@ -4,6 +4,16 @@ export const content = {
       dashboard: {
         usersPendingApproval: "There are users pending approval",
       },
+      sendMessage: {
+        button: "Send message",
+        title: "Send message",
+        label: "Input text to be sent",
+        placeholder: "Type your message...",
+        send: "OK",
+        success: "Message sent",
+        successDescription: "Your message was sent to the administrator.",
+        error: "Could not send message",
+      },
       landingPage: {
         manageFirePumps: "Manage your firepump reports",
         subtitle: "Fire Pump Maintenance Program",

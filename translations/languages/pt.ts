@@ -4,6 +4,16 @@ export const content = {
       dashboard: {
         usersPendingApproval: "Existem utilizadores em aprovação",
       },
+      sendMessage: {
+        button: "Enviar mensagem",
+        title: "Enviar mensagem",
+        label: "Texto a enviar",
+        placeholder: "Escreva a sua mensagem...",
+        send: "OK",
+        success: "Mensagem enviada",
+        successDescription: "A sua mensagem foi enviada ao administrador.",
+        error: "Não foi possível enviar a mensagem",
+      },
       landingPage: {
         manageFirePumps: "Gestão de relatórios de bombas de incêndio",
         subtitle: "Programa de Manutenção de Bombas de Incêndio",
