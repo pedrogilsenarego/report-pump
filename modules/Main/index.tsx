@@ -2,13 +2,16 @@ import * as React from "react";
 import UsersPending from "./components/UsersPending";
 import { KeyRoles } from "@/constants/roles";
 import WithRole from "@/hoc/WithRole";
-import { ChartTest } from "./components/Chart";
 import SendMessage from "./components/SendMessage";
+import NewChecklist from "@/modules/Interventions/components/NewChecklist";
 
 export default function Main() {
   return (
     <div className="w-full flex flex-col gap-2">
-      <div className="flex justify-end">
+      <div className="flex justify-start gap-2">
+        <WithRole roleKey={[KeyRoles.ADMIN]}>
+          <NewChecklist />
+        </WithRole>
         <SendMessage />
       </div>
       <div
@@ -21,7 +24,6 @@ export default function Main() {
         <WithRole roleKey={[KeyRoles.ADMIN]}>
           <UsersPending />
         </WithRole>
-        <ChartTest />
       </div>
     </div>
   );
