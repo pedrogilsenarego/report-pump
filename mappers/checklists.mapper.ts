@@ -28,8 +28,15 @@ const mapActions = (actions: ChecklistActionRaw[]): ChecklistAction[] => {
 export const mapChecklist = (profile: ChecklistRaw): Checklist => {
   return {
     id: profile.id,
+    code: profile.code,
     nfpaEd: profile.nfpa_ed,
     createdAt: profile.created_at,
+    date: profile.date,
+    name: profile.name,
+    companyResp: profile.company_resp,
+    nameResp: profile.name_resp,
+    phone: profile.ph,
+    email: profile.email,
     actions: profile.checklistactions
       ? mapActions(profile.checklistactions)
       : [], // Handle optional checklistActions
@@ -43,8 +50,23 @@ export const mapChecklists = (profiles: ChecklistRaw[]): Checklist[] => {
 
 export const mapChecklistToRaw = (
   profile: NewChecklistType
-): Pick<ChecklistRaw, "nfpa_ed"> => {
+): Pick<
+  ChecklistRaw,
+  | "nfpa_ed"
+  | "date"
+  | "name"
+  | "company_resp"
+  | "name_resp"
+  | "ph"
+  | "email"
+> => {
   return {
     nfpa_ed: profile.nfpaEd,
+    date: profile.date,
+    name: profile.name,
+    company_resp: profile.companyResp || undefined,
+    name_resp: profile.nameResp,
+    ph: profile.phone || undefined,
+    email: profile.email || undefined,
   };
 };

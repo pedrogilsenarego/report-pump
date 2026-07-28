@@ -1,14 +1,28 @@
 export type Checklist = {
   id: string;
+  code?: number;
   createdAt: string;
+  date?: string;
+  name?: string;
   nfpaEd: string;
+  companyResp?: string;
+  nameResp?: string;
+  phone?: string;
+  email?: string;
   actions?: ChecklistAction[];
 };
 
 export type ChecklistRaw = {
   id: string;
+  code?: number;
   created_at: string;
+  date?: string;
+  name?: string;
   nfpa_ed: string;
+  company_resp?: string;
+  name_resp?: string;
+  ph?: string;
+  email?: string;
   checklistactions?: ChecklistActionRaw[];
 };
 

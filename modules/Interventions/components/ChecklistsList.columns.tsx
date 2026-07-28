@@ -10,6 +10,21 @@ export const columns: ColumnDef<Checklist>[] = [
     ),
   },
   {
+    accessorKey: "code",
+    header: () => <div className="text-right">Report Nr.</div>,
+    cell: ({ row }) => <div>{row.original.code ?? "N/A"}</div>,
+  },
+  {
+    accessorKey: "name",
+    header: () => <div className="text-right">Name</div>,
+    cell: ({ row }) => <div>{row.original.name || "N/A"}</div>,
+  },
+  {
+    accessorKey: "nameResp",
+    header: () => <div className="text-right">Person responsible</div>,
+    cell: ({ row }) => <div>{row.original.nameResp || "N/A"}</div>,
+  },
+  {
     accessorKey: "nfpaEd",
     header: () => <div className="text-right">Nfpa Ed</div>,
     cell: ({ row }) => (
