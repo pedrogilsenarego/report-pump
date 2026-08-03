@@ -24,8 +24,16 @@ import { i18n } from "@/translations/i18n";
 import useNewChecklist from "./useNewChecklist";
 
 export default function NewChecklist() {
-  const { form, onSubmit, openModal, setOpenModal, isPending, nextCode } =
-    useNewChecklist();
+  const {
+    form,
+    onSubmit,
+    onImport,
+    importStatus,
+    openModal,
+    setOpenModal,
+    isPending,
+    nextCode,
+  } = useNewChecklist();
 
   return (
     <Dialog open={openModal} onOpenChange={(value) => setOpenModal(value)}>
@@ -182,6 +190,20 @@ export default function NewChecklist() {
               {i18n.t("newChecklist.requiredFields")}
             </FormDescription>
 
+            {importStatus && (
+              <p
+                className={
+                  importStatus === "noErrors"
+                    ? "text-sm text-muted-foreground"
+                    : "text-sm text-destructive"
+                }
+              >
+                {importStatus === "noErrors"
+                  ? i18n.t("newChecklist.importNoErrors")
+                  : i18n.t("newChecklist.importErrorsFound")}
+              </p>
+            )}
+
             <DialogFooter>
               <Button
                 type="button"
@@ -189,6 +211,9 @@ export default function NewChecklist() {
                 onClick={() => setOpenModal(false)}
               >
                 {i18n.t("common.cancel")}
+              </Button>
+              <Button type="button" variant="secondary" onClick={onImport}>
+                {i18n.t("newChecklist.import")}
               </Button>
               <Button isLoading={isPending} type="submit">
                 {i18n.t("common.ok")}

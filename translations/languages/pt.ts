@@ -49,6 +49,9 @@ export const content = {
         emailLabel: "Email",
         emailPlaceholder: "E-mail",
         requiredFields: "(*) Campos obrigatórios",
+        import: "Importar Grupos / Sub-Gr",
+        importNoErrors: "Sem erros",
+        importErrorsFound: "Erros encontrados",
       },
       common: {
         previous: "Anterior",

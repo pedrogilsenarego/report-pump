@@ -20,10 +20,14 @@ const currentDate = () => {
   return `${now.getFullYear()}.${month}.${day}`;
 };
 
+// Action#04 outcome: null = not run yet, then No errors / Errors found
+export type ImportStatus = "noErrors" | "errorsFound" | null;
+
 export default function useNewChecklist() {
   const { toast } = useToast();
   const checklists = useChecklists();
   const [openModal, setOpenModal] = useState(false);
+  const [importStatus, setImportStatus] = useState<ImportStatus>(null);
 
   // Report Nr. is the next code available (table code + 1)
   const nextCode =
@@ -44,6 +48,7 @@ export default function useNewChecklist() {
     onSuccess: () => {
       checklists.refetch();
       setOpenModal(false);
+      setImportStatus(null);
       form.reset();
     },
   });
@@ -64,9 +69,18 @@ export default function useNewChecklist() {
     addChecklistMutation(data);
   }
 
+  // Action#04 - Groups / Sub-Groups import.
+  // TODO: source of the groups/sub-groups is still undecided (Report_Actions.xlsx
+  // upload vs. the actions catalog already in the DB), so nothing is imported yet.
+  function onImport() {
+    setImportStatus(null);
+  }
+
   return {
     form,
     onSubmit,
+    onImport,
+    importStatus,
     openModal,
     setOpenModal,
     isPending,
