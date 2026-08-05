@@ -7,6 +7,7 @@ import { useIntervention } from "./useIntervention";
 import { useReactToPrint } from "react-to-print";
 import { Button } from "@/components/ui/button";
 import { groupByCodeGroup } from "@/utils/checklist";
+import { useGroups } from "@/hook/useGroups";
 import {
   InterventionBox,
   InterventionDescription,
@@ -18,11 +19,15 @@ import {
 
 export default function Intervention() {
   const { intervention } = useIntervention();
+  const groups = useGroups();
 
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
 
   const groupedInterventions = groupByCodeGroup(intervention?.data || []);
+
+  const groupName = (group: string) =>
+    groups.data?.find((item) => String(item.code) === group)?.name;
 
   return (
     <>
@@ -33,7 +38,7 @@ export default function Intervention() {
       >
         {Object.entries(groupedInterventions).map(([group, interventions]) => (
           <div key={group} className="mb-6">
-            <InterventionGroupTitle group={group} />
+            <InterventionGroupTitle group={group} name={groupName(group)} />
             {interventions.map((intervention: any, index: number) => (
               <InterventionBox key={index}>
                 <InterventionDetailsBox>

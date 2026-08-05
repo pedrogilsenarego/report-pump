@@ -13,6 +13,7 @@ import {
   InterventionPeriod,
 } from "@/components/atoms/InterventionComponents";
 import { groupByCodeGroup } from "@/utils/checklist";
+import { useGroups } from "@/hook/useGroups";
 
 export default function NewIntervention() {
   const {
@@ -24,6 +25,10 @@ export default function NewIntervention() {
     periodName,
     period,
   } = useNewIntervention();
+  const groups = useGroups();
+
+  const groupName = (group: string) =>
+    groups.data?.find((item) => String(item.code) === group)?.name;
 
   const options = [
     { value: "error", label: "Falha" },
@@ -45,7 +50,7 @@ export default function NewIntervention() {
           {Object.entries(groupedInterventions).map(
             ([group, interventions]) => (
               <div key={group} className="mb-6">
-                <InterventionGroupTitle group={group} />
+                <InterventionGroupTitle group={group} name={groupName(group)} />
                 {interventions.map((action: any, index: any) => {
                   return (
                     <InterventionBox key={index}>

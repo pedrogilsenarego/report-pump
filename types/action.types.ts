@@ -4,6 +4,9 @@ export type Action = {
   pumpType: string;
   description: string;
   period: number;
+  // Catalog placement. Null until Action#22 loads Report_Actions.xlsx.
+  codeGroup: number | null;
+  codeSubgroup: number | null;
 };
 
 export type ActionRaw = {
@@ -12,4 +15,6 @@ export type ActionRaw = {
   pump_type: string;
   description: string;
   period: number;
+  code_group: number | null;
+  code_subgroup: number | null;
 };

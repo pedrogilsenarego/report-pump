@@ -23,12 +23,6 @@ export const content = {
         access: "Aceder",
         newUser: "Novo Utilizador",
       },
-      checklists: {
-        groupTitle: {
-          "1": "Inspeções Pré Ensaio",
-          "2": "Verificações e Ensaios (VE)",
-        },
-      },
       newChecklist: {
         trigger: "Nova Check-List",
         title: "Nova Check-List",

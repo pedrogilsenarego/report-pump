@@ -1,12 +1,19 @@
 # Check-List Actions Import — Action#04 / Action#22
 
-Working notes for the Groups / Sub-Groups / Actions import. Last updated 2026-08-03.
+Working notes for the Groups / Sub-Groups / Actions import. Last updated 2026-08-05.
 
 ## Spec source
 
-`C:\Users\pedro\Downloads\FP25-INFOLOG-R1-Menus1 (1).pdf` — Equitotal, *FIREPUMP25 — Menu(s) Structure /
-organization*, sheet 4/6, dated 2025.04.13. Single-page CAD-style flow diagram of all screens, pop-ups
-and actions. **Move this file into the repo or a shared drive — it currently only exists in Downloads.**
+In the repo at `app/assets/`, Equitotal *FIREPUMP25 — Menu(s) Structure / organization*, dated 2025.04.13:
+
+- `FP25-INFOLOG-R1-Menus1.pdf` — sheet 4/6: login, registration, Administrator menu (Screen#03),
+  New Check-List (PopUp#07), Service Provider menu. Actions #01–#23. This is the sheet that covers
+  Action#04 and Action#22, plus the RELATED TABLES legend.
+- `FP25-INFOLOG-R1-Menus2.pdf` — sheet 5/6: Customer menu (Screen#09), installations, pump groups,
+  customer technicians, interventions and reports. Actions #14–#31.
+
+Both are single-page CAD-style flow diagrams. Sheet 5/6 names the check-list action rows
+`table.CL_ACTION:Code` — that is the spec's name for what the DB calls `checklistactions`.
 
 Related spreadsheets named in the drawing's legend, none of which we have:
 
@@ -71,6 +78,19 @@ those spreadsheets, and would be redundant if #04 parsed them too. So the workin
 
 Already built:
 
+- **Groups / Sub-Groups catalog (step 1, done 2026-08-05).**
+  `supabase/migrations/20260805_groups_subgroups.sql` — `groups` / `subgroups` tables keyed on the
+  spec's integer `Code`, multilingual names as `jsonb` (`{"en": ..., "pt": ...}`), `code_group` /
+  `code_subgroup` added to `actions` with a composite FK into `subgroups (code_group, code)`, RLS
+  (read: any authenticated user; write: admin only, via a `public.is_admin()` SECURITY DEFINER
+  helper). Seeds groups 1 and 2 with the strings that used to be hardcoded translations.
+  **The migration still has to be run — there is no Supabase CLI linked, so paste it into the SQL
+  editor.** Nothing else in this list works until it is applied.
+  Code side: `types/group.types.ts`, `mappers/groups.mapper.ts`,
+  `actions/clientActions/groups.actions.ts` (`getGroups` / `getSubgroups` / `addGroup` /
+  `addSubgroup`), `hook/useGroups.ts`, `utils/localizedName.ts` (current lang → pt → en → any),
+  and `InterventionGroupTitle` now takes the catalog `name` instead of reading
+  `checklists.groupTitle`, which is deleted from `en.ts` / `pt.ts`.
 - New Check-List header form — `modules/Interventions/components/NewChecklist.tsx`, auto Report Nr.
   via `nextCode` in `useNewChecklist.ts`, date default `yyyy.mm.dd`.
 - `SF#081` import button + the `SF#082-085` No errors / Errors found result line — added, but
@@ -83,12 +103,15 @@ Already built:
 
 Gaps:
 
-- **No groups or sub-groups anywhere in the DB.** `code_group` / `code_subgroup` exist only as plain
-  integers on `checklistactions`, assigned per check-list. Group *names* are hardcoded in the
-  translation files as `checklists.groupTitle` (`"1"`: Pre-Test Inspections, `"2"`: Checks and Tests
-  (VE)), rendered by `components/atoms/InterventionComponents.tsx`. Sub-group names have no display.
-- **`actions` has no group / sub-group columns** (`types/action.types.ts` is `id, created_at,
-  pump_type, description, period`), so a catalog action belongs to no group. This blocks Action#04.
+- **Sub-group names still have no display anywhere.** The catalog stores them; nothing renders them.
+  `InterventionGroup` prints `codeGroup.code` only.
+- **`actions.description` is still single-language** while group / sub-group names are multilingual.
+  Report_Actions.xlsx carries action names in several languages too, so `description` needs the same
+  `jsonb` treatment — deferred out of step 1 because it touches every existing action row and the
+  whole intervention read / print path. Do it as part of Action#22, before any real import.
+- **`checklistactions` has no FK to the catalog, on purpose** — the rows are a per-report snapshot
+  that must survive a re-import dropping an action (Q3). This means a check-list can reference a
+  `code_group` that no longer exists in `groups`; `InterventionGroupTitle` degrades to the bare code.
 - **No spreadsheet parser and no file input** — `package.json` has no `xlsx` / `papaparse` / `exceljs`.
 - `addChecklist` inserts only the `checklists` header row; nothing anywhere writes `checklistactions`,
   so every new check-list is created empty even though the whole read/display side expects it filled.
@@ -100,7 +123,8 @@ Minor, unrelated to the import:
 - **Name / NFPA_Edition defaults are swapped vs the spec.** `useNewChecklist.ts` sets
   `name: "NFPA-25 Last Edition"` and `nfpaEd: ""`; the spec puts that default on NFPA_Edition and
   makes Name a BROWSE over existing `CHECK_LIST:Name` values (currently a free-text input).
-- `mapActionToRaw` (`mappers/actions.mapper.ts`) drops `pumpType`.
+- ~~`mapActionToRaw` (`mappers/actions.mapper.ts`) drops `pumpType`.~~ Fixed in step 1 — it now writes
+  `pump_type`, `code_group` and `code_subgroup`.
 - The spec spells the table both `SUPPLYER` and `SUPPLIER`; `Peridiocity` is a typo for periodicity.
 
 ## Open questions for the client
@@ -131,10 +155,10 @@ Non-blocking:
 
 ## Next steps
 
-1. **Schema** — `groups` / `subgroups` tables with per-language names; add `code_group` /
-   `code_subgroup` to `actions`. Needed under every reading of the spec, depends on no client answer.
-   Prerequisite for both #22 and #04. Also retires the hardcoded `groupTitle` strings. ← start here
+1. ~~**Schema**~~ — done 2026-08-05, see "Already built" above. **Run the migration.** ← do this
 2. **Admin catalog screen on Screen#03** — view (and per Q2 maybe edit) groups / sub-groups / actions.
+   Unblocked; `useGroups` / `useSubgroups` and `addGroup` / `addSubgroup` already exist for it.
+   Also needs sub-group codes on the manual `NewAction` form, which still cannot set a group. ← then here
 3. **Action#22 import** — parse, validate, report errors. Blocked on Q1.
 4. **Action#04** — bulk-insert `checklistactions` from the catalog; wire up the existing stub and the
    No errors / Errors found branch. Blocked on Q4 (and needs step 1).

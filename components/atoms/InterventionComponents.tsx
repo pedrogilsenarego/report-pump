@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { periodValues } from "@/constants/actions";
-import { i18n } from "@/translations/i18n";
+import { LocalizedName } from "@/types/group.types";
+import { localizedName } from "@/utils/localizedName";
 
 type Props = {
   codeGroup: string | number;
@@ -56,10 +57,20 @@ export function InterventionBox({
   );
 }
 
-export function InterventionGroupTitle({ group }: { group: string }) {
+// `name` comes from the groups catalog in the DB (multilingual), not from the
+// translation files. Falls back to the bare code while the catalog is empty.
+export function InterventionGroupTitle({
+  group,
+  name,
+}: {
+  group: string;
+  name?: LocalizedName;
+}) {
+  const title = localizedName(name);
+
   return (
     <h2 className="text-lg font-semibold mb-2">
-      {group} - {i18n.t(`checklists.groupTitle.${group}`)}
+      {title ? `${group} - ${title}` : group}
     </h2>
   );
 }

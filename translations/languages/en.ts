@@ -23,12 +23,6 @@ export const content = {
         access: "Access",
         newUser: "New User",
       },
-      checklists: {
-        groupTitle: {
-          "1": "Pre-Test Inspections",
-          "2": "Checks and Tests (VE)",
-        },
-      },
       newChecklist: {
         trigger: "New Checklist",
         title: "New Check-List",
