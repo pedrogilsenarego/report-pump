@@ -46,6 +46,23 @@ export const content = {
         import: "Importar Grupos / Sub-Gr",
         importNoErrors: "Sem erros",
         importErrorsFound: "Erros encontrados",
+        reportNrAuto: "atribuído ao gravar",
+        importFilesTitle: "Importação de Grupos / Sub-Grupos / Ações",
+        importFilesHint:
+          "Os quatro ficheiros são obrigatórios. Nada é gravado até premir OK.",
+        formLabel: {
+          form1: "Form1_Groups.xlsx",
+          form2: "Form2_Sub_Groups.xlsx",
+          form3: "Form3_Actions.xlsx",
+          form4: "Form4_Measurements.xlsx",
+        },
+        templateLabel: "Modelo de check-list",
+        templatePlaceholder: "Selecionar…",
+        importCounts:
+          "{{groups}} grupos, {{subgroups}} sub-grupos, {{actions}} ações, {{values}} medições",
+        importMoreIssues: "… e mais {{count}}",
+        importRequestFailed: "Não foi possível enviar o pedido de importação.",
+        importFailedTitle: "A importação falhou",
       },
       common: {
         previous: "Anterior",

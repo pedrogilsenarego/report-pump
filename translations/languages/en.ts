@@ -46,6 +46,23 @@ export const content = {
         import: "Groups / Sub-Gr Import",
         importNoErrors: "No errors",
         importErrorsFound: "Errors found",
+        reportNrAuto: "assigned on save",
+        importFilesTitle: "Groups / Sub-Groups / Actions import",
+        importFilesHint:
+          "All four workbooks are required. Nothing is written until you press OK.",
+        formLabel: {
+          form1: "Form1_Groups.xlsx",
+          form2: "Form2_Sub_Groups.xlsx",
+          form3: "Form3_Actions.xlsx",
+          form4: "Form4_Measurements.xlsx",
+        },
+        templateLabel: "Check-list template",
+        templatePlaceholder: "Select…",
+        importCounts:
+          "{{groups}} groups, {{subgroups}} sub-groups, {{actions}} actions, {{values}} measurements",
+        importMoreIssues: "… and {{count}} more",
+        importRequestFailed: "The import request could not be sent.",
+        importFailedTitle: "Import failed",
       },
       common: {
         previous: "Previous",

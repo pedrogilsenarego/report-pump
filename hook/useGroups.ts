@@ -9,16 +9,20 @@ import {
 } from "@/actions/clientActions/groups.actions";
 import { Group, Subgroup } from "@/types/group.types";
 
-export function useGroups() {
+// Groups belong to a check-list, so the id is part of the query key — two check-lists
+// both have a group 1 and they are different rows.
+export function useGroups(checklistId?: number) {
   return useQuery<Group[]>({
-    queryKey: [QueryKeys.GROUPS],
-    queryFn: () => getGroups(),
+    queryKey: [QueryKeys.GROUPS, checklistId],
+    queryFn: () => getGroups(checklistId!),
+    enabled: !!checklistId,
   });
 }
 
-export function useSubgroups() {
+export function useSubgroups(checklistId?: number) {
   return useQuery<Subgroup[]>({
-    queryKey: [QueryKeys.SUBGROUPS],
-    queryFn: () => getSubgroups(),
+    queryKey: [QueryKeys.SUBGROUPS, checklistId],
+    queryFn: () => getSubgroups(checklistId!),
+    enabled: !!checklistId,
   });
 }

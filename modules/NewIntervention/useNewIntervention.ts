@@ -61,6 +61,7 @@ export const useNewIntervention = () => {
   };
 
   return {
+    checklistId,
     checklistData,
     isLoadingChecklist,
     control,

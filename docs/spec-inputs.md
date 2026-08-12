@@ -86,7 +86,12 @@ cannot represent that. Note the row-6 label is misspelled `CHEKC-LIST` in Form1 
 
 ## `Form2_Sub_Groups.xlsx` → `CL_SUB_GR` + `CL_SUBGR_TEXT`
 
-Header `TABLE OF NAMES OF SUB-GROUPS`. 32 data rows (16 sub-groups × 2 check-lists).
+Header `TABLE OF NAMES OF SUB-GROUPS`. **33** data rows — 16 sub-groups for check-list 1,
+**17** for check-list 2. (An earlier reading of "16 × 2" was wrong; corrected 2026-08-12 by
+running the parser over the file.) The extra row is code 32, `02 / 03 / 10`,
+`Nova ação teste` / `New test action` — its name says *action* while it sits in the
+**sub-group** file, so it looks like a test row someone left in rather than spec content.
+**Worth asking the client to confirm before it ships into a real check-list.** **[?]**
 
 ```
 A CODE | B CHECK-LIST | C GROUP | D SUB-GROUP | E LANG1 | F NAME1 | G LANG2 | H NAME2

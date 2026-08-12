@@ -57,8 +57,8 @@ export function InterventionBox({
   );
 }
 
-// `name` comes from the groups catalog in the DB (multilingual), not from the
-// translation files. Falls back to the bare code while the catalog is empty.
+// `name` comes from cl_gr_text in the DB (one row per language), not from the
+// translation files. Falls back to the bare code when the check-list has no import yet.
 export function InterventionGroupTitle({
   group,
   name,
@@ -72,5 +72,26 @@ export function InterventionGroupTitle({
     <h2 className="text-lg font-semibold mb-2">
       {title ? `${group} - ${title}` : group}
     </h2>
+  );
+}
+
+// Sub-group heading, from cl_subgr_text. Sub-group names repeat across groups
+// ("Bombas S.I." is 2/1, 3/1 and 4/1), so the code stays visible alongside the name.
+export function InterventionSubgroupTitle({
+  group,
+  subgroup,
+  name,
+}: {
+  group: string | number;
+  subgroup: string | number;
+  name?: LocalizedName;
+}) {
+  const title = localizedName(name);
+  const code = `${group}.${subgroup}`;
+
+  return (
+    <h3 className="text-base font-medium mt-3 mb-1">
+      {title ? `${code} - ${title}` : code}
+    </h3>
   );
 }

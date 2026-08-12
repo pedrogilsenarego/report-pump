@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseBrowser } from "@/lib/supabase/browser";
-import {
-  mapGroups,
-  mapGroupToRaw,
-  mapSubgroups,
-  mapSubgroupToRaw,
-} from "@/mappers/groups.mapper";
+import { mapGroups, mapSubgroups } from "@/mappers/groups.mapper";
 import { Group, Subgroup } from "@/types/group.types";
 
 const supabase = supabaseBrowser();
 
-export const getGroups = async (): Promise<Group[]> => {
+/**
+ * Groups / sub-groups are per check-list, so every read is scoped to one.
+ * There are no write helpers: Action#04's import is the only thing that creates them
+ * (see docs/checklist-actions-import.md), and the tables are admin-write under RLS.
+ */
+
+export const getGroups = async (checklistId: number): Promise<Group[]> => {
   return new Promise(async (resolve, reject) => {
     try {
       const {
@@ -22,8 +23,9 @@ export const getGroups = async (): Promise<Group[]> => {
       }
 
       const { data, error } = await supabase
-        .from("groups")
-        .select("*")
+        .from("cl_gr")
+        .select("*, cl_gr_text (language, text)")
+        .eq("checklist_id", checklistId)
         .order("code", { ascending: true });
 
       if (error) {
@@ -39,7 +41,7 @@ export const getGroups = async (): Promise<Group[]> => {
   });
 };
 
-export const getSubgroups = async (): Promise<Subgroup[]> => {
+export const getSubgroups = async (checklistId: number): Promise<Subgroup[]> => {
   return new Promise(async (resolve, reject) => {
     try {
       const {
@@ -51,9 +53,10 @@ export const getSubgroups = async (): Promise<Subgroup[]> => {
       }
 
       const { data, error } = await supabase
-        .from("subgroups")
-        .select("*")
-        .order("code_group", { ascending: true })
+        .from("cl_sub_gr")
+        .select("*, cl_subgr_text (language, text)")
+        .eq("checklist_id", checklistId)
+        .order("code_gr", { ascending: true })
         .order("code", { ascending: true });
 
       if (error) {
@@ -64,64 +67,6 @@ export const getSubgroups = async (): Promise<Subgroup[]> => {
       return resolve(mapSubgroups(data));
     } catch (error: any) {
       console.error("Error in getSubgroups:", error);
-      reject(error.message);
-    }
-  });
-};
-
-export const addGroup = async (props: Partial<Group>): Promise<any> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        return reject(new Error("User not authenticated"));
-      }
-
-      const { data, error } = await supabase
-        .from("groups")
-        .insert([{ ...mapGroupToRaw(props) }])
-        .single();
-
-      if (error) {
-        console.error("Error adding group:", error);
-        return reject(error.message);
-      }
-
-      return resolve(data);
-    } catch (error: any) {
-      console.error("Error in addGroup:", error);
-      reject(error.message);
-    }
-  });
-};
-
-export const addSubgroup = async (props: Partial<Subgroup>): Promise<any> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        return reject(new Error("User not authenticated"));
-      }
-
-      const { data, error } = await supabase
-        .from("subgroups")
-        .insert([{ ...mapSubgroupToRaw(props) }])
-        .single();
-
-      if (error) {
-        console.error("Error adding subgroup:", error);
-        return reject(error.message);
-      }
-
-      return resolve(data);
-    } catch (error: any) {
-      console.error("Error in addSubgroup:", error);
       reject(error.message);
     }
   });

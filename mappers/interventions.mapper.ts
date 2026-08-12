@@ -3,6 +3,7 @@ import {
   InterventionRaw,
   InterventionResult,
   InterventionResultRaw,
+  InterventionResults,
 } from "@/types/interventions.types";
 
 export const mapIntervention = (profile: InterventionRaw): Intervention => {
@@ -26,6 +27,13 @@ export const mapInterventionToRaw = (
 };
 
 export const mapInterventionResults = (
+  interventions: InterventionResultRaw
+): InterventionResults => ({
+  checklistId: interventions.checklist_id,
+  results: mapInterventionResultRows(interventions),
+});
+
+const mapInterventionResultRows = (
   interventions: InterventionResultRaw
 ): InterventionResult[] => {
   return interventions.interventionchecklistactions.map((intervention) => {

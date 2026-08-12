@@ -6,28 +6,39 @@ import { useRef } from "react";
 import { useIntervention } from "./useIntervention";
 import { useReactToPrint } from "react-to-print";
 import { Button } from "@/components/ui/button";
-import { groupByCodeGroup } from "@/utils/checklist";
-import { useGroups } from "@/hook/useGroups";
+import { groupByGroupAndSubgroup } from "@/utils/checklist";
+import { useGroups, useSubgroups } from "@/hook/useGroups";
 import {
   InterventionBox,
   InterventionDescription,
   InterventionDetailsBox,
   InterventionGroup,
   InterventionGroupTitle,
+  InterventionSubgroupTitle,
   InterventionPeriod,
 } from "@/components/atoms/InterventionComponents";
 
 export default function Intervention() {
   const { intervention } = useIntervention();
-  const groups = useGroups();
+  // Group and sub-group names are per check-list, so both reads need its id.
+  const checklistId = intervention?.data?.checklistId;
+  const groups = useGroups(checklistId);
+  const subgroups = useSubgroups(checklistId);
 
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
 
-  const groupedInterventions = groupByCodeGroup(intervention?.data || []);
+  const grouped = groupByGroupAndSubgroup(intervention?.data?.results || []);
 
-  const groupName = (group: string) =>
-    groups.data?.find((item) => String(item.code) === group)?.name;
+  const groupName = (code: number | string) =>
+    groups.data?.find((item) => String(item.code) === String(code))?.name;
+
+  const subgroupName = (codeGroup: number | string, code: number | string) =>
+    subgroups.data?.find(
+      (item) =>
+        String(item.codeGroup) === String(codeGroup) &&
+        String(item.code) === String(code)
+    )?.name;
 
   return (
     <>
@@ -36,26 +47,38 @@ export default function Intervention() {
         style={{ rowGap: "10px" }}
         className="p-6 flex flex-col"
       >
-        {Object.entries(groupedInterventions).map(([group, interventions]) => (
-          <div key={group} className="mb-6">
-            <InterventionGroupTitle group={group} name={groupName(group)} />
-            {interventions.map((intervention: any, index: number) => (
-              <InterventionBox key={index}>
-                <InterventionDetailsBox>
-                  <InterventionGroup
-                    codeGroup={intervention.codeGroup}
-                    code={intervention.code}
-                  />
-                  <InterventionPeriod period={intervention.period} />
-                  <InterventionDescription
-                    description={intervention.description}
-                  />
-                </InterventionDetailsBox>
-                <div className="border p-2">
-                  <p>{intervention.value}</p>
-                </div>
-              </InterventionBox>
-            ))}{" "}
+        {grouped.map((group) => (
+          <div key={group.codeGroup} className="mb-6">
+            <InterventionGroupTitle
+              group={String(group.codeGroup)}
+              name={groupName(group.codeGroup)}
+            />
+            {group.subgroups.map((subgroup) => (
+              <div key={`${group.codeGroup}.${subgroup.codeSubgroup}`}>
+                <InterventionSubgroupTitle
+                  group={group.codeGroup}
+                  subgroup={subgroup.codeSubgroup}
+                  name={subgroupName(group.codeGroup, subgroup.codeSubgroup)}
+                />
+                {subgroup.actions.map((action: any, index: number) => (
+                  <InterventionBox key={index}>
+                    <InterventionDetailsBox>
+                      <InterventionGroup
+                        codeGroup={action.codeGroup}
+                        code={action.code}
+                      />
+                      <InterventionPeriod period={action.period} />
+                      <InterventionDescription
+                        description={action.description}
+                      />
+                    </InterventionDetailsBox>
+                    <div className="border p-2">
+                      <p>{action.value}</p>
+                    </div>
+                  </InterventionBox>
+                ))}
+              </div>
+            ))}
           </div>
         ))}
       </div>

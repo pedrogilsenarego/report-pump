@@ -17,6 +17,7 @@ import { useGroups } from "@/hook/useGroups";
 
 export default function NewIntervention() {
   const {
+    checklistId,
     checklistData,
     control,
     handleSubmit,
@@ -25,7 +26,7 @@ export default function NewIntervention() {
     periodName,
     period,
   } = useNewIntervention();
-  const groups = useGroups();
+  const groups = useGroups(checklistId);
 
   const groupName = (group: string) =>
     groups.data?.find((item) => String(item.code) === group)?.name;

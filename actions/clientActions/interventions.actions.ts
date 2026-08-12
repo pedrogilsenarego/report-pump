@@ -6,7 +6,7 @@ import {
   mapInterventions,
   mapInterventionToRaw,
 } from "@/mappers/interventions.mapper";
-import { Intervention, InterventionResult } from "@/types/interventions.types";
+import { Intervention, InterventionResults } from "@/types/interventions.types";
 const supabase = supabaseBrowser();
 
 export const getInterventions = async (): Promise<Intervention[]> => {
@@ -119,7 +119,7 @@ export const getIntervention = async ({
   interventionId,
 }: {
   interventionId: number | undefined;
-}): Promise<InterventionResult[]> => {
+}): Promise<InterventionResults> => {
   return new Promise(async (resolve, reject) => {
     if (!interventionId) return;
     try {

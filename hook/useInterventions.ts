@@ -3,7 +3,7 @@
 
 import { QueryKeys } from "@/constants/queryKeys";
 import { useQuery } from "@tanstack/react-query";
-import { Intervention, InterventionResult } from "@/types/interventions.types";
+import { Intervention, InterventionResults } from "@/types/interventions.types";
 import {
   getIntervention,
   getInterventions,
@@ -17,8 +17,8 @@ export function useInterventions() {
 }
 
 export function useInterventionResult(interventionId: number | undefined) {
-  return useQuery<InterventionResult[]>({
-    queryKey: [QueryKeys.INTERVENTION],
+  return useQuery<InterventionResults>({
+    queryKey: [QueryKeys.INTERVENTION, interventionId],
     queryFn: () => getIntervention({ interventionId }),
     enabled: !!interventionId,
   });

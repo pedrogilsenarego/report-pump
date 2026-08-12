@@ -18,6 +18,7 @@ export type InterventionRaw = {
 };
 
 export type InterventionResultRaw = {
+  checklist_id?: number;
   interventionchecklistactions: {
     checklistaction_id: number;
     value: string;
@@ -37,4 +38,13 @@ export type InterventionResultRaw = {
 };
 export type InterventionResult = ChecklistAction & {
   value: string;
+};
+
+/**
+ * The report needs the intervention's check-list id, not just its answers: group and
+ * sub-group names are per check-list, so cl_gr can only be read with it.
+ */
+export type InterventionResults = {
+  checklistId?: number;
+  results: InterventionResult[];
 };

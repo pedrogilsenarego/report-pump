@@ -1,4 +1,3 @@
-import { NewChecklistType } from "@/modules/Interventions/components/NewChecklist.validation";
 import {
   ChecklistAction,
   Checklist,
@@ -46,27 +45,4 @@ export const mapChecklist = (profile: ChecklistRaw): Checklist => {
 // Map an array of ChecklistRaw to an array of Checklist
 export const mapChecklists = (profiles: ChecklistRaw[]): Checklist[] => {
   return profiles.map((profile) => mapChecklist(profile));
-};
-
-export const mapChecklistToRaw = (
-  profile: NewChecklistType
-): Pick<
-  ChecklistRaw,
-  | "nfpa_ed"
-  | "date"
-  | "name"
-  | "company_resp"
-  | "name_resp"
-  | "ph"
-  | "email"
-> => {
-  return {
-    nfpa_ed: profile.nfpaEd,
-    date: profile.date,
-    name: profile.name,
-    company_resp: profile.companyResp || undefined,
-    name_resp: profile.nameResp,
-    ph: profile.phone || undefined,
-    email: profile.email || undefined,
-  };
 };

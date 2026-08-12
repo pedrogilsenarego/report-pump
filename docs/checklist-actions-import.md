@@ -165,6 +165,70 @@ Minor, unrelated to the import:
   `pump_type`, `code_group` and `code_subgroup`.
 - The spec spells the table both `SUPPLYER` and `SUPPLIER`; `Peridiocity` is a typo for periodicity.
 
+## 2026-08-12 — schema applied, parser written
+
+- `supabase/migrations/20260812_cl_checklist_tree.sql` **is applied** (SQL editor). It replaces
+  `20260805_groups_subgroups.sql`, which was deleted — never run, wrong shape. Eight tables:
+  `cl_gr`, `cl_sub_gr`, `cl_action`, `cl_action_values` + their `_text` siblings, scoped by
+  `checklist_id` -> `checklists.id`, admin-only RLS via `is_admin()`.
+- **Also fixed there: `checklists` was missing its entire PopUp#07 header block.** The live table
+  held only `(id, nfpa_ed, created_at)` while `mapChecklistToRaw` wrote `date` / `name` /
+  `company_resp` / `name_resp` / `ph` / `email` — so `addChecklist` failed with 42703 on every
+  submit, and `nextCode` read a `code` column that did not exist. Columns added, `code`
+  backfilled to `id` for the 6 existing rows and made unique.
+- `lib/forms/parseChecklistForms.ts` — the Action#04 parser. Pure (takes `ArrayBuffer`s), so it
+  runs in the browser or a route handler; the client/server decision is still open. Language
+  blocks are **derived from the row-6 labels** (`LANG1`/`NAME1`, and `LANG1`/`TYPE1`/`SOURCE1`/
+  `NAME1` in Form3), never a hardcoded stride. `scripts/parseFormsCheck.ts` runs it over
+  `app/assets/` — `npx tsx scripts/parseFormsCheck.ts`.
+- Verified against the real files: template **1** yields 4 groups / 16 sub-groups but **60
+  referential errors**, all `Form4` rows naming `GROUP=2` actions absent from `Form3`.
+  Template **2** yields 4 groups / 17 sub-groups and **zero actions**, because `Form3` carries
+  only check-list-1 rows. So neither template can currently be imported — exactly the
+  `Form3_Actions` gap below, now demonstrated rather than inferred.
+- Validation rules are ours, not the spec's (open question 5 never got answered): structural
+  (label row found, required identity columns present, at least one `LANG`/`NAME` pair),
+  duplicate identity tuples, referential integrity child->parent, and a template yielding no
+  actions at all. Empty template rows carrying only a `CODE` are skipped silently.
+
+### Action#04 is wired (2026-08-12)
+
+- `app/api/checklists/import/route.ts` — POST multipart. Admin-gated twice (explicit
+  `profiles.role` check for a clean 403, then RLS `is_admin()`), parses server-side, and is
+  **two-phase**: `dryRun=1` from `SF#081` validates and writes nothing; `SF#088` posts again
+  and creates the `checklists` row plus the whole tree. `SF#088` is `disabled` until a dry run
+  returns ok, and any change to the file inputs clears the verdict — so the import really is
+  mandatory and a check-list can no longer be created empty.
+- `lib/forms/insertChecklistTree.ts` — bulk insert per level, ids matched back by composite
+  code. PostgREST cannot span statements in a transaction, so failure triggers a
+  **compensating delete** of the `checklists` row, which cascades the partial tree away.
+- Report Nr. is now assigned **server-side** from `max(code) + 1`; the client used to compute
+  it, which two concurrent admins would collide on.
+- `addChecklist` / `mapChecklistToRaw` were **deleted**. They inserted a header row with no
+  tree — the exact bug being fixed — and nothing else called them.
+- Read path repointed off the deleted global tables: `getGroups(checklistId)` /
+  `getSubgroups(checklistId)` read `cl_gr` / `cl_sub_gr` with their `_text` children,
+  `useGroups` / `useSubgroups` take a check-list id and key the query on it,
+  `utils/specLanguage.ts` maps `PTG`/`ENG` -> `pt`/`en` on read.
+- **Sub-group names now render** (`InterventionSubgroupTitle`, `groupByGroupAndSubgroup`) —
+  the report nests group -> sub-group -> action. That closes the long-standing display gap.
+- Verified against the live DB with `scripts/importTreeCheck.ts`: full tree inserts, reads
+  back nested, duplicate identity rejected (23505), orphan sub-group rejected (23503),
+  cascade delete leaves nothing behind.
+
+### Still missing after that
+
+- **The intervention path still reads the old `checklistactions` -> `actions` tables.** A
+  check-list imported by Action#04 has `cl_action` rows and **no** `checklistactions` rows, so
+  its actions do not appear in New Intervention or on the report — only its group and
+  sub-group names do. Repointing `getCheckList` / `addIntervention` /
+  `interventionchecklistactions` onto `cl_action` is the next piece of work, and it subsumes
+  the old "`actions.description` -> multilingual" item, since `cl_action_text` already holds
+  names, `type` and `source` per language.
+- **Re-import (Q3) is not implemented.** Every import creates a *new* check-list; there is no
+  path that re-imports into an existing one, which is the case that could orphan recorded
+  `INT_RESULT` rows. Deliberate — the client has not answered replace-vs-merge.
+
 ## Open questions for the client
 
 Answered by the 2026-08-07 bundle:
@@ -198,6 +262,9 @@ Still open:
 9. **New — `CL_ACTION.Pump_Type` domain.** `#Tipos Sub-Grupo NP.xlsx` implies four categories
    (Sala SI / Jockey / B.Elétrica / B.Diesel) against `PUMP_GROUP.Type`'s three (`J`/`E`/`D`).
 10. **New — `CTRL_STATUS` keys** are `1`/`2`/`3` in the xlsx but `A`/`M`/`0` in p3's pre-set table.
+12. **New — is `Form2` row 32 a test row?** `02 / 03 / 10`, `Nova ação teste` /
+    `New test action`. It is the only asymmetry between the two check-list templates' sub-group
+    lists (16 vs 17) and its name says *action* in the sub-group file. Confirm before importing.
 11. **New — Action#02 contains a hardcoded password** (`=="presidentE1990"`) as an alternative to
     a real user lookup. Will not be implemented; flag it to the client.
 
