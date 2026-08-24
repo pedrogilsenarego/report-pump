@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { supabaseBrowser } from "@/lib/supabase/browser";
-import { mapChecklists } from "@/mappers/checklists.mapper";
-import { Checklist } from "@/types/checklist.types";
+import { mapChecklist, mapChecklists } from "@/mappers/checklists.mapper";
+import { Checklist, ChecklistSummary } from "@/types/checklist.types";
 const supabase = supabaseBrowser();
 
 export const getCheckLists = async (): Promise<Checklist[]> => {
@@ -80,4 +80,55 @@ export const getCheckList = async (
       reject(error.message);
     }
   });
+};
+
+/**
+ * The check-list list with the size of each imported tree.
+ *
+ * Only cl_gr hangs off checklists.id directly — cl_sub_gr and cl_action are attached by
+ * the composite (checklist_id, code_gr[, code_sub_gr]) FK, which PostgREST cannot embed
+ * from the header. So groups come back as an embedded aggregate and the other two levels
+ * are tallied from an id-only read.
+ */
+export const getCheckListSummaries = async (): Promise<ChecklistSummary[]> => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error("User not authenticated");
+
+  const [checklists, subgroups, actions] = await Promise.all([
+    supabase
+      .from("checklists")
+      .select("*, cl_gr(count)")
+      .order("id", { ascending: false }),
+    supabase.from("cl_sub_gr").select("checklist_id"),
+    supabase.from("cl_action").select("checklist_id"),
+  ]);
+
+  const failed = [checklists, subgroups, actions].find((result) => result.error);
+  if (failed?.error) {
+    console.error("Error fetching check-list summaries:", failed.error);
+    throw new Error(failed.error.message);
+  }
+
+  const tally = (rows: Array<{ checklist_id: number }> | null) => {
+    const counts = new Map<string, number>();
+    (rows || []).forEach((row) => {
+      const key = `${row.checklist_id}`;
+      counts.set(key, (counts.get(key) || 0) + 1);
+    });
+    return counts;
+  };
+
+  const subgroupCounts = tally(subgroups.data);
+  const actionCounts = tally(actions.data);
+
+  return (checklists.data || []).map((row: any) => ({
+    ...mapChecklist(row),
+    // The embedded aggregate arrives as [{ count: n }], or [] when nothing was imported.
+    groupCount: row.cl_gr?.[0]?.count || 0,
+    subgroupCount: subgroupCounts.get(`${row.id}`) || 0,
+    actionCount: actionCounts.get(`${row.id}`) || 0,
+  }));
 };

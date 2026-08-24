@@ -47,3 +47,15 @@ export type ChecklistActionRaw = {
   code_group: number;
   code_subgroup: number;
 };
+
+/**
+ * A check-list row plus the size of the tree Action#04 imported under it.
+ *
+ * The counts are what tells an admin whether an import actually landed — a check-list
+ * with 0 groups is a header row whose import never ran (or was rolled back).
+ */
+export type ChecklistSummary = Checklist & {
+  groupCount: number;
+  subgroupCount: number;
+  actionCount: number;
+};

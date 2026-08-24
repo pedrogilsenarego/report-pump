@@ -34,6 +34,7 @@ import { useState } from "react";
 import { columns } from "./ActionList.columns";
 import NewPump from "./NewAction";
 import { useActions } from "@/hook/useActions";
+import { i18n } from "@/translations/i18n";
 
 export default function ActionsList() {
   const { data } = useActions();
@@ -63,6 +64,7 @@ export default function ActionsList() {
   });
   return (
     <div className="w-full flex flex-col gap-2">
+      <h2 className="text-lg font-medium">{i18n.t("actionsList.title")}</h2>
       <div
         style={{
           justifyContent: "center",

@@ -4,11 +4,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { NewChecklistType, NewCheklistSchema } from "./NewChecklist.validation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useChecklists } from "@/hook/useChecklist";
 import { FormKind, ImportIssue } from "@/lib/forms/parseChecklistForms";
 import { i18n } from "@/translations/i18n";
+import { QueryKeys } from "@/constants/queryKeys";
 
 const DEFAULT_NFPA_ED = "NFPA-25 Last Edition";
 
@@ -44,6 +45,7 @@ type ImportResponse = {
 export default function useNewChecklist() {
   const { toast } = useToast();
   const checklists = useChecklists();
+  const queryClient = useQueryClient();
   const [openModal, setOpenModal] = useState(false);
 
   const [files, setFiles] = useState<Partial<Record<FormKind, File>>>({});
@@ -150,6 +152,8 @@ export default function useNewChecklist() {
       }
 
       checklists.refetch();
+      // The list screen reads the summary query, which carries the imported tree counts.
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.CHECKLISTS_SUMMARY] });
       setOpenModal(false);
       reset();
     },

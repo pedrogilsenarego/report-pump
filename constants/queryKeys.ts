@@ -7,6 +7,7 @@ export enum QueryKeys {
   PUMPS = "pumps",
   CHECKLISTS = "checklists",
   CHECKLIST = "checklist",
+  CHECKLISTS_SUMMARY = "checklists-summary",
   ACTIONS = "actions",
   GROUPS = "groups",
   SUBGROUPS = "subgroups",

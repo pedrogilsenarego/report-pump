@@ -4,10 +4,12 @@ import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 import {
   ColumnFiltersState,
+  ExpandedState,
   SortingState,
   VisibilityState,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -30,27 +32,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
-// import { useInterventions } from "@/hook/useInterventions";
-// import { useRouter } from "next/navigation";
-// import { RouterKeys } from "@/constants/router";
-import { useChecklists } from "@/hook/useChecklist";
+import { Fragment, useState } from "react";
+import { useChecklistSummaries } from "@/hook/useChecklist";
+import { i18n } from "@/translations/i18n";
 import { columns } from "./ChecklistsList.columns";
-import NewChecklist from "./NewChecklist";
+import ChecklistTree from "./ChecklistTree";
+import NewChecklist from "@/modules/Interventions/components/NewChecklist";
 
 export default function ChecklistsList() {
-  const { data } = useChecklists();
+  const { data, isLoading } = useChecklistSummaries();
 
-  // const router = useRouter();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
-
-  // const handleClickRow = (interventionId?: string) => {
-  //   if (!interventionId) return;
-  //   router.push(RouterKeys.INTERVENTION.replace(":id", interventionId));
-  // };
+  const [expanded, setExpanded] = useState<ExpandedState>({});
 
   const table = useReactTable({
     data: data || [],
@@ -58,10 +54,12 @@ export default function ChecklistsList() {
 
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onExpandedChange: setExpanded,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
@@ -69,10 +67,13 @@ export default function ChecklistsList() {
       columnFilters,
       columnVisibility,
       rowSelection,
+      expanded,
     },
   });
+
   return (
     <div className="w-full flex flex-col gap-2">
+      <h2 className="text-lg font-medium">{i18n.t("checklists.title")}</h2>
       <div
         style={{
           justifyContent: "center",
@@ -84,7 +85,8 @@ export default function ChecklistsList() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
+              {i18n.t("checklists.columns")}
+              <ChevronDownIcon className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -131,21 +133,31 @@ export default function ChecklistsList() {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  className="cursor-pointer"
-                  //onClick={() => handleClickRow(row.original.id)}
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                // Fragment, not a bare row: an expanded check-list renders its imported
+                // tree in a second full-width row underneath.
+                <Fragment key={row.id}>
+                  <TableRow
+                    className="cursor-pointer"
+                    data-state={row.getIsSelected() && "selected"}
+                    onClick={() => row.original.groupCount && row.toggleExpanded()}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  {row.getIsExpanded() && (
+                    <TableRow>
+                      <TableCell colSpan={row.getVisibleCells().length}>
+                        <ChecklistTree checklistId={Number(row.original.id)} />
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </Fragment>
               ))
             ) : (
               <TableRow>
@@ -153,7 +165,9 @@ export default function ChecklistsList() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {isLoading
+                    ? i18n.t("checklists.loading")
+                    : i18n.t("checklists.empty")}
                 </TableCell>
               </TableRow>
             )}
@@ -171,7 +185,7 @@ export default function ChecklistsList() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            {i18n.t("common.previous")}
           </Button>
           <Button
             variant="outline"
@@ -179,7 +193,7 @@ export default function ChecklistsList() {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            {i18n.t("common.next")}
           </Button>
         </div>
       </div>
