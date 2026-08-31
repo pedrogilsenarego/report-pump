@@ -10,9 +10,9 @@ Source pages in `app/assets/`:
 | `FP25-INFOLOG-R1-p1.pdf` | 1/6 | Legend of Data Base Structure |
 | `FP25-INFOLOG-R1-p2.pdf` | 2/6 | Data-base organization |
 | `FP25-INFOLOG-R1-p3.pdf` | 3/6 | System Tables / Operational Data Tables / Fixed values of Fields |
-| `FP25-INFOLOG-R1-Menus1.pdf` | 4/6 | Menus — admin / service provider (see `checklist-actions-import.md`) |
-| `FP25-INFOLOG-R1-Menus2.pdf` | 5/6 | Menus — customer (see `checklist-actions-import.md`) |
-| `FP25-INFOLOG-R1-Outputs.pdf` | 6/6 | Outputs — not yet transcribed |
+| `FP25-INFOLOG-R1-Menus1.pdf` | 4/6 | Menus — admin / service provider (Action#04 slice in `checklist-actions-import.md`; everything else in `screens-flows.md`) |
+| `FP25-INFOLOG-R1-Menus2.pdf` | 5/6 | Menus — customer (`screens-flows.md`) |
+| `FP25-INFOLOG-R1-Outputs.pdf` | 6/6 | Outputs — **transcribed 2026-08-31** in `reports-outputs.md` |
 
 These are CAD drawings. Their PDF text layer comes out unordered, so this file is a
 reconstruction from the rendered pages. Where the drawing was genuinely ambiguous it is marked
@@ -229,18 +229,21 @@ Whether they are genuinely distinct concepts or a modelling duplication is uncle
 | | | `VT` | Vertical |
 | | | `V-IL` | Vertical In-Line |
 | | | `VT-MS` | Vertical Multi-Stage |
-| `PUMP_GROUP` | `Condition` | `1` / `2` | Active / Inactive |
+| `PUMP_GROUP` | `Condition` | `1` / `2` | Active / Inactive — **contradicted by sheets 5/6 and 6/6, which both say `1`/`0`; see `reports-outputs.md`** |
 | `TECHNICIAN_CUST` | `Condition` | `1` / `2` | Active / Inactive |
 | `INST_RESPONSABLE` | `Condition` | `1` / `2` | Active / Inactive |
 | `INSTALLATION` | `Condition` | `1` / `2` / `3` | Active / Exist but not active / Deleted |
 | `INTERVENTION` | `Controler_Status` | `A` / `M` / `0` | Automatic / Manual / Off |
 | `INTERVENTION` | `Locked` | `1` / `2` | Not Locked / Locked |
-| `INT_RESULT` | `Result` | `V` / `X` / `-` | Ok / Fail / See notes |
+| `INT_RESULT` | `Result` | `V` / `X` / `-` | Ok / Fail / See notes — **sheet 5/6 uses a fourth value `*` that is not in this table**; see `screens-flows.md` |
 
 `CL_ACTION.Pump_Type* S(1)*` is pre-set but has no entry of its own in the p3 table. It is
 almost certainly the `PUMP_GROUP.Type` domain (`J`/`E`/`D`) — i.e. which pump kinds an action
-applies to. **[?]** — confirm, because it decides whether one check-list template covers all
-three pump types with per-action filtering.
+applies to. **Sheet 5/6 supports this**: *Print Blank* defines `xType = PUMP_GROUP:Type` right
+before calling Action#28, and Action#28's report is the one that loops `CL_ACTION`. So one
+check-list template does cover all pump types with per-action filtering. What is still open is
+the **four-vs-three mismatch** with `#Tipos Sub-Grupo NP.xlsx` (`Sala SI` / `Jockey` /
+`B.Elétrica` / `B.Diesel`). **[?]** See `screens-flows.md`.
 
 **Conflict:** p3's pre-set table gives `Controler_Status` as `A`/`M`/`0`, but
 `Table_Ctrl_Status.xlsx` keys the same three meanings as `1`/`2`/`3`. The xlsx is the loaded

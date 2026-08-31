@@ -46,9 +46,11 @@ export default function InterventionsList() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const handleClickRow = (interventionId?: string) => {
+  // interventions.id is a bigint, so Intervention.id is a number now that the type
+  // matches the column rather than the old `string`.
+  const handleClickRow = (interventionId?: number) => {
     if (!interventionId) return;
-    router.push(RouterKeys.INTERVENTION.replace(":id", interventionId));
+    router.push(RouterKeys.INTERVENTION.replace(":id", String(interventionId)));
   };
 
   const table = useReactTable({

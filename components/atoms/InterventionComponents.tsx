@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { periodValues } from "@/constants/actions";
+import { periodLabel } from "@/constants/actions";
 import { LocalizedName } from "@/types/group.types";
 import { localizedName } from "@/utils/localizedName";
 
@@ -10,26 +10,44 @@ type Props = {
 
 export function InterventionGroup(props: Props) {
   return (
-    <p>
+    <p className="whitespace-nowrap tabular-nums opacity-70">
       {props.codeGroup}.{props.code}
     </p>
   );
 }
 
-export function InterventionPeriod({ period }: { period: number }) {
+export function InterventionPeriod({ period }: { period?: number }) {
+  const label = periodLabel(period);
+  if (!label) return null;
+
   return (
-    <div className="border p-2">
-      <p>{periodValues[period]}</p>
+    <div className="border px-2 py-1 rounded-sm text-xs whitespace-nowrap">
+      <p>{label}</p>
     </div>
   );
 }
 
+/**
+ * Action names come from cl_action_text (one row per language), so they resolve through
+ * localizedName like group and sub-group names — not through the translation files.
+ * `source` is the NFPA-25 clause the action comes from, printed alongside it on the report.
+ */
 export function InterventionDescription({
   description,
+  source,
 }: {
-  description: string;
+  description?: LocalizedName;
+  source?: LocalizedName;
 }) {
-  return <p>{description}</p>;
+  const text = localizedName(description);
+  const clause = localizedName(source);
+
+  return (
+    <div className="flex flex-col">
+      <p>{text}</p>
+      {clause ? <p className="text-xs opacity-60">{clause}</p> : null}
+    </div>
+  );
 }
 
 export function InterventionDetailsBox({
@@ -37,21 +55,12 @@ export function InterventionDetailsBox({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="flex gap-4 w-full items-center">{children}</div>;
+  return <div className="flex gap-4 flex-1 items-center">{children}</div>;
 }
 
-export function InterventionBox({
-  children,
-  key,
-}: {
-  children: React.ReactNode;
-  key: any;
-}) {
+export function InterventionBox({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      key={key}
-      className="border flex p-2 rounded-sm justify-between space-x-3 items-center"
-    >
+    <div className="border flex p-2 rounded-sm justify-between gap-3 items-center">
       {children}
     </div>
   );

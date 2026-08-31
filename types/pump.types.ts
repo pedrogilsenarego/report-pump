@@ -1,5 +1,6 @@
 export type Pump = {
-  id: string;
+  // pumps.id is a bigint too — see the note on Checklist.id.
+  id: number;
   createdAt: string;
   installationId?: string;
   type?: string;
@@ -10,7 +11,7 @@ export type Pump = {
 };
 
 export type PumpRaw = {
-  id: string;
+  id: number;
   created_at: string;
   installation_id?: string;
   type?: string;

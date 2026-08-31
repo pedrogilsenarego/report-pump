@@ -3,24 +3,22 @@
 import { QueryKeys } from "@/constants/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import {
-  getCheckList,
   getCheckListSummaries,
   getCheckLists,
 } from "@/actions/clientActions/checklists.actions";
 import { Checklist, ChecklistSummary } from "@/types/checklist.types";
 
+/**
+ * There is no `useChecklist(id)` any more. It read `checklists -> checklistactions ->
+ * actions`, the pre-import catalog, which is empty for every check-list Action#04
+ * imported. Use `useChecklistActions(id)` from hook/useInterventions.ts, which reads
+ * cl_action.
+ */
+
 export function useChecklists() {
   return useQuery<Checklist[]>({
     queryKey: [QueryKeys.CHECKLISTS],
     queryFn: getCheckLists,
-  });
-}
-
-export function useChecklist(checklistId: number | undefined) {
-  return useQuery<Checklist[]>({
-    queryKey: [QueryKeys.CHECKLIST, checklistId],
-    queryFn: () => getCheckList(checklistId),
-    enabled: !!checklistId,
   });
 }
 

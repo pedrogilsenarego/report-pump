@@ -153,7 +153,7 @@ export default function ChecklistsList() {
                   {row.getIsExpanded() && (
                     <TableRow>
                       <TableCell colSpan={row.getVisibleCells().length}>
-                        <ChecklistTree checklistId={Number(row.original.id)} />
+                        <ChecklistTree checklistId={row.original.id} />
                       </TableCell>
                     </TableRow>
                   )}

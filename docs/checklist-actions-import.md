@@ -27,9 +27,20 @@ In the repo at `app/assets/`, Equitotal *FIREPUMP25 — Menu(s) Structure / orga
 Both are single-page CAD-style flow diagrams. Sheet 5/6 names the check-list action rows
 `table.CL_ACTION:Code` — that is the spec's name for what the DB calls `checklistactions`.
 
-Pages 1–3 and 6 (`-p1`, `-p2`, `-p3`, `-Outputs`) arrived on 2026-08-07 and are transcribed in
-`data-model.md`. The older `Spec1.pdf`–`Spec5.pdf` were the same drawings under provisional
-names and have been removed.
+Pages 1–3 (`-p1`, `-p2`, `-p3`) arrived on 2026-08-07 and are transcribed in `data-model.md`.
+The older `Spec1.pdf`–`Spec5.pdf` were the same drawings under provisional names and have been
+removed.
+
+**2026-08-31 — the remaining two sheets are now transcribed.** Sheet 6/6 (`-Outputs`) had never
+been read; the parts of sheets 4/6 and 5/6 outside Action#04 had never been written down:
+
+- **`reports-outputs.md`** — sheet 6/6: `REPORT#01` / `#02` / `#03` layouts, `REPORT#10`, and
+  the intervention PDF.
+- **`screens-flows.md`** — sheets 4/6 and 5/6: registration, admin menu, service-provider menu,
+  the whole customer menu, and the intervention lifecycle.
+
+Both carry a "gap against the current implementation" section. Between them they resolve open
+question 7 and narrow question 9 below.
 
 Related spreadsheets named in the drawing's legend — **all now present** except as noted, and
 extracted in `spec-inputs.md`:
@@ -254,13 +265,21 @@ Still open:
    recorded data.
 5. **What produces "Errors found"?** `#Actions.xlsx` confirms the user sees only a `" X "`
    marker, never a list. But what counts as an error is still unstated.
-7. **Scope of Action#04** — all groups/sub-groups, or does the user pick? Related: which
-   check-list template (`CHECK-LIST=1` or `2`) does a given import use, and where is that chosen?
-   The forms carry the column; nothing in the spec says how its value is selected.
+7. **Scope of Action#04** — all groups/sub-groups, or does the user pick?
+   ~~Which check-list template does a given import use, and where is that chosen?~~
+   **Answered 2026-08-31 by sheets 4/6 and 6/6.** Nothing chooses: sheet 4/6 sets
+   `xLast_Check_List = BIGGEST (table.CHECK_LIST:Code)` at **login**, and `REPORT#03` loops
+   `CL_ACTION` on that variable. The newest imported check-list is used by everyone, always.
+   **New question in its place:** is that intended? An admin importing a check-list silently
+   re-points every customer's blank report, with no confirmation and no way back to the previous
+   template. See `reports-outputs.md`.
 8. Confirm the Name / NFPA_Edition swap above. (p2 does add `Name* [Rev1] S(20)` to `CHECK_LIST`,
    consistent with Name being a real field, but the default-value question stands.)
 9. **New — `CL_ACTION.Pump_Type` domain.** `#Tipos Sub-Grupo NP.xlsx` implies four categories
    (Sala SI / Jockey / B.Elétrica / B.Diesel) against `PUMP_GROUP.Type`'s three (`J`/`E`/`D`).
+   **Narrowed 2026-08-31:** sheet 5/6's *Print Blank* sets `xType = PUMP_GROUP:Type` before
+   generating `REPORT#03`, so `Pump_Type` really is the per-action filter and the value really
+   is a `PUMP_GROUP.Type`. Only the four-vs-three mismatch is still open.
 10. **New — `CTRL_STATUS` keys** are `1`/`2`/`3` in the xlsx but `A`/`M`/`0` in p3's pre-set table.
 12. **New — is `Form2` row 32 a test row?** `02 / 03 / 10`, `Nova ação teste` /
     `New test action`. It is the only asymmetry between the two check-list templates' sub-group

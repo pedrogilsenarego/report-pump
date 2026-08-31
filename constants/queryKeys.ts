@@ -13,4 +13,6 @@ export enum QueryKeys {
   SUBGROUPS = "subgroups",
   INTERVENTIONS = "interventions",
   INTERVENTION = "intervention",
+  CHECKLIST_ACTIONS = "checklist-actions",
+  CTRL_STATUS = "ctrl-status",
 }

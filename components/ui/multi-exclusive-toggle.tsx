@@ -17,6 +17,12 @@ interface ExclusiveMultiToggleProps {
   control: Control<any>;
   options: ToggleOption[];
   className?: string;
+  /**
+   * Left undefined by default so nothing is pre-selected. This used to default to
+   * `options[0].value`, which silently pre-answered every check-list action with the first
+   * option — an untouched intervention saved a full set of answers nobody gave.
+   */
+  defaultValue?: string;
 }
 
 export function ExclusiveMultiToggleForm({
@@ -24,17 +30,18 @@ export function ExclusiveMultiToggleForm({
   control,
   options,
   className,
+  defaultValue,
 }: ExclusiveMultiToggleProps) {
   const { field } = useController({
     name,
     control,
-    defaultValue: options[0].value,
+    defaultValue,
   });
 
   return (
     <ToggleGroup
       type="single"
-      value={field.value}
+      value={field.value ?? ""}
       onValueChange={field.onChange}
       className={cn("justify-start", className)}
     >

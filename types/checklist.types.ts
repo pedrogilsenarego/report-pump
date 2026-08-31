@@ -1,5 +1,8 @@
 export type Checklist = {
-  id: string;
+  // checklists.id is a bigint — it arrives as a NUMBER, not a string. It was typed
+  // `string` here, which let a number reach a Radix <SelectItem value>, where it must be a
+  // string: the trigger then could not match the selection and rendered blank.
+  id: number;
   code?: number;
   createdAt: string;
   date?: string;
@@ -13,7 +16,7 @@ export type Checklist = {
 };
 
 export type ChecklistRaw = {
-  id: string;
+  id: number;
   code?: number;
   created_at: string;
   date?: string;

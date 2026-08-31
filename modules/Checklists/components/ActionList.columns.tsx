@@ -1,4 +1,4 @@
-import { periodValues } from "@/constants/actions";
+import { periodLabel } from "@/constants/actions";
 import { Action } from "@/types/action.types";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -16,7 +16,7 @@ export const columns: ColumnDef<Action>[] = [
     header: () => <div className="text-right">Period</div>,
     cell: ({ row }) => (
       <div className="lowercase">
-        {periodValues[parseInt(row.getValue("period"))]}
+        {periodLabel(row.getValue("period"))}
       </div>
     ),
   },

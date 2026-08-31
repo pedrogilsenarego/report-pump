@@ -29,7 +29,7 @@ import {
 import { ReloadIcon } from "@radix-ui/react-icons";
 import useNewIntervention from "./useNewIntervention";
 import { useInstallations } from "@/hook/useInstallation";
-import { periodValues } from "@/constants/actions";
+import { PERIODICITY, periodLabel } from "@/constants/actions";
 
 export default function NewIntervention() {
   const {
@@ -39,10 +39,13 @@ export default function NewIntervention() {
     setOpenModal,
     checklists,
     isLoadingChecklists,
+    pumps,
+    isLoadingPumps,
   } = useNewIntervention();
 
   const { data: installations, isLoading: isLoadingInstallations } =
     useInstallations();
+  const installationId = form.watch("installationId");
   return (
     <Dialog open={openModal} onOpenChange={(value) => setOpenModal(value)}>
       <DialogTrigger asChild>
@@ -68,7 +71,7 @@ export default function NewIntervention() {
                   <FormLabel>Checklist</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value ?? ""}
                   >
                     <FormControl>
                       {isLoadingChecklists ? (
@@ -84,7 +87,10 @@ export default function NewIntervention() {
                     <SelectContent>
                       {checklists?.map((checklist) => {
                         return (
-                          <SelectItem key={checklist.id} value={checklist.id}>
+                          <SelectItem
+                            key={checklist.id}
+                            value={String(checklist.id)}
+                          >
                             {checklist.nfpaEd}
                           </SelectItem>
                         );
@@ -92,39 +98,7 @@ export default function NewIntervention() {
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    Choose a checklist for the intervention if there is none.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="period"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Period</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a period" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {periodValues?.map((checklist, index) => {
-                        return (
-                          <SelectItem key={index} value={index.toFixed()}>
-                            {checklist}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Choose a checklist for the intervention if there is none.
+                    The check-list template this report is filled against.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -138,7 +112,7 @@ export default function NewIntervention() {
                   <FormLabel>Installation</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value ?? ""}
                   >
                     <FormControl>
                       {isLoadingInstallations ? (
@@ -173,6 +147,87 @@ export default function NewIntervention() {
               )}
             />
 
+            {/*
+              An intervention belongs to a PUMP GROUP (spec key Code_Pump_Gr), inside an
+              installation. The list narrows to the chosen installation, so this field sits
+              after it.
+            */}
+            <FormField
+              control={form.control}
+              name="pumpId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Pump Group</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value ?? ""}
+                    disabled={!installationId}
+                  >
+                    <FormControl>
+                      {isLoadingPumps ? (
+                        <div className="flex items-center justify-center">
+                          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                        </div>
+                      ) : (
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={
+                              installationId
+                                ? "Select a pump group"
+                                : "Select an installation first"
+                            }
+                          />
+                        </SelectTrigger>
+                      )}
+                    </FormControl>
+                    <SelectContent>
+                      {pumps.map((pump) => (
+                        <SelectItem key={pump.id} value={String(pump.id)}>
+                          {pump.type || pump.id}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    {installationId && !pumps.length
+                      ? "There are no Pump Groups defined for this Installation!"
+                      : "The pump group this report covers."}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="period"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Period</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value ?? ""}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a period" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {PERIODICITY.map((entry) => (
+                        <SelectItem key={entry.code} value={String(entry.code)}>
+                          {periodLabel(entry.code)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    How often this round of checks is performed. A round also
+                    includes every more frequent check.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <DialogFooter>
               <Button type="submit">Start Checklist</Button>
             </DialogFooter>

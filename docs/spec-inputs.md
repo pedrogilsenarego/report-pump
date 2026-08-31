@@ -462,3 +462,25 @@ Worth having in one place, since a parser has to survive all of them:
 5. Flag images (`Flag_PTG.jpg` etc.).
 6. Confirmation of the `Pump_Type` domain, the `CTRL_STATUS` key set, and whether an Action#04
    re-import replaces or merges (still open — see `checklist-actions-import.md`).
+
+### Added 2026-08-31, from sheets 4/6, 5/6 and 6/6
+
+Reading the three menu/output drawings in full (`screens-flows.md`, `reports-outputs.md`) turned
+up more to ask about than to build from:
+
+7. **`PUMP_GROUP.Condition` domain** — `1`/`2` on p3 vs `1`/`0` on sheets 5/6 and 6/6.
+8. **`INT_RESULT.Result` has a fourth value `*`** on sheet 5/6, absent from p3's `V`/`X`/`-`.
+   And notes are prompted on `Result = "V" OR "*"` (V = **Ok**), which reads like a slip for `X`.
+9. **"Delete Customer's Data"** on the admin menu is drawn with no action and no target — the
+   only GDPR-shaped operation in the spec, and it is undefined. Ask together with the missing
+   `FP25 RGPD Rev2`.
+10. **Who creates `INST_RESPONSABLE` rows?** The customer menu only ever *links* an existing one
+    to an installation; no screen creates one.
+11. **The paid tier.** Sheet 4/6 carries an unattached note: *"Opções a cinzento só disponíveis
+    para quem pagar"* — greyed menu options are only for paying users. Which options, and what
+    the tiers are, is nowhere in the bundle.
+12. **`REPORT#01`'s CONDITION column** prints `TECHNICIAN_CUST:Certification`, which is the
+    free-text qualification field already printed one column earlier. Almost certainly
+    `:Condition`.
+13. **`Send message` targets `ADMIN@FP25.com`** on sheet 5/6, but `#Emails.xlsx` uses
+    `admin_FP25@equitotal.pt`. Which is real?

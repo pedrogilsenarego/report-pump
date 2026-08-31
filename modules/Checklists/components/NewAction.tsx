@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import useNewAction from "./useNewAction";
 import { Input } from "@/components/ui/input";
-import { periodValues } from "@/constants/actions";
+import { PERIODICITY, periodLabel } from "@/constants/actions";
 
 export default function NewIntervention() {
   const { form, onSubmit, openModal, setOpenModal } = useNewAction();
@@ -63,20 +63,18 @@ export default function NewIntervention() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Period</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={"0"}>
+                  <Select onValueChange={field.onChange} defaultValue={"1"}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a period" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {periodValues?.map((installation, index) => {
-                        return (
-                          <SelectItem key={index} value={index.toFixed()}>
-                            {installation}
-                          </SelectItem>
-                        );
-                      })}
+                      {PERIODICITY.map((entry) => (
+                        <SelectItem key={entry.code} value={String(entry.code)}>
+                          {periodLabel(entry.code)}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
 
