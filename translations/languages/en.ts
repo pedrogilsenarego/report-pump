@@ -64,9 +64,6 @@ export const content = {
         importRequestFailed: "The import request could not be sent.",
         importFailedTitle: "Import failed",
       },
-      actionsList: {
-        title: "Actions catalog",
-      },
       checklists: {
         title: "Check-lists",
         columns: 'Columns',

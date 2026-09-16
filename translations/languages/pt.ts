@@ -64,9 +64,6 @@ export const content = {
         importRequestFailed: "Não foi possível enviar o pedido de importação.",
         importFailedTitle: "A importação falhou",
       },
-      actionsList: {
-        title: "Catálogo de ações",
-      },
       checklists: {
         title: "Check-lists",
         columns: 'Colunas',

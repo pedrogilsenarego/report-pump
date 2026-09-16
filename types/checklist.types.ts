@@ -12,7 +12,6 @@ export type Checklist = {
   nameResp?: string;
   phone?: string;
   email?: string;
-  actions?: ChecklistAction[];
 };
 
 export type ChecklistRaw = {
@@ -26,29 +25,6 @@ export type ChecklistRaw = {
   name_resp?: string;
   ph?: string;
   email?: string;
-  checklistactions?: ChecklistActionRaw[];
-};
-
-export type ChecklistAction = {
-  checklistactionId: number;
-  code: number;
-  codeGroup: number;
-  codeSubgroup: number;
-  period: number;
-  pumpType: string;
-  description: string;
-};
-
-export type ChecklistActionRaw = {
-  actions: {
-    period: number;
-    pump_type: string;
-    description: string;
-  };
-  id: number;
-  code: number;
-  code_group: number;
-  code_subgroup: number;
 };
 
 /**
