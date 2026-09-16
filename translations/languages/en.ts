@@ -83,6 +83,9 @@ export const content = {
         loadingTree: 'Loading groups…',
         emptyTree: 'No groups were imported for this check-list.',
         noSubgroups: 'No sub-groups',
+        noActions: 'No actions',
+        pumpType: 'Pump type {{type}}',
+        measurements: '{{count}} measurement(s)',
       },
       periodicity: {
         weekly: "Weekly",

@@ -83,6 +83,9 @@ export const content = {
         loadingTree: 'A carregar grupos…',
         emptyTree: 'Não foram importados grupos para esta check-list.',
         noSubgroups: 'Sem sub-grupos',
+        noActions: 'Sem ações',
+        pumpType: 'Tipo de bomba {{type}}',
+        measurements: '{{count}} medição(ões)',
       },
       periodicity: {
         weekly: "Semanal",
