@@ -47,27 +47,29 @@ export default function NavBar() {
             <TooltipContent side="right">Dashboard</TooltipContent>
           </Tooltip>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                href={RouterKeys.INTERVENTIONS}
-                style={{
-                  color: isActive(RouterKeys.INTERVENTIONS)
-                    ? "white"
-                    : undefined,
-                }}
-                className={`flex h-9 w-9 items-center justify-center transition-all md:h-8 md:w-8 ${
-                  isActive(RouterKeys.INTERVENTIONS)
-                    ? "text-background bg-primary rounded-full"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <FileInput className="h-5 w-5" />
-                <span className="sr-only">Interventions</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Interventions</TooltipContent>
-          </Tooltip>
+          <WithRole roleKey={[KeyRoles.CUSTOMER]}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href={RouterKeys.INTERVENTIONS}
+                  style={{
+                    color: isActive(RouterKeys.INTERVENTIONS)
+                      ? "white"
+                      : undefined,
+                  }}
+                  className={`flex h-9 w-9 items-center justify-center transition-all md:h-8 md:w-8 ${
+                    isActive(RouterKeys.INTERVENTIONS)
+                      ? "text-background bg-primary rounded-full"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <FileInput className="h-5 w-5" />
+                  <span className="sr-only">Interventions</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">Interventions</TooltipContent>
+            </Tooltip>
+          </WithRole>
           <WithRole roleKey={[KeyRoles.ADMIN]}>
             <Tooltip>
               <TooltipTrigger asChild>
