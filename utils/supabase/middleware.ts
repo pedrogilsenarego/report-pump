@@ -5,7 +5,6 @@ import { NextResponse, type NextRequest } from "next/server";
 // Add any routes that should be protected
 export const protectedPaths = [
   RouterKeys.MAIN,
-  RouterKeys.ANALYTICS,
   RouterKeys.INSTALLATIONS,
   RouterKeys.SETTINGS,
   RouterKeys.USERS,

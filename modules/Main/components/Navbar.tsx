@@ -5,7 +5,6 @@ import {
   Factory,
   FileInput,
   Home,
-  LineChart,
   Settings,
   Table,
   Users2,
@@ -155,25 +154,6 @@ export default function NavBar() {
               <TooltipContent side="right">Pumps</TooltipContent>
             </Tooltip>
           </WithRole>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                href="#"
-                style={{
-                  color: isActive(RouterKeys.ANALYTICS) ? "white" : undefined,
-                }}
-                className={`flex h-9 w-9 items-center justify-center transition-all md:h-8 md:w-8 ${
-                  isActive(RouterKeys.ANALYTICS)
-                    ? "text-background bg-primary rounded-full"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <LineChart className="h-5 w-5" />
-                <span className="sr-only">Analytics</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Analytics</TooltipContent>
-          </Tooltip>
         </nav>
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
           <Tooltip>
