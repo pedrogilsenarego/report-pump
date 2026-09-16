@@ -64,6 +64,9 @@ export const content = {
         importRequestFailed: "Não foi possível enviar o pedido de importação.",
         importFailedTitle: "A importação falhou",
       },
+      technicians: {
+        listPdf: "Lista de Técnicos (PDF)",
+      },
       checklists: {
         title: "Check-lists",
         columns: 'Colunas',

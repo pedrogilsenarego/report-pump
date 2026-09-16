@@ -34,6 +34,7 @@ import {
 import { useState } from "react";
 import { columns } from "./TechnicianList.columns";
 import NewTechnician from "./NewTechnician";
+import { i18n } from "@/translations/i18n";
 
 export default function TechnicianList() {
   const { data } = useTechnicians();
@@ -79,6 +80,14 @@ export default function TechnicianList() {
           className="max-w-sm"
         /> */}
         <NewTechnician />
+        {/*
+          SF#244 "List of Technicians (PDF)" -> Action#20 generates REPORT#01,
+          Action#21 saves it. The route replies with an attachment, so the browser's
+          own save dialog is the spec's [Input xLocation] step.
+        */}
+        <Button variant="outline" asChild>
+          <a href="/api/reports/technicians">{i18n.t("technicians.listPdf")}</a>
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
