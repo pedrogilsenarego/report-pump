@@ -6,9 +6,14 @@ Derived from the full spec transcription (`data-model.md`, `spec-inputs.md`, `sc
 **(1) the intervention lifecycle is built** — see `intervention-lifecycle.md`. Its migration
 still has to be run. Everything below it is registered, not started.
 
+> **2026-09-16 — verified against the live database**, not just the repo. The Supabase
+> management API is reachable now (`SUPABASE_ACCESS_TOKEN`), so the claims below have been
+> checked rather than inferred. Two of them were wrong; both are corrected in place and marked
+> **[verified 2026-09-16]**. Completion estimate against the spec is at the end of this file.
+
 ---
 
-## 1. Intervention lifecycle — BUILT
+## 1. Intervention lifecycle — BUILT, SCHEMA NOT APPLIED
 
 The core of the product. Five tables plus `INTERVENTION.Locked`, none of which existed; every
 report depends on them. Full notes in **`intervention-lifecycle.md`**.
@@ -20,8 +25,19 @@ periodicity and `Pump_Type`); the header block (technicians, controller status, 
 Verifyed_By / Responsable); Finalise existing as an editable variant of View existing, gated
 on `Locked`; the two administrator emails on finalise; and the `Locked` print gate.
 
-**⚠ The migration has not been run** — no Supabase CLI is linked and the Supabase MCP server
-timed out. Paste it into the SQL editor; nothing in this item works until then.
+**⚠ The migration has still not been run — confirmed against the live DB [verified
+2026-09-16].** `public` contains none of it:
+
+```
+interventions:  id, created_at, user_id, checklist_id, installation_id   <- 5 columns
+absent tables:  int_result, int_notes, measurements,
+                intervention_technicians, ctrl_status
+```
+
+Meanwhile `interventions.actions.ts` writes `int_result` / `measurements` / `int_notes` /
+`intervention_technicians` and the header reads `ctrl_status`. So **New Intervention renders
+but cannot save**, and the Controller status select is empty for the same reason. This is the
+one blocking item in the file — paste the migration into the SQL editor.
 
 Remaining: an end-to-end run against the real database, and a real PDF instead of the browser
 print dialog (that is item 2, blocked on `FP25 - EQ0102 Rev7.pdf`).
@@ -60,11 +76,20 @@ prints the wrong word if we guess. `REPORT#01`'s CONDITION column reads
 
 **Spec:** `data-model.md` § `PUMP_GROUP` — ~25 fields.
 
-**Repo:** `types/pump.types.ts` has four: `id`, `installation_id`, `type`, `condition`.
+**Correction [verified 2026-09-16]: the `pumps` table already has the full field set.** All 26
+columns are present — `sub_type`, `pump_{tag,brand,model,sn}`, `motor_{tag,brand,model,sn}`,
+`ctrl_{tag,brand,model,type}`, `coupling_{brand,model,sn}`, `gearb_{brand,model,sn}`,
+`column_length`, `nr_stages`, `condition`. **No migration is needed.** Only `code_customer` is
+absent, and it is derivable through `installations.company_id`.
 
-Missing: `code_customer`, `sub_type`, and the whole component block —
-`pump_{tag,brand,model,sn}`, `motor_{tag,brand,model,sn}`, `ctrl_{tag,brand,model,type}`,
-`coupling_{brand,model,sn}`, `gearb_{brand,model,sn}`, `column_lenght`, `nr_stages`.
+**Repo:** the gap is entirely UI/type-side. `types/pump.types.ts` exposes `id`,
+`installation_id`, `type`, `sub_type`, `condition`; `NewPump.tsx` writes three fields. So this
+item is now "build the six-block form over columns that exist", not a schema change.
+
+**`Type` is a free-text `<Input>`** and has already produced junk: rows 2 and 3 hold
+`type = "teste"`, which no `Pump_Type` filter can match, and `condition = "sss"` against a
+1/0 domain. Both `Type` (J/E/D) and `Sub_Type` (H-ES/H-SC/VT/V-IL/VT-MS) are fixed domains and
+belong in selects — do that even if the rest of the form waits.
 
 - `Sub_Type` is unmodelled, so the `"H-ES"` → `"Horizontal End-Suction"` expansion the reports do
   has no source. Domain is on p3: `H-ES` / `H-SC` / `VT` / `V-IL` / `VT-MS`.
@@ -175,3 +200,94 @@ in `intervention-lifecycle.md`.
    against a spec table that is 1-based and in the opposite order. Replaced with `PERIODICITY`
    + `periodLabel()`, the eight real codes, PT and EN. Still hardcoded — the rows belong in a
    `periodicity` table once Action#23 exists. ✅
+
+---
+
+## Done 2026-09-16
+
+- **The pre-import `actions` catalog is gone.** `ActionsList` / `NewAction` / `useActions` /
+  `actions.actions.ts` / `actions.mapper.ts` / `types/action.types.ts` deleted, the dead
+  `checklistactions` branch stripped out of `checklists.mapper.ts`, and `ChecklistAction` /
+  `ChecklistActionRaw` removed from `types/checklist.types.ts`. Actions are per-check-list
+  imported data (Action#04) — the spec has no per-action CRUD screen anywhere.
+  **The DB tables `actions`, `checklistactions` and `interventionchecklistactions` still
+  exist** and were deliberately left: the last one holds pre-rework intervention results with
+  no mapping onto `cl_action`. Drop them in a migration once item 1 is applied and you accept
+  losing those rows.
+- **The check-list tree now renders actions.** `ChecklistTree` stopped at sub-group level, so
+  the Actions column said 9 with nothing behind it. It now nests group -> sub-group -> action
+  with the periodicity, the NFPA-25 `source` clause, `Pump_Type` and the measurement-slot
+  count. New i18n keys `checklists.noActions` / `pumpType` / `measurements`.
+- **Analytics removed.** It appears nowhere in the spec — no analytics, dashboard, chart or
+  statistics screen among the 14 screens / 43 pop-ups — and was already a dead `href="#"` with
+  no route. Gone from `Navbar.tsx`, `constants/router.ts` and `middleware.ts`'s
+  `protectedPaths`. **`recharts` is now an unused dependency.**
+  `RouterKeys.SETTINGS` is the same case — non-spec, `href="#"`, no route, still guarded in
+  `protectedPaths`. Left in place pending a decision.
+- **Pump groups never reached the New Intervention selector.** `getPumps` resolved the raw
+  Supabase rows without a mapper, so every pump arrived with `installation_id` and no
+  `installationId`; the filter in `useNewIntervention.ts` compares
+  `String(pump.installationId) === installationId` and therefore dropped every row the moment
+  an installation was picked. The screen showed the spec's "There are no Pump Groups defined
+  for this Installation!" while the group existed. Fixed with `mapPump` / `mapPumps`.
+
+### Test-data note
+
+The seed data is split across companies, which makes the app look more broken than it is:
+
+| Company | Installations | Pump groups | Technicians |
+| --- | --- | --- | --- |
+| `8aedbce5…` (admin `pedrogilsenarego@gmail.com`) | 1 (Demo — Pump House) | 1 (`type E`) | **0** |
+| `54c57a8c…` | 2 | 2 | 5 |
+
+`useTechnicians` keys off the **logged-in user's** company, not the customer who owns the
+selected installation. Under the spec those are the same thing — the logged-in user *is* the
+customer — so this only surfaces because an admin can reach the intervention flow at all.
+
+**Which is itself a deviation:** Interventions has no `WithRole` guard in `Navbar.tsx`, while
+Installations and Pumps are `[CUSTOMER]` and Check-lists is `[ADMIN]`. Screen#03 (admin) has
+five buttons — validate customer access, validate supplier access, delete customer's data,
+check-list, logout — and no operational records at all. Gate it to `[CUSTOMER]`.
+
+---
+
+## Completion against the spec — estimate, 2026-09-16
+
+Scored three ways, because any single count is misleading. **Partial = 0.5.**
+
+**By the 31 numbered actions in `#Actions.xlsx`** — the spec's own implementation checklist:
+
+| | Actions | |
+| --- | --- | --- |
+| Done | #04, #07 | check-list import + its validation |
+| Partial | #01, #02, #03, #08, #15, #24 | i18n; login (Supabase, not the spec's own); customer/supplier approval without `Validated_By`/`Date_Validated`; technician create; pump-group create (3 fields of 25) |
+| Missing | the other 23 | provider side #09–#13, technician CRUD #16–#19, every report #20/#21/#26–#31, the admin uploads #22/#23, pump-group edit #25, #05/#06/#14 |
+
+**≈ 16%.** This badly undersells the work, because the whole intervention lifecycle —
+Create / Finalise / View — is **unnumbered** in the spec and so scores nothing here.
+
+**By data model** (~25 spec tables): the check-list tree (8 tables), `INSTALLATION`,
+`PUMP_GROUP`, `CUSTOMER`/`SUPPLYER` (as `profiles`/`companies`), `TECHNICIAN_CUST` and
+`INTERVENTION`'s header exist. Absent: `INT_RESULT`, `INT_NOTES`, `MEASUREMENTS`,
+`TECHNICIAN_INT1/2`, `CTRL_STATUS`, `LANGUAGE`, `MAINT_TYPE`, `PERIODICITY`, `TECHNICIAN_SUP`,
+`INST_RESPONSABLE` (partial as `responsables`). **≈ 60%** — and ≈ 45% by what is actually
+*applied*, since item 1's five tables are written but not migrated.
+
+**By user-facing capability** — what a customer can actually do end to end: log in, be
+approved, manage installations, create a pump group, import a check-list, fill an
+intervention. Cannot: finalise or view one (blocked on item 1), produce **any** of the five
+PDFs, suspend/deactivate anything, manage provider technicians, or use the admin uploads.
+**≈ 35%.**
+
+**Overall: roughly one third of the spec, call it 30–40%.** The honest summary is that the
+data-entry half is largely there and the **output half is absent** — the five PDFs are the
+single largest block of unbuilt work, and the product exists to produce them.
+
+Two caveats on that number:
+
+1. **Applying item 1's migration moves it several points** for one paste. Nothing else has
+   that ratio.
+2. **The remaining third is not evenly available.** The intervention PDF and `REPORT#03`'s
+   body are blocked on `FP25 - EQ0102 Rev7.pdf`, which is not in the bundle — so the largest
+   missing piece cannot be started until the client sends it. Chase that before estimating a
+   delivery date.
