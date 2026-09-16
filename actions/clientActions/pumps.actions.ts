@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseBrowser } from "@/lib/supabase/browser";
-import { mapPumpToRaw } from "@/mappers/pump.mapper";
+import { mapPumpToRaw, mapPumps } from "@/mappers/pump.mapper";
 import { NewPumpType } from "@/modules/Pumps/components/NewPump.validation";
 import { Pump } from "@/types/pump.types";
 
@@ -60,7 +60,7 @@ export const getPumps = async ({
         return reject(pumpsError.message);
       }
 
-      return resolve(pumps);
+      return resolve(mapPumps(pumps as any));
     } catch (error: any) {
       console.error("Error in getPumps:", error);
       reject(error.message);
