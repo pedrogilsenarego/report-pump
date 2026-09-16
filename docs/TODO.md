@@ -291,3 +291,85 @@ Two caveats on that number:
    body are blocked on `FP25 - EQ0102 Rev7.pdf`, which is not in the bundle — so the largest
    missing piece cannot be started until the client sends it. Chase that before estimating a
    delivery date.
+
+---
+
+# ▶ START HERE — session state, 2026-09-16
+
+Where the project actually stands, verified against the live DB at the end of the session.
+Read this first; the items above are the long-form backlog.
+
+## What changed today
+
+1. **The pre-import `actions` catalog was deleted** (code only — see "Done 2026-09-16").
+2. **The check-list tree renders actions**, three levels deep with periodicity + NFPA clause.
+3. **Analytics removed** — not in the spec, and already a dead link.
+4. **`getPumps` mapper bug fixed** — pump groups never reached the New Intervention selector.
+5. **Interventions gated to `[CUSTOMER]`** in the navbar, matching Screen#09.
+6. **`20260831_intervention_lifecycle.sql` IS NOW APPLIED.** Verified: 5 tables created,
+   `interventions` 5 -> 18 columns, 6 `ctrl_status` rows, 10 RLS policies, 12 indexes.
+7. **REPORT#01 built** — the first of the five PDFs, and the renderer decision.
+8. **`20260916_intervention_code.sql` written — NOT YET APPLIED.**
+
+## ⚠ Do this first
+
+**Apply `supabase/migrations/20260916_intervention_code.sql`** in the SQL editor. Without it
+every new intervention saves with `code = NULL` — the spec's Report Nr., which `REPORT#03`
+and the intervention PDF both key off. It is silent because a unique index permits NULLs.
+
+Check it took:
+
+```sql
+select id, code from interventions order by id desc limit 5;   -- no nulls
+```
+
+## The renderer decision (affects the four remaining reports)
+
+**`@react-pdf/renderer` 4.9.0**, rendered server-side in a route handler. Reasons: the spec's
+reports are save-to-file flows, not print dialogs, so `react-to-print` cannot serve them; the
+reports are structured tables, which is what it does well; and it is pure JS, unlike Puppeteer.
+
+`lib/reports/reportFurniture.tsx` holds the header/footer band that sheet 6/6 draws on all
+three reports — **REPORT#02 and #03 reuse it**, so fix layout complaints there, once.
+
+Gotcha for anyone writing a standalone script against it: `@react-pdf/hyphenate` publishes
+only an `import` condition, so `npx tsx` (CJS) fails to resolve it with
+`ERR_PACKAGE_PATH_NOT_EXPORTED`. Next's bundler is fine. Verify with `npx next build`, not a
+scratch script.
+
+## What still needs testing — nobody has run these
+
+| # | Test | Why it matters |
+| --- | --- | --- |
+| 1 | **REPORT#01 PDF** — `/users` -> "List of Technicians (PDF)", as a customer in company `54c57a8c…` | **Never executed.** Build passes and the route 401s correctly when unauthenticated, but the render path (fonts, page breaks, column widths) has never run. Check the header band and that columns do not overlap |
+| 2 | **Save an intervention WITH a measurement and a controller status** | Intervention 12 wrote 7 results but 0 measurements and no `controler_status` — because those inputs were left blank, not because they are broken. Unproven either way |
+| 3 | **Open an existing intervention** (View existing) | The read path has never been exercised. Suspect: `verifyed_by` / `responsable` store the *display name* as text, so matching them back to a technician is a weak key — two "Pedro Rego" rows already exist |
+| 4 | **Finalise an intervention** (`locked`) and the two admin emails | Built, never run |
+
+## Test-data traps
+
+Logging in as **admin gets you nowhere** — technicians, installations, pump groups and
+interventions are all customer-side per Screen#03 vs Screen#09, and admin can no longer see
+the Interventions nav at all.
+
+| Company | Installations | Pump groups | Technicians | |
+| --- | --- | --- | --- | --- |
+| `8aedbce5…` (admin `pedrogilsenarego@gmail.com`) | 1 | 1, correctly `type E` | **0** | no technicians -> the intervention header cannot be filled |
+| `54c57a8c…` (`teste2@gmail.com`, role 2) | 2 | 2, but `type = "teste"` | 5 | **use this one**, but see below |
+
+**`pumps` rows 2 and 3 have `type = "teste"` and `condition = "sss"`** — junk from the
+free-text Type field. If an intervention's action list comes back shorter than expected,
+that is why: `appliesToPumpType` is matching against a value that is not J/E/D.
+
+## Then, in order
+
+1. **Type / Sub_Type as selects** on the pump form — half an hour, and it stops the
+   corruption above. Domains are fixed: J/E/D and H-ES/H-SC/VT/V-IL/VT-MS.
+2. **The six-block PUMP_GROUP form** (item 3) — no schema work, the 26 columns exist.
+3. **REPORT#02** — reuses the furniture from REPORT#01; needs item 2 for anything to print.
+4. **Soft-delete flows** (item 4) — installations and technicians only; the pump-group one
+   waits on the `Condition` 1/2-vs-1/0 question.
+
+**Still blocked on the client:** `FP25 - EQ0102 Rev7.pdf` (the intervention report layout —
+blocks the two most valuable PDFs), the full `Form3_Actions.xlsx`, the RGPD conditions file,
+the email bodies, and the `PUMP_GROUP.Condition` domain.
