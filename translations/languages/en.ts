@@ -131,6 +131,9 @@ export const content = {
           "VT-MS": "Vertical Multi-Stage",
         },
       },
+      installations: {
+        listPdf: "List of Installations (PDF)",
+      },
       technicians: {
         listPdf: "List of Technicians (PDF)",
         name: "Name",

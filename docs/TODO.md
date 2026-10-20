@@ -386,6 +386,13 @@ that is why: `appliesToPumpType` is matching against a value that is not J/E/D.
    `installations` blocks customer UPDATEs, these will toast an error. The pump-group flow
    still waits on the 1/2-vs-1/0 question; `INST_RESPONSABLE` keeps its free-text input.
 
+5. ~~**REPORT#10**~~ — **done 2026-10-20**: `lib/reports/Report10Installations.tsx` +
+   `/api/reports/installations`, linked from the installations list. No layout exists on
+   sheet 6/6, so it follows REPORT#01's table. Prints the five columns `installations`
+   has (Name / Area / Address / Responsable / Condition) — the spec's Address2/3,
+   Language, Phone and Email were never added as columns. All conditions included.
+   Rendered with sample data; not yet against the live DB.
+
 **Still blocked on the client:** `FP25 - EQ0102 Rev7.pdf` (the intervention report layout —
 blocks the two most valuable PDFs), the full `Form3_Actions.xlsx`, the RGPD conditions file,
 the email bodies, and the `PUMP_GROUP.Condition` domain.

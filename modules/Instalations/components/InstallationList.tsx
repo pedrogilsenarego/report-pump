@@ -34,6 +34,7 @@ import { useState } from "react";
 import { useInstallations } from "@/hook/useInstallation";
 import { columns } from "./InstallationList.columns";
 import NewInstallation from "./NewInstallation";
+import { i18n } from "@/translations/i18n";
 
 export default function InstallationList() {
   const { data } = useInstallations();
@@ -79,6 +80,13 @@ export default function InstallationList() {
           className="max-w-sm"
         /> */}
         <NewInstallation />
+        {/*
+          "List installations (pdf)" -> Action#30 generates REPORT#10, Action#31 saves it.
+          The route replies with an attachment, so the browser's save dialog is PopUp#41.
+        */}
+        <Button variant="outline" asChild>
+          <a href="/api/reports/installations">{i18n.t("installations.listPdf")}</a>
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
