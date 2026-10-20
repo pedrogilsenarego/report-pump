@@ -10,119 +10,52 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import { Form } from "@/components/ui/form";
+import { Pump } from "@/types/pump.types";
+import { i18n } from "@/translations/i18n";
 import useNewPump from "./useNewPump";
-import { useInstallations } from "@/hook/useInstallation";
+import PumpGroupFields from "./PumpGroupFields";
 
-export default function NewPump() {
-  const { form, onSubmit, isPending, openModal, setOpenModal } = useNewPump();
-  const { data: installations, isLoading: isLoadingInstallations } =
-    useInstallations();
+/**
+ * Screen#13 (new pump group) or, given `pump`, Screen#14 (edit). Both lay out the same six
+ * blocks, so they share PumpGroupFields.
+ */
+export default function NewPump({ pump }: { pump?: Pump }) {
+  const { form, onSubmit, isPending, openModal, onOpenChange } =
+    useNewPump(pump);
+  const isEdit = !!pump;
+
   return (
-    <Dialog open={openModal} onOpenChange={(value) => setOpenModal(value)}>
+    <Dialog open={openModal} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">New Pump</Button>
+        {isEdit ? (
+          <Button variant="ghost" size="sm">
+            {i18n.t("pumpGroup.edit")}
+          </Button>
+        ) : (
+          <Button variant="outline">{i18n.t("pumpGroup.new")}</Button>
+        )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-5 w-full"
           >
             <DialogHeader>
-              <DialogTitle>Create new pump</DialogTitle>
+              <DialogTitle>
+                {i18n.t(isEdit ? "pumpGroup.editTitle" : "pumpGroup.newTitle")}
+              </DialogTitle>
               <DialogDescription>
-                Fill the form. Click save when done.
+                {i18n.t("pumpGroup.description")}
               </DialogDescription>
             </DialogHeader>
 
-            <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Type" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="installationId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Installation</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      {isLoadingInstallations ? (
-                        <div className="flex items-center justify-center">
-                          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                        </div>
-                      ) : (
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select an installation" />
-                        </SelectTrigger>
-                      )}
-                    </FormControl>
-                    <SelectContent>
-                      {installations?.map((installation) => {
-                        return (
-                          <SelectItem
-                            key={installation.id}
-                            value={installation.id}
-                          >
-                            {installation.name}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Choose an installation for the pump if there is none, go to
-                    users and create one
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="condition"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Condition" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <PumpGroupFields form={form} />
 
             <DialogFooter>
               <Button isLoading={isPending} type="submit">
-                Save changes
+                {i18n.t("common.ok")}
               </Button>
             </DialogFooter>
           </form>

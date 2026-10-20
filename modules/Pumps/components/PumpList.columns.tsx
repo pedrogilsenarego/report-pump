@@ -1,76 +1,55 @@
-import { Button } from "@/components/ui/button";
-//import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu";
 import { Pump } from "@/types/pump.types";
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-
 import { ColumnDef } from "@tanstack/react-table";
+import {
+  PUMP_CONDITION_ACTIVE,
+  pumpSubTypeLabel,
+  pumpTypeLabel,
+} from "@/constants/pumpGroup";
+import { i18n } from "@/translations/i18n";
+import NewPump from "./NewPump";
+
+const t = (key: string) => i18n.t(`pumpGroup.${key}`);
 
 export const columns: ColumnDef<Pump>[] = [
-  //   {
-  //     id: "select",
-  //     header: ({ table }) => (
-  //       <Checkbox
-  //         checked={
-  //           table.getIsAllPageRowsSelected() ||
-  //           (table.getIsSomePageRowsSelected() && "indeterminate")
-  //         }
-  //         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //         aria-label="Select all"
-  //       />
-  //     ),
-  //     cell: ({ row }) => (
-  //       <Checkbox
-  //         checked={row.getIsSelected()}
-  //         onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //         aria-label="Select row"
-  //       />
-  //     ),
-  //     enableSorting: false,
-  //     enableHiding: false,
-  //   },
   {
-    accessorKey: "installationName",
-    header: "Installation",
+    id: "installation",
+    header: () => t("installation"),
     cell: ({ row }) => (
       <div className="capitalize">
         {row.original.installations?.name || "N/A"}
       </div>
     ),
   },
-
+  {
+    accessorKey: "type",
+    header: () => t("type"),
+    cell: ({ row }) => pumpTypeLabel(row.original.type),
+  },
+  {
+    accessorKey: "subType",
+    header: () => t("subType"),
+    cell: ({ row }) => pumpSubTypeLabel(row.original.subType),
+  },
+  {
+    id: "pump",
+    header: () => t("blockPump"),
+    cell: ({ row }) =>
+      [row.original.pumpBrand, row.original.pumpModel]
+        .filter(Boolean)
+        .join(" ") || "—",
+  },
   {
     accessorKey: "condition",
-    header: () => <div className="text-right">Condition</div>,
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("condition")}</div>
-    ),
+    header: () => t("condition"),
+    // Only Active is certain; the inactive code is 2 or 0 depending on the sheet.
+    cell: ({ row }) =>
+      row.original.condition === PUMP_CONDITION_ACTIVE
+        ? t("active")
+        : row.original.condition,
   },
   {
     id: "actions",
     enableHiding: false,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    cell: ({ row }) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Delete Installation</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <NewPump pump={row.original} />,
   },
 ];

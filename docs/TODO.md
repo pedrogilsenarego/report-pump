@@ -363,9 +363,12 @@ that is why: `appliesToPumpType` is matching against a value that is not J/E/D.
 
 ## Then, in order
 
-1. **Type / Sub_Type as selects** on the pump form — half an hour, and it stops the
-   corruption above. Domains are fixed: J/E/D and H-ES/H-SC/VT/V-IL/VT-MS.
-2. **The six-block PUMP_GROUP form** (item 3) — no schema work, the 26 columns exist.
+1. ~~**Type / Sub_Type as selects**~~ — **done 2026-10-20**, `constants/pumpGroup.ts`.
+2. ~~**The six-block PUMP_GROUP form**~~ (item 3) — **done 2026-10-20**: Screen#13 and #14
+   share `modules/Pumps/components/PumpGroupFields.tsx`; edit is the row's *Edit* button
+   (`updatePump`). New groups get `condition = "1"`; empty optionals are written as NULL.
+   Not run against the DB yet. The controller S/N waits on the `Ctrl_TAG` question. Rows 2/3
+   (`type = "teste"`) still need fixing by hand — open them with Edit and pick a Type.
 3. **REPORT#02** — reuses the furniture from REPORT#01; needs item 2 for anything to print.
 4. **Soft-delete flows** (item 4) — installations and technicians only; the pump-group one
    waits on the `Condition` 1/2-vs-1/0 question.

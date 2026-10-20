@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseBrowser } from "@/lib/supabase/browser";
-import { mapPumpToRaw, mapPumps } from "@/mappers/pump.mapper";
+import {
+  mapNewPumpToRaw,
+  mapPumpToRaw,
+  mapPumps,
+} from "@/mappers/pump.mapper";
 import { NewPumpType } from "@/modules/Pumps/components/NewPump.validation";
 import { Pump } from "@/types/pump.types";
 
@@ -78,7 +82,7 @@ export const addPump = async (props: NewPumpType): Promise<any> => {
       if (!user) {
         return reject(new Error("User not authenticated"));
       }
-      const rawData = mapPumpToRaw(props);
+      const rawData = mapNewPumpToRaw(props);
 
       const { data, error } = await supabase
         .from("pumps")
@@ -90,13 +94,49 @@ export const addPump = async (props: NewPumpType): Promise<any> => {
         .single();
 
       if (error) {
-        console.error("Error adding technician:", error);
+        console.error("Error adding pump:", error);
         return reject(error.message);
       }
 
       return resolve(data);
     } catch (error: any) {
       console.error("Error in addPump:", error);
+      reject(error.message);
+    }
+  });
+};
+
+/** Action#25 — Screen#14 edit. Condition is not on the screen, so it is left as stored. */
+export const updatePump = async ({
+  id,
+  values,
+}: {
+  id: number;
+  values: NewPumpType;
+}): Promise<any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return reject(new Error("User not authenticated"));
+      }
+
+      const { error } = await supabase
+        .from("pumps")
+        .update(mapPumpToRaw(values))
+        .eq("id", id);
+
+      if (error) {
+        console.error("Error updating pump:", error);
+        return reject(error.message);
+      }
+
+      return resolve(id);
+    } catch (error: any) {
+      console.error("Error in updatePump:", error);
       reject(error.message);
     }
   });
