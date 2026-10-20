@@ -191,8 +191,25 @@ export const acceptUserPending = async ({
         .eq("id", companyId);
 
       if (updateErrorCompany) {
-        console.error("Error updating invitation:", updateError);
-        return reject(updateError);
+        console.error("Error updating invitation:", updateErrorCompany);
+        return reject(updateErrorCompany);
+      }
+
+      // Action#03 / #08: record who validated and when. Separate and best-effort so that
+      // approval keeps working before 20261020_company_validation.sql is applied.
+      const { error: validationError } = await supabase
+        .from("companies")
+        .update({
+          validated_by: user.id,
+          date_validated: new Date().toISOString(),
+        })
+        .eq("id", companyId);
+
+      if (validationError) {
+        console.error(
+          "Could not record Validated_By / Date_Validated — is the 20261020 migration applied?",
+          validationError
+        );
       }
 
       return resolve("User Accepted");

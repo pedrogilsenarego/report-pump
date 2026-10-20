@@ -4,6 +4,7 @@ import { Technician } from "@/types/technician.types";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { technicianConditionLabel } from "@/constants/condition";
 import SuspendTechnician from "./SuspendTechnician";
+import EditTechnician from "./EditTechnician";
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -73,6 +74,11 @@ export const columns: ColumnDef<Technician>[] = [
     id: "actions",
     enableHiding: false,
     // Nothing in the spec deletes a technician — Action#19 suspends instead.
-    cell: ({ row }) => <SuspendTechnician technician={row.original} />,
+    cell: ({ row }) => (
+      <div className="flex justify-end">
+        <EditTechnician technician={row.original} />
+        <SuspendTechnician technician={row.original} />
+      </div>
+    ),
   },
 ];

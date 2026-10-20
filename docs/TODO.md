@@ -393,6 +393,37 @@ that is why: `appliesToPumpType` is matching against a value that is not J/E/D.
    Language, Phone and Email were never added as columns. All conditions included.
    Rendered with sample data; not yet against the live DB.
 
+6. ~~**Technician edit**~~ — **done 2026-10-20** (Screen#11 / Action#17): *Edit* on active
+   rows; Name / Phone / Function / Certification. Server action `updateTechnician`
+   (service-role, with a same-company check). Email shown read-only — it is the auth login.
+   Language left out pending the PTG-vs-pt key decision. Not run against the DB.
+
+7. **Registration (item 5)** — partly done 2026-10-20:
+   - `Validated_By` / `Date_Validated`: **`20261020_company_validation.sql` written, NOT
+     APPLIED.** `acceptUserPending` writes them in a separate best-effort update, so
+     approval keeps working before the migration runs (it logs an error until then).
+   - **Bug fixed:** signup overwrote the Responsable Name with the company name
+     (`useSignupComponent.ts`), so the name typed at SF#013/#097 was discarded.
+   - **Not done, by design:** the "access name ≥ 10 chars, cannot be changed" rule. Login
+     here is by email (Supabase), there is no access-name field to apply it to; the email
+     already is the unique, fixed identifier. Revisit only if the client insists on
+     usernames.
+8. **i18n (item 7)** — the data is in: `scripts/generate-spec-fields.cjs` generates
+   `translations/specFields.ts` (394 SF# entries; 206 numbers reserved with no text are
+   skipped), and `sf(n)` in `translations/specField.ts` returns the label in the UI
+   language. **Not yet done:** rewiring existing screens onto `sf(n)` — manual, screen by
+   screen. The pump-group and technician PT labels were aligned with the workbook already.
+   Side finding: Screen#13 has a controller **S/N** field (SF#390), which supports reading
+   the duplicate `Ctrl_TAG S(5)` as `Ctrl_SN`.
+9. **Cleanup** — `recharts` and the unused `components/ui/chart.tsx` removed; the
+   unused `QueryKeys.ACTIONS` removed; the `router.ts` lint error silenced (LOGIN is a
+   deliberate alias of HOME). **`20261020_archive_legacy_actions.sql` written, NOT
+   APPLIED** — moves `actions` / `checklistactions` / `interventionchecklistactions` to an
+   `archive` schema instead of dropping them, so the old intervention results survive.
+
+**Migrations waiting to be applied, in order:** `20260916_intervention_code.sql`,
+`20261020_company_validation.sql`, `20261020_archive_legacy_actions.sql`.
+
 **Still blocked on the client:** `FP25 - EQ0102 Rev7.pdf` (the intervention report layout —
 blocks the two most valuable PDFs), the full `Form3_Actions.xlsx`, the RGPD conditions file,
 the email bodies, and the `PUMP_GROUP.Condition` domain.

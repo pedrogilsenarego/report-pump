@@ -8,7 +8,6 @@ export enum QueryKeys {
   CHECKLISTS = "checklists",
   CHECKLIST = "checklist",
   CHECKLISTS_SUMMARY = "checklists-summary",
-  ACTIONS = "actions",
   GROUPS = "groups",
   SUBGROUPS = "subgroups",
   INTERVENTIONS = "interventions",

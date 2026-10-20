@@ -141,6 +141,12 @@ export const content = {
         phone: "Phone",
         email: "Email",
         certification: "Certification",
+        edit: "Edit",
+        editTitle: "Edit Technician",
+        editDescription: "Change the technician data. Click OK when done.",
+        updated: "Technician updated",
+        updateError: "Could not update the technician",
+        invalidPhone: "Invalid phone number format",
       },
       checklists: {
         title: "Check-lists",

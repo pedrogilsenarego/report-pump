@@ -84,7 +84,13 @@ export default function useAuthComponent(onClose?: () => void) {
       onSuccess: (data: any) => {
         const password = form.watch("password");
         console.log(data);
-        signupMutation({ ...data, password, username: data.nameCompany });
+        // `username` is the Responsable Name field (SF#013 / #097). It used to be
+        // overwritten with the company name, so the name typed there was discarded.
+        signupMutation({
+          ...data,
+          password,
+          username: form.getValues("username"),
+        });
       },
     });
 
