@@ -64,6 +64,45 @@ export const content = {
         importRequestFailed: "The import request could not be sent.",
         importFailedTitle: "Import failed",
       },
+      referenceTables: {
+        languages: {
+          button: "Update Languages Table",
+          description:
+            "Upload Table_Language.xlsx. It replaces the languages table; press Check first.",
+        },
+        periodicity: {
+          button: "Update Periodicity Table",
+          description:
+            "Upload Table_Periodicity.xlsx. It replaces the periodicity table; press Check first.",
+        },
+        check: "Check",
+        checkedRows: "No errors — {{count}} rows ready. Press OK to apply.",
+        willRemove: "Will remove: {{list}}",
+        updated: "Table updated",
+        requestFailed: "The request could not be sent.",
+      },
+      password: {
+        button: "Change password",
+        title: "Change password",
+        description: "Enter your current password, then the new one (at least {{min}} characters).",
+        old: "Old password",
+        new: "New password",
+        confirm: "Confirm password",
+        tooShort: "At least {{min}} characters",
+        noMatch: "Passwords don't match",
+        wrongOld: "The old password is not correct",
+        changed: "Password changed",
+        error: "Could not change the password",
+      },
+      registration: {
+        button: "Edit Registration",
+        title: "Edit Registration",
+        description: "Your company's registration data. Click OK when done.",
+        loading: "Loading registration…",
+        notAvailable: "Your registration could not be loaded.",
+        updated: "Registration updated",
+        error: "Could not update the registration",
+      },
       condition: {
         active: "Active",
         suspended: "Suspended",
@@ -133,6 +172,21 @@ export const content = {
       },
       installations: {
         listPdf: "List of Installations (PDF)",
+        new: "New Installation",
+        newTitle: "New Installation",
+        edit: "Edit",
+        editTitle: "Edit Installation",
+        description: "Fill the installation data. Click OK when done.",
+        name: "Name",
+        responsible: "Responsable",
+        selectResponsible: "Select a responsable",
+        responsibleHint:
+          "If there is none, go to Users and create one first.",
+        area: "Area",
+        address: "Address",
+        created: "Installation created",
+        updated: "Installation updated",
+        error: "Could not save the installation",
       },
       technicians: {
         listPdf: "List of Technicians (PDF)",

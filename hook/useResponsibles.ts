@@ -11,7 +11,7 @@ export function useResponsibles() {
   const companyId = user?.data?.company_id || "";
 
   return useQuery<Responsible[]>({
-    queryKey: [QueryKeys.RESPONSIBLES],
+    queryKey: [QueryKeys.RESPONSIBLES, companyId],
     queryFn: () => getReponsible({ companyId: companyId }),
     enabled: !!companyId,
   });

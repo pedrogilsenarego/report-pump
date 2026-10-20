@@ -3,7 +3,6 @@
 import { logoutUser } from "@/actions/clientActions/userActions";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { QueryKeys } from "@/constants/queryKeys";
 import { RouterKeys } from "@/constants/router";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -24,11 +23,10 @@ export default function LogoutButton() {
     },
     onSuccess: () => {
       router.push(RouterKeys.HOME);
-      queryClient.removeQueries({ queryKey: [QueryKeys.USER] });
-      queryClient.removeQueries({ queryKey: [QueryKeys.USERS_PENDING] });
-      queryClient.removeQueries({ queryKey: [QueryKeys.INSTALLATIONS] });
-      queryClient.removeQueries({ queryKey: [QueryKeys.TECHNICIANS] });
-      queryClient.removeQueries({ queryKey: ["session"] });
+      // Everything cached belongs to the account that just left — and with
+      // staleTime: Infinity nothing would refetch for the next one. Removing a hand-kept
+      // list of keys missed pumps, responsibles, interventions and more.
+      queryClient.clear();
     },
   });
 

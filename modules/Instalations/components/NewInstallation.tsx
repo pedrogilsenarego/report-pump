@@ -32,16 +32,38 @@ import {
 } from "@/components/ui/select";
 import { useResponsibles } from "@/hook/useResponsibles";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { Installation } from "@/types/installation.types";
+import { i18n } from "@/translations/i18n";
 
-export default function NewInstallation() {
-  const { form, onSubmit, isPending, openModal, setOpenModal } =
-    useNewInstallation();
+const t = (key: string) => i18n.t(`installations.${key}`);
+
+/**
+ * Screen#09 INSTALLATION — *Create new* (Action#16), or given `installation`, *Edit existing*
+ * (Action#17/#18). The responsible select doubles as SF#260 *Create / Change Responsable*:
+ * the spec's flow only ever links an existing INST_RESPONSABLE to the installation, which is
+ * what changing it here does.
+ */
+export default function NewInstallation({
+  installation,
+}: {
+  installation?: Installation;
+}) {
+  const { form, onSubmit, isPending, openModal, onOpenChange } =
+    useNewInstallation(installation);
   const { data: responsibles, isLoading: isLoadingResponsibles } =
     useResponsibles();
+  const isEdit = !!installation;
+
   return (
-    <Dialog open={openModal} onOpenChange={(value) => setOpenModal(value)}>
+    <Dialog open={openModal} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">New Installation</Button>
+        {isEdit ? (
+          <Button variant="ghost" size="sm">
+            {t("edit")}
+          </Button>
+        ) : (
+          <Button variant="outline">{t("new")}</Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
@@ -50,10 +72,8 @@ export default function NewInstallation() {
             className="space-y-5 w-full"
           >
             <DialogHeader>
-              <DialogTitle>Create new installation</DialogTitle>
-              <DialogDescription>
-                Fill the form. Click save when done.
-              </DialogDescription>
+              <DialogTitle>{t(isEdit ? "editTitle" : "newTitle")}</DialogTitle>
+              <DialogDescription>{t("description")}</DialogDescription>
             </DialogHeader>
 
             <FormField
@@ -61,8 +81,9 @@ export default function NewInstallation() {
               name="name"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel>{t("name")} (*)</FormLabel>
                   <FormControl>
-                    <Input placeholder="Name" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -73,11 +94,8 @@ export default function NewInstallation() {
               name="responsibleId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Responsible</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <FormLabel>{t("responsible")} (*)</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       {isLoadingResponsibles ? (
                         <div className="flex items-center justify-center">
@@ -85,27 +103,22 @@ export default function NewInstallation() {
                         </div>
                       ) : (
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a responsible" />
+                          <SelectValue placeholder={t("selectResponsible")} />
                         </SelectTrigger>
                       )}
                     </FormControl>
                     <SelectContent>
-                      {responsibles?.map((responsible) => {
-                        return (
-                          <SelectItem
-                            key={responsible.id}
-                            value={responsible.id}
-                          >
-                            {responsible.name}
-                          </SelectItem>
-                        );
-                      })}
+                      {responsibles?.map((responsible) => (
+                        <SelectItem
+                          key={responsible.id}
+                          value={String(responsible.id)}
+                        >
+                          {responsible.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
-                  <FormDescription>
-                    Choose a responsible for the insatallation if there is none,
-                    go to users and create one
-                  </FormDescription>
+                  <FormDescription>{t("responsibleHint")}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -115,8 +128,9 @@ export default function NewInstallation() {
               name="area"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel>{t("area")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Area" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -127,12 +141,9 @@ export default function NewInstallation() {
               name="address"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel>{t("address")}</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Address"
-                      className="resize-none"
-                      {...field}
-                    />
+                    <Textarea className="resize-none" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -141,7 +152,7 @@ export default function NewInstallation() {
 
             <DialogFooter>
               <Button isLoading={isPending} type="submit">
-                Save changes
+                {i18n.t("common.ok")}
               </Button>
             </DialogFooter>
           </form>

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { periodLabel } from "@/constants/actions";
+import { usePeriodicity } from "@/hook/useReferenceTables";
 import { LocalizedName } from "@/types/group.types";
 import { localizedName } from "@/utils/localizedName";
 
@@ -17,6 +17,7 @@ export function InterventionGroup(props: Props) {
 }
 
 export function InterventionPeriod({ period }: { period?: number }) {
+  const { label: periodLabel } = usePeriodicity();
   const label = periodLabel(period);
   if (!label) return null;
 

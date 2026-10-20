@@ -4,6 +4,7 @@ import { Installation } from "@/types/installation.types";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { installationConditionLabel } from "@/constants/condition";
 import ChangeInstallationCondition from "./ChangeInstallationCondition";
+import NewInstallation from "./NewInstallation";
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -74,7 +75,10 @@ export const columns: ColumnDef<Installation>[] = [
     enableHiding: false,
     // Nothing in the spec deletes an installation — "Deleted" is Condition 3 (PopUp#28).
     cell: ({ row }) => (
-      <ChangeInstallationCondition installation={row.original} />
+      <div className="flex justify-end">
+        <NewInstallation installation={row.original} />
+        <ChangeInstallationCondition installation={row.original} />
+      </div>
     ),
   },
 ];

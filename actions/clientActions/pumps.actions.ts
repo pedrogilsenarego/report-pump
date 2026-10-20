@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { supabaseBrowser } from "@/lib/supabase/browser";
+import { getSessionUser, supabaseBrowser } from "@/lib/supabase/browser";
 import {
   mapNewPumpToRaw,
   mapPumpToRaw,
@@ -16,48 +16,28 @@ export const getPumps = async ({
   companyId: string;
 }): Promise<Pump[]> => {
   return new Promise(async (resolve, reject) => {
-    console.log(companyId);
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await getSessionUser();
 
       if (!user) {
         return reject(new Error("User not authenticated"));
       }
 
-      const { data: installationData, error: installationError } =
-        await supabase
-          .from("installations")
-          .select("id")
-          .eq("company_id", companyId);
-
-      if (installationError) {
-        console.error("Error fetching installation IDs:", installationError);
-        return reject(installationError.message);
-      }
-
-      // Extract installation IDs into an array
-      const installationIds = installationData?.map(
-        (installation) => installation.id
-      );
-
-      if (!installationIds || installationIds.length === 0) {
-        // No installations found for the company, return empty
-        return resolve([]);
-      }
-
-      // Fetch pumps linked to the retrieved installation IDs
+      // One request: `!inner` turns the embed into a join, so filtering on the embedded
+      // installation's company_id drops pumps of other companies. This used to be two
+      // sequential requests (installation ids, then pumps `in` those ids).
       const { data: pumps, error: pumpsError } = await supabase
         .from("pumps")
         .select(
-          `*, installations (
+          `*, installations!inner (
             id,
             name,
             company_id
           )`
         )
-        .in("installation_id", installationIds);
+        .eq("installations.company_id", companyId);
 
       if (pumpsError) {
         console.error("Error fetching pumps:", pumpsError);
@@ -77,7 +57,7 @@ export const addPump = async (props: NewPumpType): Promise<any> => {
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await getSessionUser();
 
       if (!user) {
         return reject(new Error("User not authenticated"));
@@ -118,7 +98,7 @@ export const updatePump = async ({
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await getSessionUser();
 
       if (!user) {
         return reject(new Error("User not authenticated"));

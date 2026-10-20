@@ -1,4 +1,4 @@
-import { supabaseBrowser } from "@/lib/supabase/browser";
+import { getSessionUser, supabaseBrowser } from "@/lib/supabase/browser";
 import { User } from "@/types/user.types";
 
 const supabase = supabaseBrowser();
@@ -8,7 +8,7 @@ export const getProfilesPending = async (): Promise<User[]> => {
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await getSessionUser();
 
       if (!user) {
         return reject(new Error("User not authenticated"));

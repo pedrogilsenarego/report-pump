@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { supabaseBrowser } from "@/lib/supabase/browser";
+import { getSessionUser, supabaseBrowser } from "@/lib/supabase/browser";
 import {
   mapInterventionResults,
   mapInterventions,
@@ -61,7 +61,7 @@ const answerKey = (answer: AnswerDraft) =>
 export const getInterventions = async (): Promise<Intervention[]> => {
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await getSessionUser();
 
   if (!user) throw new Error("User not authenticated");
 
@@ -374,7 +374,7 @@ export const addIntervention = async (
 ): Promise<InterventionSaveResult> => {
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await getSessionUser();
 
   if (!user) throw new Error("User not authenticated");
 
@@ -465,7 +465,7 @@ export const updateIntervention = async (
 ): Promise<InterventionSaveResult> => {
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await getSessionUser();
 
   if (!user) throw new Error("User not authenticated");
 
@@ -571,7 +571,7 @@ export const getIntervention = async ({
 
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await getSessionUser();
 
   if (!user) throw new Error("User not authenticated");
 

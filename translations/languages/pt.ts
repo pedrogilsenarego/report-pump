@@ -64,6 +64,45 @@ export const content = {
         importRequestFailed: "Não foi possível enviar o pedido de importação.",
         importFailedTitle: "A importação falhou",
       },
+      referenceTables: {
+        languages: {
+          button: "Atualizar Tabela de Línguas",
+          description:
+            "Carregue Table_Language.xlsx. Substitui a tabela de línguas; carregue primeiro em Verificar.",
+        },
+        periodicity: {
+          button: "Atualizar Tabela de Periodicidade",
+          description:
+            "Carregue Table_Periodicity.xlsx. Substitui a tabela de periodicidade; carregue primeiro em Verificar.",
+        },
+        check: "Verificar",
+        checkedRows: "Sem erros — {{count}} linhas prontas. Carregue OK para aplicar.",
+        willRemove: "Vai remover: {{list}}",
+        updated: "Tabela atualizada",
+        requestFailed: "Não foi possível enviar o pedido.",
+      },
+      password: {
+        button: "Alterar palavra-passe",
+        title: "Alterar palavra-passe",
+        description: "Introduza a palavra-passe atual e depois a nova (mínimo {{min}} caracteres).",
+        old: "Palavra-passe atual",
+        new: "Nova palavra-passe",
+        confirm: "Confirmar palavra-passe",
+        tooShort: "Mínimo {{min}} caracteres",
+        noMatch: "As palavras-passe não coincidem",
+        wrongOld: "A palavra-passe atual não está correta",
+        changed: "Palavra-passe alterada",
+        error: "Não foi possível alterar a palavra-passe",
+      },
+      registration: {
+        button: "Editar Registo",
+        title: "Editar Registo",
+        description: "Os dados de registo da sua empresa. Clique OK quando terminar.",
+        loading: "A carregar o registo…",
+        notAvailable: "Não foi possível carregar o seu registo.",
+        updated: "Registo atualizado",
+        error: "Não foi possível atualizar o registo",
+      },
       condition: {
         active: "Ativo",
         suspended: "Suspenso",
@@ -134,6 +173,21 @@ export const content = {
       },
       installations: {
         listPdf: "Lista de Instalações (PDF)",
+        new: "Nova Instalação",
+        newTitle: "Nova Instalação",
+        edit: "Editar",
+        editTitle: "Editar Instalação",
+        description: "Preencha os dados da instalação. Clique OK quando terminar.",
+        name: "Nome",
+        responsible: "Responsável",
+        selectResponsible: "Selecione um responsável",
+        responsibleHint:
+          "Se não existir nenhum, crie-o primeiro em Utilizadores.",
+        area: "Área",
+        address: "Morada",
+        created: "Instalação criada",
+        updated: "Instalação atualizada",
+        error: "Não foi possível guardar a instalação",
       },
       technicians: {
         listPdf: "Lista de Técnicos (PDF)",

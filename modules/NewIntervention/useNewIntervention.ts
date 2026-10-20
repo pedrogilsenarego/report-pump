@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { addIntervention } from "@/actions/clientActions/interventions.actions";
-import { periodLabel } from "@/constants/actions";
+import { usePeriodicity } from "@/hook/useReferenceTables";
 import { QueryKeys } from "@/constants/queryKeys";
 import { RouterKeys } from "@/constants/router";
 import { useChecklistActions } from "@/hook/useInterventions";
@@ -27,6 +27,7 @@ export const useNewIntervention = () => {
   const router = useRouter();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const periodicity = usePeriodicity();
 
   const checklistId = params.checklist
     ? parseInt(params.checklist as string, 10)
@@ -139,7 +140,7 @@ export const useNewIntervention = () => {
   return {
     checklistId,
     period,
-    periodName: periodLabel(period),
+    periodName: periodicity.label(period),
     grouped,
     totalCount: dueActions.length,
     answeredCount,

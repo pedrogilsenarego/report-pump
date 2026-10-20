@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -13,53 +12,71 @@ import {
   NewInstallationSchema,
   NewInstallationType,
 } from "./NewInstallation.validation";
-import { addInstallation } from "@/actions/clientActions/installation.actions";
+import {
+  addInstallation,
+  updateInstallation,
+} from "@/actions/clientActions/installation.actions";
 import { useInstallations } from "@/hook/useInstallation";
+import { Installation } from "@/types/installation.types";
+import { i18n } from "@/translations/i18n";
 
-export default function useNewInstallation() {
+const toForm = (installation?: Installation): NewInstallationType => ({
+  name: installation?.name ?? "",
+  area: installation?.area ?? "",
+  address: installation?.address ?? "",
+  responsibleId: installation?.responsibleId
+    ? String(installation.responsibleId)
+    : "",
+});
+
+/** Create new (Action#16) when `installation` is omitted, Edit existing when given. */
+export default function useNewInstallation(installation?: Installation) {
   const { toast } = useToast();
   const [openModal, setOpenModal] = useState(false);
   const { refetch } = useInstallations();
   const user = useUser();
   const form = useForm<NewInstallationType>({
     resolver: zodResolver(NewInstallationSchema),
-    defaultValues: {
-      name: undefined,
-      area: undefined,
-      address: undefined,
-      responsibleId: undefined,
-    },
+    defaultValues: toForm(installation),
   });
 
-  const { mutate: createNewInstallation, isPending } = useMutation({
-    mutationFn: addInstallation,
+  const { mutate, isPending } = useMutation({
+    mutationFn: (values: NewInstallationType) =>
+      installation
+        ? updateInstallation({ id: installation.id, values })
+        : addInstallation({
+            ...values,
+            companyId: user.data?.company_id as string,
+          }),
     onError: (data: string) => {
-      console.log(data);
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
+        title: i18n.t("installations.error"),
         description: data,
       });
     },
-    onSuccess: (data: string) => {
+    onSuccess: () => {
       toast({
         variant: "default",
-        title: "Installation added with success",
-        description: data,
+        title: i18n.t(
+          installation ? "installations.updated" : "installations.created"
+        ),
       });
       setOpenModal(false);
       refetch();
-      form.reset();
+      if (!installation) form.reset(toForm());
     },
   });
 
   function onSubmit(data: NewInstallationType) {
-    const newData: NewInstallationType & { companyId?: string } = data;
-    newData.companyId = user.data?.company_id;
-    createNewInstallation(
-      newData as NewInstallationType & { companyId: string }
-    );
+    mutate(data);
   }
 
-  return { form, onSubmit, isPending, openModal, setOpenModal };
+  /** Re-seed from the stored row each time the edit dialog opens. */
+  function onOpenChange(value: boolean) {
+    if (value && installation) form.reset(toForm(installation));
+    setOpenModal(value);
+  }
+
+  return { form, onSubmit, isPending, openModal, onOpenChange };
 }

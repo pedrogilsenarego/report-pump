@@ -5,15 +5,53 @@ import { NewTechnicianType } from "@/modules/Users/components/Techncian/NewTechn
 
 const supabaseAdmin = supabaseAdminServer();
 
+/** Customers (2) create customer technicians (4); providers (3) create provider ones (5). */
+const TECHNICIAN_ROLE_FOR: Record<number, number> = { 2: 4, 3: 5 };
+
+/**
+ * Screen#10 (customer, Action#15) / Screen#06 (provider, Action#09).
+ *
+ * This runs with the service-role key, so nothing the browser sends is trusted for
+ * authorisation: the company and the new account's role come from the CALLER's profile.
+ * They used to come from the request body (`companyId`, `role`), which let a caller create
+ * an account in any company — or with role 1, an administrator.
+ */
 export const addTechnician = async (
-  props: NewTechnicianType & { companyId: string }
+  props: NewTechnicianType & { companyId?: string }
 ): Promise<{ success: boolean; message: string }> => {
   const {
     data: { user },
-  } = await supabaseAdmin.auth.getUser();
+  } = await supabaseServer().auth.getUser();
 
   if (!user) {
     return { success: false, message: "User not authenticated" };
+  }
+
+  const { data: caller } = await supabaseAdmin
+    .from("profiles")
+    .select("company_id, role")
+    .eq("id", user.id)
+    .single();
+
+  const role = TECHNICIAN_ROLE_FOR[Number(caller?.role)];
+  if (!caller?.company_id || !role) {
+    return { success: false, message: "Not allowed" };
+  }
+
+  // Action#10 / PopUp#18: "NAME ALREADY EXISTS !". Names are how technicians are picked and
+  // printed (Verified by / Responsible store the display name), so two with the same name
+  // in one company cannot be told apart.
+  const { data: sameName } = await supabaseAdmin
+    .from("profiles")
+    .select("id")
+    .eq("company_id", caller.company_id)
+    .in("role", [4, 5])
+    // Case-insensitive exact match: escape ilike's own wildcards.
+    .ilike("display_name", props.name.trim().replace(/[%_\\]/g, "\\$&"))
+    .limit(1);
+
+  if (sameName?.length) {
+    return { success: false, message: "NAME ALREADY EXISTS !" };
   }
 
   // Step 1: Attempt to create the user
@@ -23,10 +61,10 @@ export const addTechnician = async (
       password: props.password,
       email_confirm: true,
       user_metadata: {
-        displayName: props.name,
-        role: parseInt(props.role),
+        displayName: props.name.trim(),
+        role,
         phone: props.phone,
-        companyId: props.companyId,
+        companyId: caller.company_id,
       },
     });
 

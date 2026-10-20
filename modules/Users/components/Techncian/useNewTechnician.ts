@@ -10,7 +10,6 @@ import {
   NewTechnicianSchema,
   NewTechnicianType,
 } from "./NewTechnician.validation";
-//import { addTechnician } from "@/actions/clientActions/technician.actions";
 import { useUser } from "@/hook/useUser";
 import { useEffect, useState } from "react";
 import { useTechnicians } from "@/hook/useTechnician";

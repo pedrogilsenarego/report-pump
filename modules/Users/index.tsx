@@ -22,7 +22,11 @@ export default function Users() {
       <WithRole roleKey={[KeyRoles.CUSTOMER, KeyRoles.SUPPLYER]}>
         <TechnicianList />
       </WithRole>
-      <WithRole roleKey={[KeyRoles.CUSTOMER, KeyRoles.SUPPLYER]}>
+      {/*
+        INST_RESPONSABLE belongs to installations, which only customers have. A provider's
+        responsable is SUPPLYER:Name_Responsable1 — part of Edit Registration (Screen#05).
+      */}
+      <WithRole roleKey={[KeyRoles.CUSTOMER]}>
         <ResponsibleList />
       </WithRole>
     </div>

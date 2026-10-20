@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { supabaseBrowser } from "@/lib/supabase/browser";
+import { getSessionUser, supabaseBrowser } from "@/lib/supabase/browser";
 import {
   mapInstallations,
   mapInstallationToRaw,
@@ -23,7 +23,7 @@ export const getInstallations = async ({
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await getSessionUser();
 
       if (!user) {
         return reject(new Error("User not authenticated"));
@@ -62,7 +62,7 @@ export const addInstallation = async (
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await getSessionUser();
 
       if (!user) {
         return reject(new Error("User not authenticated"));
@@ -108,6 +108,34 @@ export const setInstallationCondition = async ({
 
   if (error) {
     console.error("Error updating installation condition:", error);
+    throw error.message;
+  }
+  return id;
+};
+
+/**
+ * Screen#09 *Edit existing* (Action#17/#18). Condition is changed only through PopUp#28
+ * (setInstallationCondition), so it is not part of this update.
+ */
+export const updateInstallation = async ({
+  id,
+  values,
+}: {
+  id: string;
+  values: NewInstallationType;
+}): Promise<string> => {
+  const { error } = await supabase
+    .from("installations")
+    .update({
+      name: values.name,
+      area: values.area || null,
+      address: values.address || null,
+      responsible_id: values.responsibleId,
+    })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error updating installation:", error);
     throw error.message;
   }
   return id;

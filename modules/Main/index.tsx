@@ -3,6 +3,9 @@ import UsersPending from "./components/UsersPending";
 import { KeyRoles } from "@/constants/roles";
 import WithRole from "@/hoc/WithRole";
 import SendMessage from "./components/SendMessage";
+import EditRegistration from "./components/EditRegistration";
+import ChangePassword from "./components/ChangePassword";
+import UpdateReferenceTable from "./components/UpdateReferenceTable";
 import NewChecklist from "@/modules/Interventions/components/NewChecklist";
 
 export default function Main() {
@@ -11,7 +14,13 @@ export default function Main() {
       <div className="flex justify-start gap-2">
         <WithRole roleKey={[KeyRoles.ADMIN]}>
           <NewChecklist />
+          <UpdateReferenceTable kind="languages" />
+          <UpdateReferenceTable kind="periodicity" />
         </WithRole>
+        <WithRole roleKey={[KeyRoles.CUSTOMER, KeyRoles.SUPPLYER]}>
+          <EditRegistration />
+        </WithRole>
+        <ChangePassword />
         <SendMessage />
       </div>
       <div

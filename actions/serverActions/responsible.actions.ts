@@ -1,20 +1,38 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
-import { supabaseAdminServer } from "@/lib/supabase/server";
+import { supabaseAdminServer, supabaseServer } from "@/lib/supabase/server";
 import { NewResponsibleType } from "@/modules/Users/components/Responsible/NewResponsible.validation";
 
 const supabaseAdmin = supabaseAdminServer();
 
+/** Customers (2) create responsables with role 6, providers (3) with role 7. */
+const RESPONSIBLE_ROLE_FOR: Record<number, number> = { 2: 6, 3: 7 };
+
+/**
+ * Runs with the service-role key, so the company and the new account's role come from the
+ * CALLER's profile, never the request body — see the same note on addTechnician.
+ */
 export const addResponsible = async (
-  props: NewResponsibleType & { companyId: string }
+  props: NewResponsibleType & { companyId?: string }
 ): Promise<{ success: boolean; message: string }> => {
   try {
     const {
       data: { user },
-    } = await supabaseAdmin.auth.getUser();
+    } = await supabaseServer().auth.getUser();
 
     if (!user) {
       return { success: false, message: "User not authenticated" };
+    }
+
+    const { data: caller } = await supabaseAdmin
+      .from("profiles")
+      .select("company_id, role")
+      .eq("id", user.id)
+      .single();
+
+    const role = RESPONSIBLE_ROLE_FOR[Number(caller?.role)];
+    if (!caller?.company_id || !role) {
+      return { success: false, message: "Not allowed" };
     }
 
     // Step 1: Attempt to create the user
@@ -25,9 +43,9 @@ export const addResponsible = async (
         email_confirm: true,
         user_metadata: {
           displayName: props.name,
-          role: parseInt(props.role),
+          role,
           phone: props.phone,
-          companyId: props.companyId,
+          companyId: caller.company_id,
         },
       });
 

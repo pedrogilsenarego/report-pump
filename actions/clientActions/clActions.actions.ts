@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { supabaseBrowser } from "@/lib/supabase/browser";
+import { getSessionUser, supabaseBrowser } from "@/lib/supabase/browser";
 import { mapClActions } from "@/mappers/clAction.mapper";
 import { ClAction } from "@/types/clAction.types";
 
@@ -24,7 +24,7 @@ export const getChecklistActions = async (
 
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await getSessionUser();
 
   if (!user) throw new Error("User not authenticated");
 

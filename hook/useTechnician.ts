@@ -11,7 +11,7 @@ export function useTechnicians() {
   const companyId = user?.data?.company_id || "";
 
   return useQuery<Technician[]>({
-    queryKey: [QueryKeys.TECHNICIANS],
+    queryKey: [QueryKeys.TECHNICIANS, companyId],
     queryFn: () => getTechnician({ companyId: companyId }),
     enabled: !!companyId,
   });

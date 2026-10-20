@@ -27,6 +27,8 @@ interface CountrySelectProps {
   whitelist?: string[];
   blacklist?: string[];
   onChange?: (value: string) => void;
+  /** Controlled value (a countryShortCode). Omit to leave the select uncontrolled. */
+  value?: string;
   className?: string;
   placeholder?: string;
 }
@@ -36,6 +38,7 @@ function CountrySelect({
   whitelist = [],
   blacklist = [],
   onChange = () => {},
+  value,
   className,
   placeholder = "Country",
 }: CountrySelectProps) {
@@ -50,8 +53,9 @@ function CountrySelect({
 
   return (
     <Select
-      onValueChange={(value: string) => {
-        onChange(value);
+      {...(value !== undefined ? { value } : {})}
+      onValueChange={(next: string) => {
+        onChange(next);
       }}
     >
       <SelectTrigger className={className}>

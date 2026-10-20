@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RouterKeys } from "@/constants/router";
-import { supabaseBrowser } from "@/lib/supabase/browser";
+import { getSessionUser, supabaseBrowser } from "@/lib/supabase/browser";
 
 const supabase = supabaseBrowser();
 
@@ -34,7 +34,7 @@ export const updatePassword = async ({
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await getSessionUser();
       if (!user) {
         reject("no session");
       }
@@ -168,7 +168,7 @@ export const acceptUserPending = async ({
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await getSessionUser();
 
       if (!user) {
         return reject(new Error("User not authenticated"));
@@ -225,7 +225,7 @@ export const validateUser = async (): Promise<string> => {
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await getSessionUser();
 
       if (!user) {
         return reject(new Error("User not authenticated"));
@@ -248,4 +248,34 @@ export const validateUser = async (): Promise<string> => {
       reject(error.message);
     }
   });
+};
+
+/**
+ * Change password (P4) from the menu: the old password is checked first, as the spec's
+ * "Input Old Password -> Validate Password" step, by re-authenticating with it. Supabase's
+ * updateUser alone would accept any logged-in session without the old one.
+ */
+export const changePassword = async ({
+  oldPassword,
+  newPassword,
+}: {
+  oldPassword: string;
+  newPassword: string;
+}): Promise<string> => {
+  const {
+    data: { user },
+  } = await getSessionUser();
+
+  if (!user?.email) throw "User not authenticated";
+
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email: user.email,
+    password: oldPassword,
+  });
+  if (signInError) throw "WRONG_PASSWORD";
+
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  if (error) throw error.message;
+
+  return "Password changed";
 };

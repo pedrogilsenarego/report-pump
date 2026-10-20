@@ -1,6 +1,6 @@
 "use client";
 
-import { periodLabel } from "@/constants/actions";
+import { usePeriodicity } from "@/hook/useReferenceTables";
 import { useGroups, useSubgroups } from "@/hook/useGroups";
 import { useChecklistActions } from "@/hook/useInterventions";
 import { i18n } from "@/translations/i18n";
@@ -17,6 +17,7 @@ import { localizedName } from "@/utils/localizedName";
  * periodicity, the NFPA-25 clause each one cites and its measurement slots.
  */
 export default function ChecklistTree({ checklistId }: { checklistId: number }) {
+  const { label: periodLabel } = usePeriodicity();
   const groups = useGroups(checklistId);
   const subgroups = useSubgroups(checklistId);
   const actions = useChecklistActions(checklistId);

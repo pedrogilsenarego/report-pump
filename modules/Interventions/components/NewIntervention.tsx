@@ -30,9 +30,10 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import useNewIntervention from "./useNewIntervention";
 import { useInstallations } from "@/hook/useInstallation";
 import { isActiveInstallation } from "@/constants/condition";
-import { PERIODICITY, periodLabel } from "@/constants/actions";
+import { usePeriodicity } from "@/hook/useReferenceTables";
 
 export default function NewIntervention() {
+  const { codes: periodCodes, label: periodLabel } = usePeriodicity();
   const {
     form,
     onSubmit,
@@ -218,9 +219,9 @@ export default function NewIntervention() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {PERIODICITY.map((entry) => (
-                        <SelectItem key={entry.code} value={String(entry.code)}>
-                          {periodLabel(entry.code)}
+                      {periodCodes.map((code) => (
+                        <SelectItem key={code} value={String(code)}>
+                          {periodLabel(code)}
                         </SelectItem>
                       ))}
                     </SelectContent>

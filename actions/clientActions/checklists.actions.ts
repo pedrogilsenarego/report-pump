@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { supabaseBrowser } from "@/lib/supabase/browser";
+import { getSessionUser, supabaseBrowser } from "@/lib/supabase/browser";
 import { mapChecklist, mapChecklists } from "@/mappers/checklists.mapper";
 import { Checklist, ChecklistSummary } from "@/types/checklist.types";
 const supabase = supabaseBrowser();
@@ -10,7 +10,7 @@ export const getCheckLists = async (): Promise<Checklist[]> => {
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await getSessionUser();
 
       if (!user) {
         return reject(new Error("User not authenticated"));
@@ -45,7 +45,7 @@ export const getCheckLists = async (): Promise<Checklist[]> => {
 export const getCheckListSummaries = async (): Promise<ChecklistSummary[]> => {
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await getSessionUser();
 
   if (!user) throw new Error("User not authenticated");
 

@@ -421,8 +421,46 @@ that is why: `appliesToPumpType` is matching against a value that is not J/E/D.
    APPLIED** — moves `actions` / `checklistactions` / `interventionchecklistactions` to an
    `archive` schema instead of dropping them, so the old intervention results survive.
 
-**Migrations waiting to be applied, in order:** `20260916_intervention_code.sql`,
-`20261020_company_validation.sql`, `20261020_archive_legacy_actions.sql`.
+10. **Customer menu gaps — done 2026-10-20 (later):**
+    - *Edit existing* installation (Action#17/#18): same dialog as create, Edit on the row.
+      The responsable select is also SF#260 *Change Responsable*.
+    - *Edit Record* / *Edit Registration* (SF#210, provider SF#131 / Screen#08):
+      `modules/Main/components/EditRegistration.tsx`, server actions in
+      `actions/serverActions/registration.actions.ts` keyed off the session. Email read-only.
+    - *Change password* (P4): old -> new -> confirm; the old one is checked by
+      re-authenticating. Minimum 8, same as signup (the spec's "10" is ambiguous — it is
+      stated for the access name).
+11. **Provider side** — Edit Registration and *Define / Change Responsable*
+    (`Name_Responsable1` = the registration's Responsable Name) are the dialog above; new /
+    edit technician already worked for role 3. Added Action#10 *"NAME ALREADY EXISTS !"* —
+    applied to customers too. `ResponsibleList` (INST_RESPONSABLE) now customer-only.
+12. **Security fix:** `addTechnician` / `addResponsible` (service-role server actions) took
+    `companyId` and `role` from the request body — a caller could create an account in
+    another company, or with role 1 (admin). Both now derive them from the caller's
+    profile. The dead browser-side copies (which could never work with the anon key) were
+    deleted.
+13. **Speed:** browser actions called `auth.getUser()` (a network round trip) before every
+    query — 23 sites, now `getSessionUser()` in `lib/supabase/browser.ts` (local session
+    read). `getPumps` is one request instead of two. Installations / technicians /
+    responsables query keys now include the company, and logout clears the whole cache.
+    The bigger stalls seen 2026-10-20 (18 s / 3 s on single queries) were Supabase-side.
+
+14. **Admin uploads — Action#22 / #23, done 2026-10-21.** Migration
+    **`20261021_language_periodicity.sql` written, NOT APPLIED**: tables `languages` and
+    `periodicity` (PERIODICITY and MAINT_TYPE treated as one — same file, same shape),
+    seeded with today's values, read = authenticated, write = `is_admin()`.
+    Parser `lib/forms/parseReferenceTables.ts` (verified against both bundle workbooks),
+    route `/api/admin/reference-tables` (check, then apply; the file replaces the table but
+    refuses to drop a period still used by `cl_action` or a language still used by
+    check-list text), two buttons on the admin main page. Period labels everywhere now come
+    from `usePeriodicity()`, falling back to the built-in list if the table is missing.
+    **Not wired yet:** the `languages` table into the signup / registration language
+    pickers — they store `PT`/`EN`, and switching to `PTG`/`ENG` changes stored data. Part
+    of the PT-vs-PTG decision (item 7).
+
+**Migrations:** `20260916_intervention_code.sql`, `20261020_company_validation.sql` and
+`20261020_archive_legacy_actions.sql` were applied 2026-10-20 (reported by the user, not
+verified from here).
 
 **Still blocked on the client:** `FP25 - EQ0102 Rev7.pdf` (the intervention report layout —
 blocks the two most valuable PDFs), the full `Form3_Actions.xlsx`, the RGPD conditions file,

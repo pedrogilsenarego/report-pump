@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { supabaseBrowser } from "@/lib/supabase/browser";
+import { getSessionUser, supabaseBrowser } from "@/lib/supabase/browser";
 import { mapGroups, mapSubgroups } from "@/mappers/groups.mapper";
 import { Group, Subgroup } from "@/types/group.types";
 
@@ -16,7 +16,7 @@ export const getGroups = async (checklistId: number): Promise<Group[]> => {
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await getSessionUser();
 
       if (!user) {
         return reject(new Error("User not authenticated"));
@@ -46,7 +46,7 @@ export const getSubgroups = async (checklistId: number): Promise<Subgroup[]> => 
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await getSessionUser();
 
       if (!user) {
         return reject(new Error("User not authenticated"));
