@@ -28,7 +28,6 @@ export default function useNewTechnician() {
       email: undefined,
       phone: undefined,
       certification: undefined,
-      condition: undefined,
       function: undefined,
       password: undefined,
       confirmPassword: undefined,

@@ -2,6 +2,7 @@
 import { supabaseBrowser } from "@/lib/supabase/browser";
 
 import { mapTechnicians } from "@/mappers/technician.mapper";
+import { CONDITION_ACTIVE } from "@/constants/condition";
 import { NewTechnicianType } from "@/modules/Users/components/Techncian/NewTechnician.validation";
 import { Technician } from "@/types/technician.types";
 
@@ -101,7 +102,7 @@ export const addTechnician = async (
           profile_id: newUserId,
           function: props.function,
           certification: props.certification,
-          condition: props.condition,
+          condition: CONDITION_ACTIVE,
         });
 
       if (errorInsertingTechnician) {
@@ -114,4 +115,27 @@ export const addTechnician = async (
       reject(error.message);
     }
   });
+};
+
+/**
+ * Action#19 — Screen#12 *Suspend* sets `TECHNICIAN_CUST:Condition = 2`. The condition lives
+ * on the `technician` detail row, keyed by the technician's profile id.
+ */
+export const setTechnicianCondition = async ({
+  profileId,
+  condition,
+}: {
+  profileId: string;
+  condition: string;
+}): Promise<string> => {
+  const { error } = await supabase
+    .from("technician")
+    .update({ condition })
+    .eq("profile_id", profileId);
+
+  if (error) {
+    console.error("Error updating technician condition:", error);
+    throw error.message;
+  }
+  return profileId;
 };

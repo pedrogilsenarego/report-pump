@@ -1,14 +1,9 @@
 import { Button } from "@/components/ui/button";
 //import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu";
 import { Installation } from "@/types/installation.types";
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { CaretSortIcon } from "@radix-ui/react-icons";
+import { installationConditionLabel } from "@/constants/condition";
+import ChangeInstallationCondition from "./ChangeInstallationCondition";
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -72,29 +67,14 @@ export const columns: ColumnDef<Installation>[] = [
   {
     accessorKey: "condition",
     header: () => <div className="text-right">Condition</div>,
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("condition")}</div>
-    ),
+    cell: ({ row }) => installationConditionLabel(row.original.condition),
   },
   {
     id: "actions",
     enableHiding: false,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    cell: ({ row }) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Delete Installation</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    // Nothing in the spec deletes an installation — "Deleted" is Condition 3 (PopUp#28).
+    cell: ({ row }) => (
+      <ChangeInstallationCondition installation={row.original} />
+    ),
   },
 ];

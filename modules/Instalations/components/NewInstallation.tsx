@@ -138,18 +138,6 @@ export default function NewInstallation() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="condition"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Condition" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             <DialogFooter>
               <Button isLoading={isPending} type="submit">

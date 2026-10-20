@@ -1,14 +1,9 @@
 import { Button } from "@/components/ui/button";
 //import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu";
 import { Technician } from "@/types/technician.types";
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { CaretSortIcon } from "@radix-ui/react-icons";
+import { technicianConditionLabel } from "@/constants/condition";
+import SuspendTechnician from "./SuspendTechnician";
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -72,29 +67,12 @@ export const columns: ColumnDef<Technician>[] = [
   {
     accessorKey: "condition",
     header: () => <div className="text-right">Condition</div>,
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("condition")}</div>
-    ),
+    cell: ({ row }) => technicianConditionLabel(row.original.condition),
   },
   {
     id: "actions",
     enableHiding: false,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    cell: ({ row }) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Delete Technician</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    // Nothing in the spec deletes a technician — Action#19 suspends instead.
+    cell: ({ row }) => <SuspendTechnician technician={row.original} />,
   },
 ];

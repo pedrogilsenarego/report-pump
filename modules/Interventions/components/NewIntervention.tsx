@@ -29,6 +29,7 @@ import {
 import { ReloadIcon } from "@radix-ui/react-icons";
 import useNewIntervention from "./useNewIntervention";
 import { useInstallations } from "@/hook/useInstallation";
+import { isActiveInstallation } from "@/constants/condition";
 import { PERIODICITY, periodLabel } from "@/constants/actions";
 
 export default function NewIntervention() {
@@ -126,7 +127,11 @@ export default function NewIntervention() {
                       )}
                     </FormControl>
                     <SelectContent>
-                      {installations?.map((installation) => {
+                      {installations
+                        ?.filter((installation) =>
+                          isActiveInstallation(installation.condition)
+                        )
+                        .map((installation) => {
                         return (
                           <SelectItem
                             key={installation.id}

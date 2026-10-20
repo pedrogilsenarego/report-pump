@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { useCtrlStatus } from "@/hook/useCtrlStatus";
 import { useTechnicians } from "@/hook/useTechnician";
+import { isActiveTechnician } from "@/constants/condition";
 import { i18n } from "@/translations/i18n";
 import { localizedName } from "@/utils/localizedName";
 
@@ -66,6 +67,13 @@ export default function InterventionHeaderFields({
             <SelectContent>
               {all
                 .filter((technician) => String(technician.id) !== exclude)
+                // PopUp#20/#21: suspended technicians drop out of the pickers — but one
+                // already on a stored intervention must still show when it is reopened.
+                .filter(
+                  (technician) =>
+                    isActiveTechnician(technician.condition) ||
+                    String(technician.id) === field.value
+                )
                 .map((technician) => (
                   <SelectItem
                     key={technician.id}

@@ -50,7 +50,8 @@ export const addTechnician = async (
       profile_id: newUserId,
       function: props.function,
       certification: props.certification,
-      condition: props.condition,
+      // A new technician is Active; Action#19 (Suspend) is the only thing that changes it.
+      condition: "1",
     });
 
   if (errorInsertingTechnician) {

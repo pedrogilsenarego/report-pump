@@ -25,7 +25,6 @@ export const NewTechnicianSchema = z.object({
   }),
 
   certification: z.string().optional(),
-  condition: z.string().optional(),
   confirmPassword: z.string({
     required_error: "The validation password is required",
   }),

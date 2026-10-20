@@ -376,8 +376,15 @@ that is why: `appliesToPumpType` is matching against a value that is not J/E/D.
    "Inactive" for both `0` and `2` until the domain is settled. The same sample run was the
    first render of REPORT#01: layout is fine; hyphenation was turned off in
    `reportFurniture.tsx` because it split names ("Com-prido").
-4. **Soft-delete flows** (item 4) — installations and technicians only; the pump-group one
-   waits on the `Condition` 1/2-vs-1/0 question.
+4. ~~**Soft-delete flows**~~ (item 4) — **done 2026-10-20** for installations and
+   technicians: *Suspend* (Screen#12 / Action#19, `technician.condition = 2`) and *Change
+   Condition* (PopUp#28, 1/2/3) on the list rows; the free-text Condition inputs are gone and
+   new rows are written as `"1"`. Pickers (intervention technicians, New Intervention and
+   pump-group installations) hide **known-inactive codes only** — legacy rows hold NULL/junk,
+   so `= "1"` would hide them — and keep a value that is already selected. Helpers in
+   `constants/condition.ts`. Not run against the DB: if RLS on `technician` /
+   `installations` blocks customer UPDATEs, these will toast an error. The pump-group flow
+   still waits on the 1/2-vs-1/0 question; `INST_RESPONSABLE` keeps its free-text input.
 
 **Still blocked on the client:** `FP25 - EQ0102 Rev7.pdf` (the intervention report layout —
 blocks the two most valuable PDFs), the full `Form3_Actions.xlsx`, the RGPD conditions file,

@@ -24,6 +24,7 @@ import {
   pumpTypeLabel,
 } from "@/constants/pumpGroup";
 import { useInstallations } from "@/hook/useInstallation";
+import { isActiveInstallation } from "@/constants/condition";
 import { i18n } from "@/translations/i18n";
 import { NewPumpType } from "./NewPump.validation";
 
@@ -155,7 +156,13 @@ export default function PumpGroupFields({
                 )}
               </FormControl>
               <SelectContent>
-                {installations?.map((installation) => (
+                {installations
+                  ?.filter(
+                    (installation) =>
+                      isActiveInstallation(installation.condition) ||
+                      String(installation.id) === field.value
+                  )
+                  .map((installation) => (
                   <SelectItem key={installation.id} value={String(installation.id)}>
                     {installation.name}
                   </SelectItem>

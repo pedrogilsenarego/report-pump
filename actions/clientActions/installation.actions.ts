@@ -8,6 +8,7 @@ import {
 import { NewInstallationType } from "@/modules/Instalations/components/NewInstallation.validation";
 
 import { Installation } from "@/types/installation.types";
+import { CONDITION_ACTIVE } from "@/constants/condition";
 
 const supabase = supabaseBrowser();
 
@@ -73,6 +74,8 @@ export const addInstallation = async (
         .insert([
           {
             ...rawData,
+            // New installations are Active; PopUp#28 is the only thing that changes it.
+            condition: CONDITION_ACTIVE,
           },
         ])
         .single();
@@ -88,4 +91,24 @@ export const addInstallation = async (
       reject(error.message);
     }
   });
+};
+
+/** PopUp#28 — *Change Condition* on an installation: 1 / 2 / 3. */
+export const setInstallationCondition = async ({
+  id,
+  condition,
+}: {
+  id: string;
+  condition: string;
+}): Promise<string> => {
+  const { error } = await supabase
+    .from("installations")
+    .update({ condition })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error updating installation condition:", error);
+    throw error.message;
+  }
+  return id;
 };

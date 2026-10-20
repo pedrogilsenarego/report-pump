@@ -81,18 +81,6 @@ export default function NewTechnician() {
             />
             <FormField
               control={form.control}
-              name="condition"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Condition" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="function"
               render={({ field }) => (
                 <FormItem>

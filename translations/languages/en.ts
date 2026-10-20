@@ -64,6 +64,26 @@ export const content = {
         importRequestFailed: "The import request could not be sent.",
         importFailedTitle: "Import failed",
       },
+      condition: {
+        active: "Active",
+        suspended: "Suspended",
+        installation: {
+          "1": "Active",
+          "2": "Exist but not Active",
+          "3": "Deleted",
+        },
+        suspend: "Suspend",
+        suspendTitle: "Suspend Technician",
+        suspendDescription:
+          "A suspended technician no longer appears when choosing technicians for an intervention, but still prints on the list of technicians.",
+        suspended_ok: "Technician suspended",
+        change: "Change Condition",
+        changeTitle: "Change Installation Condition",
+        changeDescription:
+          "Inactive or deleted installations no longer appear when creating pump groups or interventions.",
+        changed: "Condition changed",
+        error: "Could not change the condition",
+      },
       pumpGroup: {
         new: "New Pump Group",
         newTitle: "New Pump Group",
@@ -113,6 +133,11 @@ export const content = {
       },
       technicians: {
         listPdf: "List of Technicians (PDF)",
+        name: "Name",
+        function: "Function",
+        phone: "Phone",
+        email: "Email",
+        certification: "Certification",
       },
       checklists: {
         title: "Check-lists",

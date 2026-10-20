@@ -25,7 +25,6 @@ export default function useNewInstallation() {
     resolver: zodResolver(NewInstallationSchema),
     defaultValues: {
       name: undefined,
-      condition: undefined,
       area: undefined,
       address: undefined,
       responsibleId: undefined,

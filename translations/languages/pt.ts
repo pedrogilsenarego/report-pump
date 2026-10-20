@@ -64,6 +64,26 @@ export const content = {
         importRequestFailed: "Não foi possível enviar o pedido de importação.",
         importFailedTitle: "A importação falhou",
       },
+      condition: {
+        active: "Ativo",
+        suspended: "Suspenso",
+        installation: {
+          "1": "Ativa",
+          "2": "Existe mas não está ativa",
+          "3": "Eliminada",
+        },
+        suspend: "Suspender",
+        suspendTitle: "Suspender Técnico",
+        suspendDescription:
+          "Um técnico suspenso deixa de aparecer na escolha de técnicos de uma intervenção, mas continua na lista de técnicos.",
+        suspended_ok: "Técnico suspenso",
+        change: "Alterar Condição",
+        changeTitle: "Alterar Condição da Instalação",
+        changeDescription:
+          "Instalações inativas ou eliminadas deixam de aparecer na criação de grupos de bombagem e intervenções.",
+        changed: "Condição alterada",
+        error: "Não foi possível alterar a condição",
+      },
       pumpGroup: {
         new: "Novo Grupo de Bombagem",
         newTitle: "Novo Grupo de Bombagem",
@@ -113,6 +133,11 @@ export const content = {
       },
       technicians: {
         listPdf: "Lista de Técnicos (PDF)",
+        name: "Nome",
+        function: "Função",
+        phone: "Telefone",
+        email: "Email",
+        certification: "Certificação",
       },
       checklists: {
         title: "Check-lists",

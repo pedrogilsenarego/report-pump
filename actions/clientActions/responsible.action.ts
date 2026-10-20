@@ -98,7 +98,7 @@ export const addTechnician = async (
           profile_id: newUserId,
           function: props.function,
           certification: props.certification,
-          condition: props.condition,
+          condition: "1",
         });
 
       if (errorInsertingTechnician) {
