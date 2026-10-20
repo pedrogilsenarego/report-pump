@@ -11,7 +11,11 @@
  * the client. Drop the file in and add an <Image> here when they send it.
  */
 
-import { StyleSheet, Text, View } from "@react-pdf/renderer";
+import { Font, StyleSheet, Text, View } from "@react-pdf/renderer";
+
+// react-pdf hyphenates by default ("Com-prido"), which mangles names, emails and serial
+// numbers — most of what these reports print. Wrap at spaces only.
+Font.registerHyphenationCallback((word) => [word]);
 
 export const COLORS = {
   text: "#111111",

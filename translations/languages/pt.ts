@@ -69,6 +69,7 @@ export const content = {
         newTitle: "Novo Grupo de Bombagem",
         edit: "Editar",
         editTitle: "Editar Grupo de Bombagem",
+        listPdf: "Lista de Grupos (PDF)",
         description: "Preencha os dados do grupo. Clique OK quando terminar.",
         installation: "Instalação",
         selectInstallation: "Selecione uma instalação",

@@ -369,7 +369,13 @@ that is why: `appliesToPumpType` is matching against a value that is not J/E/D.
    (`updatePump`). New groups get `condition = "1"`; empty optionals are written as NULL.
    Not run against the DB yet. The controller S/N waits on the `Ctrl_TAG` question. Rows 2/3
    (`type = "teste"`) still need fixing by hand — open them with Edit and pick a Type.
-3. **REPORT#02** — reuses the furniture from REPORT#01; needs item 2 for anything to print.
+3. ~~**REPORT#02**~~ — **done 2026-10-20**: `lib/reports/Report02PumpGroups.tsx` +
+   `/api/reports/pump-groups`, linked from the pump-group list. Rendered with sample data
+   (page breaks, conditional blocks, empty case) — not yet against the live DB.
+   `PumpGroupBlocks` is exported for REPORT#03's equipment section. Cond. prints
+   "Inactive" for both `0` and `2` until the domain is settled. The same sample run was the
+   first render of REPORT#01: layout is fine; hyphenation was turned off in
+   `reportFurniture.tsx` because it split names ("Com-prido").
 4. **Soft-delete flows** (item 4) — installations and technicians only; the pump-group one
    waits on the `Condition` 1/2-vs-1/0 question.
 

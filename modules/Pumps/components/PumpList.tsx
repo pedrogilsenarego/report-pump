@@ -34,6 +34,7 @@ import { useState } from "react";
 import { columns } from "./PumpList.columns";
 import NewPump from "./NewPump";
 import { usePumps } from "@/hook/usePumps";
+import { i18n } from "@/translations/i18n";
 
 export default function PumpList() {
   const { data } = usePumps();
@@ -71,6 +72,13 @@ export default function PumpList() {
         }}
       >
         <NewPump />
+        {/*
+          "List of Groups (pdf)" -> Action#26 generates REPORT#02, Action#27 saves it.
+          The route replies with an attachment, so the browser's save dialog is PopUp#35.
+        */}
+        <Button variant="outline" asChild>
+          <a href="/api/reports/pump-groups">{i18n.t("pumpGroup.listPdf")}</a>
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

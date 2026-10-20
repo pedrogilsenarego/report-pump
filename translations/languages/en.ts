@@ -69,6 +69,7 @@ export const content = {
         newTitle: "New Pump Group",
         edit: "Edit",
         editTitle: "Edit Pump Group",
+        listPdf: "List of Groups (PDF)",
         description: "Fill the pump group data. Click OK when done.",
         installation: "Installation",
         selectInstallation: "Select an installation",
